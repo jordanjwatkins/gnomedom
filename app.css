@@ -1,0 +1,80 @@
+body div, :before, :after {
+    position: absolute;
+    box-sizing: border-box;
+}
+
+div {
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+
+.horse, .horse:before, .horse:after {
+    width: 125px;
+    height: 100px;
+    
+    bottom: 10vh;
+    left: 50%;
+    transition: 0.5s transform;
+    z-index: 2;
+    
+}
+
+.horse {
+    background: none;
+}
+
+.horse:before, .horse:after {
+    content: '';
+    background: url(horse.gif);
+    background-size: cover;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    top: 0;
+    left: 0;
+    transition: 0.5s;
+}
+
+.horse.run:before, .horse.run:after {
+    transform: rotate(20deg);
+}
+
+.horse:before {
+    
+    transform: scaleY(-1);
+    top: 100%;
+    left: 0;
+    opacity: 0.8;
+}
+
+.ground {
+    background: green;
+    background: linear-gradient(to bottom, #0fe216 0%,#1a8433 100%);
+    width: 100%;
+    height: 10vh;
+    position: absolute;
+    bottom: 0;
+}
+
+.world {
+    width: 3000px;
+    left: 50%;
+    height: 90%;
+    transform: translateX(-50%);
+}
+
+.world-center {
+    width: 20px;
+    background: brown;
+    height: 30px;
+    left: 50%;
+    bottom: 0;
+    transform: translatex(-50%);
+}
