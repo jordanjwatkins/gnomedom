@@ -3,7 +3,7 @@ body div, :before, :after {
     box-sizing: border-box;
 }
 
-div {
+div, :before, :after {
     background-size: cover;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
@@ -13,43 +13,42 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
+    background: linear-gradient(to bottom, #1e5799 0%,#7db9e8 100%);
 }
 
-
 .horse, .horse:before, .horse:after {
-    width: 125px;
-    height: 100px;
+    width: 12.5vw;
+    height: 10.0vw;
     
-    bottom: 10vh;
-    left: 50%;
-    transition: 0.5s transform;
     z-index: 2;
-    
+    bottom: 0;
 }
 
 .horse {
     background: none;
+    left: 50%;
 }
 
 .horse:before, .horse:after {
     content: '';
     background: url(horse.gif);
     background-size: cover;
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    top: 0;
     left: 0;
-    transition: 0.5s;
+    transform: translate3d(0, 0, 0);
+    transition: 0.5s transform;
 }
 
-.horse.run:before, .horse.run:after {
-    transform: rotate(20deg);
+.horse.run:after {
+    transform: rotate(3deg) translate3d(0, 0, 0);
+}
+
+.horse.run:before {
+    transform: rotate(-3deg) scaleY(-0.7) translate3d(0, -3%, 0);
 }
 
 .horse:before {
-    
-    transform: scaleY(-1);
-    top: 100%;
+    transform: scaleY(-0.7) translate3d(0, 1%, 0);
+    top: 85%;
     left: 0;
     opacity: 0.8;
 }
@@ -65,9 +64,11 @@ html, body {
 
 .world {
     width: 3000px;
-    left: 50%;
+    top: 0;
+    left: -50%;
     height: 90%;
-    transform: translateX(-50%);
+    //transform: translateX(-50%);
+    
 }
 
 .world-center {
@@ -77,4 +78,36 @@ html, body {
     left: 50%;
     bottom: 0;
     transform: translatex(-50%);
+}
+
+.title {
+    left: 55%;
+    color: #666;
+    font-size: 30vw;
+    font-family: monospace;
+    bottom: -5%;
+    line-height: 0.8;
+    z-index: 0;
+}
+
+.campfire, .evil-campfire {
+    background-image: url('campfire.gif'),  url('campfire.gif');
+    background-position: 0, -50px;
+    width: 20vw;
+    height: 8vw;
+    bottom: 0;
+    left: 50%;
+    background-size: 9vw 8vw;
+    transform: translateX(-320%);
+    background-blend-mode: multiply;
+}
+
+.evil-campfire {
+    background: url('campfire.gif');
+    display: none;
+    bottom: 0;
+    left: 50%;
+    background-size: cover;
+    mix-blend-mode: multiply;
+    transform: translateX(-350%);
 }

@@ -1,6 +1,6 @@
 var elHorse, elWorld;
 
-var world = { x: 50 };
+var world = { x: -50 };
 
 var horse = { x: 10 };
 
@@ -27,35 +27,42 @@ document.addEventListener('DOMContentLoaded', function () {
     update();
 });
 
-function horseLeft() {
-    horse.x -= 10;
-    world.x -= 1;
+function horseLeft(delta) {
+    world.x += 0.05 * delta;
 
-    //elHorse.style.left = horse.x + 'px';
-    elHorse.style.transform = 'translateX(-50%) scaleX(-1)';
-    elWorld.style.left = world.x + '%';
+    elHorse.style.transform = 'translateX(' + -world.x + 'vw) scaleX(1)';
+    //elHorse.style.left =  -world.x + '%';
+    elHorse.classList.remove('right');
+    
+    elWorld.style.transform = 'translate3d(' + world.x + 'vw, 0, 0)';
 }
 
-function horseRight() {
-    horse.x += 10;
-    world.x += 1;
+function horseRight(delta) {
+    world.x -= 0.05 * delta;
 
-    elHorse.style.transform = 'translateX(-50%) scaleX(1)';
+    elHorse.style.transform =  'translateX(' + -world.x + 'vw) scaleX(-1)';
+    elHorse.classList.add('right');
+    //elHorse.style.left = -world.x + 'vw';
 
-    elWorld.style.left = world.x + '%';
+    elWorld.style.transform = 'translate3d(' + world.x + 'vw, 0 ,0)';
 }
 
 function useCoin() {
     
 }
 
-function update() {
+var lastFrameTimeMs, delta, timestamp;
+function update(timestamp) {
+    delta = (lastFrameTimeMs) ? timestamp - lastFrameTimeMs: 0;
+
+    lastFrameTimeMs = timestamp;
+
     if (keys.left) {
-        horseRight();
+        horseLeft(delta);
 
         elHorse.classList.add('run');
     } else if (keys.right) {
-        horseLeft();
+        horseRight(delta);
 
         elHorse.classList.add('run');
     } else {
