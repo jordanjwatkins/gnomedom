@@ -26,7 +26,8 @@ html, body {
 
 .horse {
     background: none;
-    left: 50%;
+    transform: translateX(-50%);
+    left: -25vw;
 }
 
 .horse:before, .horse:after {
@@ -35,7 +36,6 @@ html, body {
     background-size: cover;
     left: 0;
     transform: translate3d(0, 0, 0);
-    
 }
 
 .horse.run:after {
@@ -65,11 +65,11 @@ html, body {
 }
 
 .world {
-    width: 3000px;
+    width: 0;
     top: 0;
     left: 50%;
     height: 90%;
-    transform: translateX(-50%);
+    transform: translate3d(352px, 0, 0);
 }
 
 .world-center {
@@ -101,18 +101,20 @@ html, body {
     width: 20vw;
     height: 8vw;
     bottom: 0;
-    left: 50%;
     background-size: 9vw 8vw;
-    transform: translateX(-320%);
+    transform: translate3d(-65vw, 0, 0);
     background-blend-mode: multiply;
 }
 
 .girl {
     background-image: url('girl-arms-around-knees.gif');
-    left: 28%;
-    bottom: 0;
+    left: -1vw;
+    bottom: 4.5vw;
     width: 5vw;
     height: 8vw;
+    z-index: 100;
+    transform: translate3d(-28vw, 0, 0);
+    transition: transform 0.5s;
 }
 
 .evil-campfire {
@@ -129,6 +131,4 @@ html, body {
     width: 4vw;
     height: 5vw;
     background: yellow;
-    width: 20vw;
-    height: 8vw;
 }

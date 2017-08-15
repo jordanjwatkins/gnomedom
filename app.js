@@ -1,6 +1,6 @@
-var elHorse, elWorld;
+var elHorse, elWorld, elGirl, currentWidth, unit, resizeDelta, horseDirection;
 
-var world = { x: -1500 };
+var world = { x: 25 * window.innerWidth / 100 };
 
 var keys = {
     left: false,
@@ -8,11 +8,20 @@ var keys = {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    currentWidth = window.innerWidth;
+    unit = currentWidth / 100;
+
     elHorse = document.querySelector('.horse');
+    elGirl = document.querySelector('.girl');
     elWorld = document.querySelector('.world');
 
-    elHorse.x = -world.x;
+
+    elWorld.x = 25 * window.innerWidth / 100;
+
+    elHorse.x = -elWorld.x;
     elHorse.y = elHorse.offsetTop;
+
+    elGirl.transforms = [];
 
     document.addEventListener('keydown', function (e) {
         if (e.which == 37) keys.left = true;
@@ -25,36 +34,45 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.which == 39) keys.right = false;
     });
 
+    horseMove(0, 1);
+
+    // preload running image to avoid visible flash
+    elHorse.classList.add('run');
+
     update();
 });
 
-function horseLeft(delta) {
+window.addEventListener('resize', function () {
+    console.log(currentWidth, window.innerWidth, unit);
+    
+    unit = window.innerWidth / 100;
+
+    resizeDelta = currentWidth / window.innerWidth;
+
+    console.log(resizeDelta, unit);
+});
+
+function horseMove(delta, direction) {
     var speed = window.innerWidth / 1000;
 
-    world.x += speed * delta;
+    elWorld.x += direction * speed * delta;
 
-    var wX = Math.round(world.x);
-    elHorse.x = -wX;
-
-    elHorse.style.transform = 'translateX(-50%) scaleX(1)';
-    elHorse.style.left = elHorse.x + 'px';
-    
-    elWorld.style.transform = 'translate3d(' + wX + 'px, 0, 0)';
-}
-
-function horseRight(delta) {
-    var speed = window.innerWidth / 1000;
-
-    world.x -= speed * delta;
-
-    var wX = Math.round(world.x);
+    var wX = Math.round(elWorld.x);
     
     elHorse.x = -wX;
+    elGirl.x = -wX;
 
-    elHorse.style.transform = 'translateX(-50%) scaleX(-1)';
+    elHorse.style.transform = 'translateX(-50%) scaleX(' + direction + ')';
     elHorse.style.left = elHorse.x + 'px';
 
-    elWorld.style.transform = 'translate3d(' + wX + 'px, 0 ,0)';
+    horseDirection = direction;
+
+    //elHorse.appendChild(elGirl);
+
+    //elGirl.transforms.push('scaleX = 1;
+
+    roundedMove(elGirl, 'scaleX(' + direction + ') rotate(3deg)');
+    roundedMove(elWorld);
 }
 
 function useCoin() {
@@ -76,10 +94,6 @@ function moveCoin(coin) {
     move(coin);
 }
 
-function move(el) {
-    el.style.transform = 'translate3d(' + el.x + 'px, ' + el.y + 'px, 0) ';
-}
-
 var lastFrameTimeMs, delta, timestamp;
 
 function update(timestamp) {
@@ -87,22 +101,22 @@ function update(timestamp) {
 
     lastFrameTimeMs = timestamp;
 
-    //elWorld.style.width = window.innerWidth * 3;
-
     // TODO: only do this on resize
-    elHorse.x = -world.x;
+    // TODO: scale all entity positions on width changes
+    elHorse.x = -elWorld.x;
     elHorse.y = elHorse.offsetTop;
 
     if (keys.left) {
-        horseLeft(delta);
+        horseMove(delta, 1);
 
         elHorse.classList.add('run');
     } else if (keys.right) {
-        horseRight(delta);
+        horseMove(delta, -1);
 
         elHorse.classList.add('run');
     } else {
         elHorse.classList.remove('run');
+        roundedMove(elGirl, 'scaleX(' + horseDirection + ') rotate(0deg)');
     }
 
     coins.forEach(moveCoin);

@@ -5,13 +5,11 @@ function addCoin(elWorld, x, y) {
 
     coin.className = 'coin';
 
-    console.log(y);
-
     coin.x = x;
     coin.y = y;
 
-    coin.vX = Math.random() * window.innerWidth / 300;
-    coin.vY = -3 - (Math.random() * window.innerWidth / 100);
+    coin.vX = 1 * window.innerWidth / 600 + Math.random() * window.innerWidth / 400;
+    coin.vY = -1 * window.innerWidth / 600 - Math.random() * window.innerWidth / 110;
 
     console.log(coin.vY);
 
