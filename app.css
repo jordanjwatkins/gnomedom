@@ -3,6 +3,20 @@ body div, :before, :after {
     box-sizing: border-box;
 }
 
+body:after {
+    content: '';
+    background: #1e5799;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    transition: 0.3s ease-in-out;
+}
+
+body.loaded:after {
+    opacity: 0;
+}
+
 div, :before, :after {
     background-size: cover;
     image-rendering: pixelated;
@@ -16,26 +30,20 @@ html, body {
     background: linear-gradient(to bottom, #1e5799 0%,#7db9e8 100%);
 }
 
-.horse, .horse:before, .horse:after {
+.horse, .horse div, .horse:before, .horse:after {
     width: 12.5vw;
     height: 10.0vw;
-    transition: 0.5s transform;
     z-index: 2;
-    bottom: 0;
-}
-
-.horse {
-    background: none;
-    transform: translateX(-50%);
-    left: -25vw;
 }
 
 .horse:before, .horse:after {
     content: '';
-    background: url(horse.gif);
+    background-image: url(horse.gif);
     background-size: cover;
     left: 0;
+    top: 0;
     transform: translate3d(0, 0, 0);
+    transition: 0.5s transform;
 }
 
 .horse.run:after {
@@ -86,7 +94,7 @@ html, body {
     color: transparent;
     font-size: 30vw;
     font-family: monospace;
-    bottom: -5%;
+    bottom: -2vw;
     line-height: 0.8;
     z-index: 0;
     background-image: url('campfire.gif');
@@ -96,35 +104,48 @@ html, body {
 }
 
 .campfire, .evil-campfire {
-    background-image: url('campfire.gif'),  url('campfire.gif');
-    background-position: 0, -50px;
+    background-image: url('campfire.gif');
     width: 20vw;
     height: 8vw;
     bottom: 0;
     background-size: 9vw 8vw;
-    transform: translate3d(-65vw, 0, 0);
+    transform: translate3d(-35vw, 0, 0);
     background-blend-mode: multiply;
+    background-repeat: no-repeat;
 }
 
-.girl {
-    background-image: url('girl-arms-around-knees.gif');
-    left: -1vw;
-    bottom: 4.5vw;
+ .evil-campfire {
+    background-image: url('campfire.gif'),  url('campfire.gif');
+    background-position: 0, 3vw;
+    width: 20vw;
+    height: 8vw;
+    bottom: 0;
+    background-size: 9vw 8vw, 7vw 8vw;
+    transform: translate3d(-65vw, 0, 0);
+    background-blend-mode: multiply;
+ }
+
+.girl, .girl div {
     width: 5vw;
     height: 8vw;
     z-index: 100;
-    transform: translate3d(-28vw, 0, 0);
+    transform: translateZ(0) rotate(0);
+    
+}
+
+.girl div {
+    transition: transform 0.5s;
+    background-image: url('girl-arms-around-knees.gif');
+    transform: translateZ(0) rotate(0);
     transition: transform 0.5s;
 }
 
-.evil-campfire {
-    background: url('campfire.gif');
-    display: none;
-    bottom: 0;
-    left: 50%;
-    background-size: cover;
-    mix-blend-mode: multiply;
-    transform: translateX(-350%);
+.run.girl div {
+    transform: translateZ(0) rotate(3deg);
+}
+
+.girl {
+    bottom: 4.5vw;
 }
 
 .coin {
