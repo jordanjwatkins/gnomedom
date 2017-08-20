@@ -180,8 +180,16 @@ html, body {
     width: 2vw;
     height: 3vw;
     background: yellow;
+    
 }
 
 .coin.picked-up {
-    transition: 0.4s transform;
+    transition: 0.5s transform, 0.9s opacity;
+    opacity: 0;
+}
+
+.gnome {
+    width: 4vw;
+    height: 6.3vw;
+    background-image: url('gnome-stand.gif');
 }

@@ -5,16 +5,11 @@ function move(el, transforms) {
 
 function roundedMove(el, transforms) {
     transforms = transforms || '';
-    
-    //console.log('translate3d(' + Math.round(el.x) + 'px, ' + Math.round(el.y||0) + 'px, 0) ' + transforms);
-    
+
     el.style.transform = 'translate3d(' + Math.round(el.x) + 'px, ' + Math.round(el.y||0) + 'px, 0) ' + transforms;
 }
 
 function boxesCollide(box1, box2) {
-    //console.dir(box1);
-    //console.dir(box2);
-
     if (box1 === box2) return false;
 
     return (

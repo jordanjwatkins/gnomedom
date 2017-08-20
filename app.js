@@ -1,4 +1,4 @@
-var elHorse, elWorld, elGirl, currentWidth, unit, horseDirection;
+var elHorse, elWorld, elGirl, currentWidth, unit, horseDirection, speed, wX;
 
 var resizeDelta = 0;
 
@@ -42,13 +42,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.addEventListener('resize', function () {
-    //console.log(currentWidth, window.innerWidth, unit);
-
     resizeDelta = currentWidth / window.innerWidth;
 
     setWorldSize();
-
-    //console.log(resizeDelta, unit);
     
     horseMove(0, horseDirection);
 
@@ -60,27 +56,19 @@ function setWorldSize() {
     currentWidth = window.innerWidth;
     unit = currentWidth / 100;
 
-    elWorld.x = (resizeDelta) ? elWorld.x / resizeDelta : world.x;
-    //elWorld.x = 25 * window.innerWidth / 100;
-    
+    elWorld.x = (resizeDelta) ? elWorld.x / resizeDelta : elWorld.x;
 
-    
     elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
-    elHorse.width =  (resizeDelta) ?  elHorse.width / resizeDelta : elHorse.clientWidth;
+    elHorse.width = (resizeDelta) ?  elHorse.width / resizeDelta : elHorse.clientWidth;
     elHorse.height = elHorse.clientHeight;
-
-    elHorse.x = -elWorld.x - elHorse.width / 2;
-    elGirl.x = -elWorld.x - elHorse.width / 4.9;
-
-    //console.log(elHorse.y, elHorse.x, elHorse.width, elHorse.height);
 }
 
 function horseMove(delta, direction) {
-    var speed = window.innerWidth / 1000;
+    speed = unit / 25;
 
     elWorld.x += direction * speed * delta;
 
-    var wX = Math.round(elWorld.x);
+    wX = Math.round(elWorld.x);
     
     elHorse.x = -wX - elHorse.width / 2;
     elGirl.x = -wX - elHorse.width / 4.9;
@@ -88,23 +76,11 @@ function horseMove(delta, direction) {
     horseDirection = direction;
 
     roundedMove(elWorld);
-
     roundedMove(elHorse);
     roundedMove(elGirl);
 }
 
-var lastFrameTimeMs, delta, timestamp;
-
-function update(timestamp) {
-    delta = (lastFrameTimeMs) ? timestamp - lastFrameTimeMs: 0;
-
-    lastFrameTimeMs = timestamp;
-
-    // TODO: only do this on resize
-    // TODO: scale all entity positions on width changes
-    //elHorse.x = -elWorld.x - elHorse.width / 2;
-    //elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
-
+function keyMove() {
     if (keys.left) {
         horseMove(delta, 1);
 
@@ -124,10 +100,22 @@ function update(timestamp) {
 
         elGirl.classList.remove('run');
     }
+}
+
+var lastFrameTimeMs, delta, timestamp;
+
+function update(timestamp) {
+    delta = (lastFrameTimeMs) ? timestamp - lastFrameTimeMs: 0;
+
+    lastFrameTimeMs = timestamp;
+
+    keyMove();
 
     coins.forEach(moveCoin);
 
     coins.forEach(maybePickUpCoin);
+
+    gnomes.forEach(moveCoin);
 
     requestAnimationFrame(update);
 }

@@ -1,28 +1,38 @@
 var coins = [];
+var coinPool = [];
 
 function useCoin() {
-    addCoin(elWorld, elHorse.x + 2  * window.innerWidth / 100, elHorse.y + 4 * window.innerWidth / 100);
+    addCoin(elWorld, elHorse.x + 4 * unit, elHorse.y + 4 * unit);
+
+    addGnome(elWorld, elHorse.x + 4 * unit, elHorse.y + 4 * unit);
 }
 
 function addCoin(elWorld, x, y) {
-    var coin = document.createElement('div');
+    var coin = (coinPool.length > 0) ? coinPool.pop() : document.createElement('div');
 
     coin.className = 'coin';
 
     coin.x = x;
     coin.y = y;
-    coin.width = window.innerWidth / 100 * 4;
-    coin.height = window.innerWidth / 100 * 5;
+    coin.width = unit * 2;
+    coin.height = unit * 3;
 
-    coin.vX = 1 * window.innerWidth / 600 + Math.random() * window.innerWidth / 400;
-    coin.vY = -1 * window.innerWidth / 600 - Math.random() * window.innerWidth / 110;
+    coin.vX = -(1 - Math.random()) * unit / 6 + Math.random() * unit / 4;
+    coin.vY = -1 * unit / 6 - unit * 0.5;
 
+    coin.active = true;
+    coin.canBePickedUp = false;
+
+    if (coin.inDom) return;
+
+    coin.inDom = true;
     coins.push(coin);
-
     elWorld.appendChild(coin);
 }
 
 function moveCoin(coin) {
+    if (!coin.active) return;
+
     if (coin.y === elWorld.clientHeight  - coin.clientHeight) return;
 
     coin.x += coin.vX;
@@ -46,10 +56,18 @@ function moveCoin(coin) {
 }
 
 function maybePickUpCoin(coin) {
+    if (!coin.active) return;
+
     if (coin.canBePickedUp && boxesCollide(coin, elHorse)) {
         coin.classList.add('picked-up');
-        coin.y = coin.y - 10 * unit;
-        //coin.style.display = 'none';
+        coin.y = coin.y - 30 * unit;
+        coin.canBePickedUp = false;
+
+        setTimeout(() => {
+            coin.active = false;
+            coin.className = 'out';
+            coinPool.push(coin);
+        }, 500);
     }
 }
 
