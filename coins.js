@@ -31,7 +31,7 @@ function moveCoin(coin) {
     coin.vY += window.innerWidth / 5000;
 
     if (coin.y >= elWorld.clientHeight - coin.clientHeight) {
-        coin.y = elWorld.clientHeight  - coin.clientHeight;
+        coin.y = elWorld.clientHeight - coin.clientHeight;
         coin.vX = 0;
         coin.vY = 0;
 
@@ -47,7 +47,9 @@ function moveCoin(coin) {
 
 function maybePickUpCoin(coin) {
     if (coin.canBePickedUp && boxesCollide(coin, elHorse)) {
-        console.log('coin pick');
+        coin.classList.add('picked-up');
+        coin.y = coin.y - 10 * unit;
+        //coin.style.display = 'none';
     }
 }
 
@@ -56,8 +58,8 @@ function resizeCoin(coin) {
 
     coin.x = coin.x / resizeDelta;
 
-    coin.width = coin.clientWidth;
-    coin.height = coin.clientHeight;
+    coin.width = unit * 2;
+    coin.height = unit * 3;
 
-    //coin.y = coin
+    
 }

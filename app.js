@@ -27,6 +27,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     elWorld.x = 25 * window.innerWidth / 100;
 
+    elHorse.width = 12.5 * unit;
+
     setWorldSize();
 
     horseMove(0, 1);
@@ -44,11 +46,9 @@ window.addEventListener('resize', function () {
 
     resizeDelta = currentWidth / window.innerWidth;
 
-    currentWidth = window.innerWidth;
-
     setWorldSize();
 
-    console.log(resizeDelta, unit);
+    //console.log(resizeDelta, unit);
     
     horseMove(0, horseDirection);
 
@@ -64,12 +64,15 @@ function setWorldSize() {
     //elWorld.x = 25 * window.innerWidth / 100;
     
 
-    elHorse.x = -elWorld.x - 4 * unit;
+    
     elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
-    elHorse.width = elHorse.clientWidth;
+    elHorse.width =  (resizeDelta) ?  elHorse.width / resizeDelta : elHorse.clientWidth;
     elHorse.height = elHorse.clientHeight;
 
-    console.log(elHorse.y, elHorse.x, elHorse.width, elHorse.height);
+    elHorse.x = -elWorld.x - elHorse.width / 2;
+    elGirl.x = -elWorld.x - elHorse.width / 4.9;
+
+    //console.log(elHorse.y, elHorse.x, elHorse.width, elHorse.height);
 }
 
 function horseMove(delta, direction) {
@@ -79,15 +82,15 @@ function horseMove(delta, direction) {
 
     var wX = Math.round(elWorld.x);
     
-    elHorse.x = -wX - 4 * unit;
-    elGirl.x = -wX;
+    elHorse.x = -wX - elHorse.width / 2;
+    elGirl.x = -wX - elHorse.width / 4.9;
 
     horseDirection = direction;
 
     roundedMove(elWorld);
 
-    roundedMove(elHorse, 'scaleX(' + direction + ')');
-    roundedMove(elGirl, 'scaleX(' + direction + ')');
+    roundedMove(elHorse);
+    roundedMove(elGirl);
 }
 
 var lastFrameTimeMs, delta, timestamp;
@@ -99,14 +102,17 @@ function update(timestamp) {
 
     // TODO: only do this on resize
     // TODO: scale all entity positions on width changes
-    elHorse.x = -elWorld.x;
-    elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
+    //elHorse.x = -elWorld.x - elHorse.width / 2;
+    //elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
 
     if (keys.left) {
         horseMove(delta, 1);
 
         elHorse.classList.add('run');
         elGirl.classList.add('run');
+
+        elHorse.classList.remove('right');
+        elGirl.classList.remove('right');
     } else if (keys.right) {
         horseMove(delta, -1);
 
@@ -116,9 +122,7 @@ function update(timestamp) {
         // don't remove first tick so 'run' image preloads correctly
         if (delta > 0) elHorse.classList.remove('run');
 
-        elGirl.classList.remove('run', 'right');
-        
-        roundedMove(elGirl, 'scaleX(' + horseDirection + ')');
+        elGirl.classList.remove('run');
     }
 
     coins.forEach(moveCoin);
