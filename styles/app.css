@@ -11,6 +11,7 @@ body:after {
     bottom: 0;
     right: 0;
     transition: 0.3s ease-in-out;
+    pointer-events: none;
 }
 
 body.loaded:after {
@@ -38,33 +39,33 @@ html, body {
 
 .horse div:before, .horse div:after {
     content: '';
-    background-image: url(horse.gif);
+    background-image: url(../images/horse.gif);
     background-size: cover;
     left: 0;
     top: 0;
     transform: translate3d(0, 0, 0);
-    transition: 0.5s transform;
+    transition: transform 0.5s;
 }
 
 .horse.run div:after {
-    background-image: url(horse-run.gif);
+    background-image: url(../images/horse-run.gif);
     transform: rotate(3deg) translate3d(0, 0, 0);
 }
 
 .horse.run div:before {
-    background-image: url(horse-run.gif);
+    background-image: url(../images/horse-run.gif);
     transform: rotate(-3deg) scaleY(-0.7) translate3d(0, -3%, 0);
 }
 
 .horse div:before {
-    transform: scaleY(-0.7) translate3d(0, 1%, 0);
+    transform: rotate(0deg) scaleY(-0.7) translate3d(0, 1%, 0);
     top: 85%;
     left: 0;
     opacity: 0.8;
 }
 
 .horse div {
-    transition: 0.5s transform;
+    transition: transform 0.5s;
 }
 
 .horse.right div {
@@ -76,7 +77,7 @@ html, body {
     background: linear-gradient(to bottom, #0fe216 0%,#1a8433 100%);
     width: 100%;
     height: 10vh;
-    position: absolute;
+    position: fixed;
     bottom: 0;
 }
 
@@ -105,14 +106,14 @@ html, body {
     bottom: -2vw;
     line-height: 0.8;
     z-index: 0;
-    background-image: url('campfire.gif');
+    background-image: url(../images/campfire.gif);
     -webkit-background-clip: text;
     background-clip: text;
     background-size: 6vw;
 }
 
 .campfire, .evil-campfire {
-    background-image: url('campfire.gif');
+    background-image: url(../images/campfire.gif);
     width: 20vw;
     height: 8vw;
     bottom: 0;
@@ -123,7 +124,7 @@ html, body {
 }
 
  .evil-campfire {
-    background-image: url('campfire.gif'),  url('campfire.gif');
+    background-image: url(../images/campfire.gif),  url(../images/campfire.gif);
     background-position: 0, 3vw;
     width: 20vw;
     height: 8vw;
@@ -143,7 +144,7 @@ html, body {
 
 .girl div, .girl div:before, .girl div:after {
     transition: transform 0.5s;
-    background-image: url('girl-arms-around-knees.gif');
+    background-image: url(../images/girl-arms-around-knees.gif);
 }
 
 .girl div { background: none; }
@@ -159,7 +160,7 @@ html, body {
 
 .girl div:before {
     transition: transform 0.5s;
-    background-image: url('girl-arms-around-knees.gif');
+    background-image: url(../images/girl-arms-around-knees.gif);
     transform: translate3d(0, 14.6vw, 0) rotate(0) scaleY(-0.75);
     opacity: 0.8;
 }
@@ -188,8 +189,21 @@ html, body {
     opacity: 0;
 }
 
-.gnome {
+.gnome, .gnome:before {
     width: 4vw;
     height: 6.3vw;
-    background-image: url('gnome-stand.gif');
+}
+
+.gnome:before {
+    content: '';
+    background-image: url(../images/gnome-stand.gif);
+}
+
+.gnome.walk:before {
+    background-image: url(../images/gnome-walk.gif);
+    transform: scaleX(-1);
+}
+
+.gnome.walk.right:before {
+    transform: scaleX(1);
 }

@@ -49,6 +49,7 @@ window.addEventListener('resize', function () {
     horseMove(0, horseDirection);
 
     coins.forEach(resizeCoin);
+    gnomes.forEach(resizeCoin);
 });
 
 
@@ -115,7 +116,15 @@ function update(timestamp) {
 
     coins.forEach(maybePickUpCoin);
 
-    gnomes.forEach(moveCoin);
+    gnomes.forEach(gnomeFallOrWalk);
 
     requestAnimationFrame(update);
+}
+
+function gnomeFallOrWalk(gnome) {
+    if (gnome.moveType === 'falling') {
+        return (gnome.vY !== 0) ? moveCoin(gnome) : gnome.moveType = 'walking';
+    }
+
+    moveGnome(gnome);
 }

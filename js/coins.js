@@ -2,12 +2,12 @@ var coins = [];
 var coinPool = [];
 
 function useCoin() {
-    addCoin(elWorld, elHorse.x + 4 * unit, elHorse.y + 4 * unit);
+    addCoin(elHorse.x + 4 * unit, elHorse.y + 4 * unit);
 
-    addGnome(elWorld, elHorse.x + 4 * unit, elHorse.y + 4 * unit);
+    addGnome(elHorse.x + 4 * unit, elHorse.y - 4 * unit);
 }
 
-function addCoin(elWorld, x, y) {
+function addCoin(x, y) {
     var coin = (coinPool.length > 0) ? coinPool.pop() : document.createElement('div');
 
     coin.className = 'coin';
@@ -60,7 +60,7 @@ function maybePickUpCoin(coin) {
 
     if (coin.canBePickedUp && boxesCollide(coin, elHorse)) {
         coin.classList.add('picked-up');
-        coin.y = coin.y - 30 * unit;
+        coin.y = coin.y - 60 * unit;
         coin.canBePickedUp = false;
 
         setTimeout(() => {
@@ -76,8 +76,6 @@ function resizeCoin(coin) {
 
     coin.x = coin.x / resizeDelta;
 
-    coin.width = unit * 2;
-    coin.height = unit * 3;
-
-    
+    coin.width = coin.width / resizeDelta;
+    coin.height = coin.height / resizeDelta;
 }
