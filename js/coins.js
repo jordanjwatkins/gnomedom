@@ -2,32 +2,25 @@ var coins = [];
 var coinPool = [];
 
 function useCoin() {
-    addCoin(elHorse.x + 4 * unit, elHorse.y + 4 * unit);
+    console.log(elHorse, elHorse.x, unit + 4);
+    addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
 
-    addGnome(elHorse.x + 4 * unit, elHorse.y - 4 * unit);
+    addGnome(elHorse.x / unit + 4, elHorse.y / unit - 4, 4, 6.3);
 }
 
-function addCoin(x, y) {
-    var coin = (coinPool.length > 0) ? coinPool.pop() : document.createElement('div');
+function addCoin(x, y, width, height) {
+    var coin = addEntity({
+        x, y, width, height,
+        thingPool: coinPool,
+        things: coins,
+        className: 'coin'
+    });
 
-    coin.className = 'coin';
+    // thrown velocity
+    coin.vX = randomDirection() * unit / 12 + randomDirection() * Math.random() * unit / 12;
+    coin.vY = -unit / 2 - Math.random();
 
-    coin.x = x;
-    coin.y = y;
-    coin.width = unit * 2;
-    coin.height = unit * 3;
-
-    coin.vX = -(1 - Math.random()) * unit / 6 + Math.random() * unit / 4;
-    coin.vY = -1 * unit / 6 - unit * 0.5;
-
-    coin.active = true;
     coin.canBePickedUp = false;
-
-    if (coin.inDom) return;
-
-    coin.inDom = true;
-    coins.push(coin);
-    elWorld.appendChild(coin);
 }
 
 function moveCoin(coin) {
@@ -38,7 +31,7 @@ function moveCoin(coin) {
     coin.x += coin.vX;
     coin.y += coin.vY;
 
-    coin.vY += window.innerWidth / 5000;
+    coin.vY += unit / 50;
 
     if (coin.y >= elWorld.clientHeight - coin.clientHeight) {
         coin.y = elWorld.clientHeight - coin.clientHeight;
@@ -74,7 +67,11 @@ function maybePickUpCoin(coin) {
 function resizeCoin(coin) {
     if (!resizeDelta) return;
 
+    console.log('coin', coin.y);
+
     coin.x = coin.x / resizeDelta;
+    coin.y = coin.y / resizeDelta;
+    //coin.y = elWorld.clientHeight - coin.clientHeight;
 
     coin.width = coin.width / resizeDelta;
     coin.height = coin.height / resizeDelta;

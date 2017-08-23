@@ -1,6 +1,7 @@
 function move(el, transforms) {
     transforms = transforms || '';
-    el.style.transform = 'translate3d(' + el.x + 'px, ' + el.y + 'px, 0) ' + transforms;
+    
+    el.style.transform = 'translate3d(' + el.x + 'px, ' + (el.y || 0) + 'px, 0) ' + transforms;
 }
 
 function roundedMove(el, transforms) {
@@ -18,4 +19,8 @@ function boxesCollide(box1, box2) {
         box1.y < box2.y + box2.height &&
         box1.height + box1.y > box2.y
    );
+}
+
+function randomDirection() {
+    return (0.5 - Math.random() > 0) ? 1 : -1; 
 }
