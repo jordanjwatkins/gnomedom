@@ -7,14 +7,7 @@ function init() {
 
     document.addEventListener('keydown', keydown);
 
-    document.addEventListener('keyup', function (e) {
-        if (e.which == 37) keys.left = false;
-        if (e.which == 39) keys.right = false;
-        if (e.which == 38) {
-            keys.up = false;
-            spendCoin(keys);
-        }
-    });
+    document.addEventListener('keyup', keyup);
 
     window.addEventListener('resize', resizeAll);
 

@@ -10,16 +10,6 @@ function horseMove(delta, direction) {
 
     horseDirection = direction;
 
-    misc.forEach((thing) => {
-        if (boxesCollide(elHorse, thing)) {
-            if (thing.coins < thing.maxCoins) {
-                console.log(thing);
-                elHorse.currentCoinTaker = thing;
-            }
-        }
-    });
-    
-
     move(elWorld);
     roundedMove(elHorse);
     roundedMove(elGirl);

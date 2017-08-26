@@ -6,7 +6,7 @@
     position: fixed;
     bottom: 0;
     background-image: url(../images/ground.gif);
-    background-size: 3.4vh;
+    background-size: calc(1.4vh + 1vw);
 }
 
 .ground.fore {
@@ -15,7 +15,7 @@
 }
 
 .ground.back {
-    height: 20vh;
+    height: calc(10vh + 5vw);
     opacity: 0.8;
 }
 
@@ -38,8 +38,26 @@
     transform: translateX(-50%);
 }
 
+.world-center:before {
+    background-image: url(../images/campfire.gif);
+    width: 3vw;
+    height: 5vw;
+    background-size: 3vw 5vw;
+    background-repeat: no-repeat;
+    content: '';
+    transform: translate(-10%, -100%);
+}
+
+.campfire, .evil-campfire {
+    background-image: url(../images/campfire.gif);
+    width: 9vw;
+    height: 8vw;
+    background-size: 9vw 8vw;
+    background-repeat: no-repeat;
+}
+
 .title {
-    left: 55%;
+    left: 4vw;
     color: transparent;
     font-size: 30vw;
     font-family: monospace;

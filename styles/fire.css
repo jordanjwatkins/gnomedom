@@ -20,7 +20,7 @@
     background-blend-mode: multiply;
  }
 
- .evil-campfire.dead {
+.evil-campfire.dead {
     height: 2vw;
     background-position: 0 -6vw, 3vw -6vw;
     top: 6vw;

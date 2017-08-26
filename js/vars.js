@@ -1,4 +1,4 @@
-var elHorse, elWorld, elGirl, currentWidth, unit, horseDirection, speed, wX;
+var elHorse, elWorld, elGirl, currentWidth, worldHeight, unit, horseDirection, speed, wX;
 var gnomeCoinPicker, horseCoinPicker;
 var resizeDelta = 0;
 

@@ -1,17 +1,18 @@
 function resizeAll() {
     resizeDelta = currentWidth / window.innerWidth;
+    worldHeight = elWorld.clientHeight;
 
     setWorldSize();
     
     horseMove(0, horseDirection);
 
-    coins.forEach(resizeCoin);
-    gnomes.forEach(resizeCoin);
-    walls.forEach(resizeCoin);
+    coins.forEach(resizeThing);
+    gnomes.forEach(resizeThing);
+    walls.forEach(resizeThing);
     
     walls.forEach(roundedMove);
 
-    //misc.forEach(resizeCoin);
+    //misc.forEach(resizeThing);
     //misc.forEach(roundedMove);
     
     //roundedMove(misc[0]);
@@ -19,7 +20,17 @@ function resizeAll() {
 
     // why doesn't forEach work correctly here?
     for(let i = 0; i < misc.length; i++) {
-        resizeCoin(misc[i]);
+        resizeThing(misc[i]);
         roundedMove(misc[i]);
     }
+}
+
+function resizeThing(thing) {
+    if (!resizeDelta) return;
+
+    thing.width = thing.width / resizeDelta;
+    thing.height = thing.height / resizeDelta;
+
+    thing.x = thing.x / resizeDelta;
+    thing.y = worldHeight - thing.height;
 }

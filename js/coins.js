@@ -113,14 +113,21 @@ function makeCoinPicker(picker) {
     }
 }
 
-function resizeCoin(coin) {
-    if (!resizeDelta) return;
+function tryPickups(coin) {
+    maybePickUpCoin(coin, elHorse);
 
-    console.log('coin', coin.y, coin.x, coin.clientHeight, coin.clientWidth, coin.className);
+    misc.forEach((thing) => {
+        if (thing.coins < thing.maxCoins) maybePickUpCoin(coin, thing);
+        
+        if (thing.coins >= thing.maxCoins) thing.classList.remove('dead');
+    });
 
-    coin.width = coin.width / resizeDelta;
-    coin.height = coin.height / resizeDelta;
+    gnomes.forEach((gnome) => {
+        maybePickUpCoin(coin, gnome);
+    });
+}
 
-    coin.x = coin.x / resizeDelta;
-    coin.y = elWorld.clientHeight - coin.height;
+function updateCoin(coin) {
+    moveCoin(coin);
+    tryPickups(coin);
 }

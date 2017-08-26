@@ -7,26 +7,24 @@ function update(timestamp) {
 
     keyMove();
 
-    coins.forEach(moveCoin);
+    updateCoinTaker();
 
-    // create method once for each coin
-    coins.forEach(tryPickups);
+    coins.forEach(updateCoin);
 
     gnomes.forEach(updateGnome);
 
     requestAnimationFrame(update);
 }
 
-function tryPickups (coin) {
-    maybePickUpCoin(coin, elHorse);
-
+function updateCoinTaker() {
+    // debounce?
+    elHorse.currentCoinTaker = null;
+    
     misc.forEach((thing) => {
-        if (thing.coins < thing.maxCoins) maybePickUpCoin(coin, thing);
-        
-        if (thing.coins >= thing.maxCoins) thing.classList.remove('dead');
-    });
-
-    gnomes.forEach((gnome) => {
-        maybePickUpCoin(coin, gnome);
+        if (boxesCollide(elHorse, thing)) {
+            if (thing.coins < thing.maxCoins) {
+                elHorse.currentCoinTaker = thing;
+            }
+        }
     });
 }
