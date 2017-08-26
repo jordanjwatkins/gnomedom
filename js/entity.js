@@ -11,6 +11,7 @@ function addEntity(props) {
     console.log(thing.x, thing.y);
 
     thing.active = true;
+    thing.maxCoins = 0;
 
     if (!thing.inDom) {
         thing.inDom = true;

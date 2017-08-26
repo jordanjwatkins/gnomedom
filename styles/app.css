@@ -3,7 +3,7 @@ body div, :before, :after {
     box-sizing: border-box;
 }
 
-body:after {
+body:after, body:before {
     content: '';
     background: #1e5799;
     top: 0;
@@ -14,7 +14,18 @@ body:after {
     pointer-events: none;
 }
 
-body.loaded:after {
+body:before {
+    z-index: 100;
+    //background: black;
+}
+
+body:after {
+    z-index: 100;
+    //background-image: radial-gradient(ellipse at 1%, #cecece 0%,#000000 86%), radial-gradient(ellipse at 90%, #cecece 0%,#000000 86%);
+    border-radius: 100%;
+}
+
+body.loaded:after, body.loaded:before {
     opacity: 0;
 }
 
@@ -79,6 +90,18 @@ html, body {
     height: 10vh;
     position: fixed;
     bottom: 0;
+    background-image: url(../images/ground.gif);
+    background-size: 3.4vh;
+}
+
+.ground.fore {
+    z-index: 3;
+    mix-blend-mode: overlay;
+}
+
+.ground.back {
+    height: 20vh;
+    opacity: 0.8;
 }
 
 .world {
@@ -87,6 +110,8 @@ html, body {
     left: 50%;
     height: 90%;
     transform: translate3d(352px, 0, 0);
+    //mix-blend-mode: overlay;
+
 }
 
 .world-center {
@@ -95,7 +120,7 @@ html, body {
     height: 30px;
     left: 50%;
     bottom: 0;
-    transform: translatex(-50%);
+    transform: translateX(-50%);
 }
 
 .title {
@@ -112,27 +137,34 @@ html, body {
     background-size: 6vw;
 }
 
+
 .campfire, .evil-campfire {
     background-image: url(../images/campfire.gif);
-    width: 20vw;
+    width: 9vw;
     height: 8vw;
-    bottom: 0;
     background-size: 9vw 8vw;
-    transform: translate3d(-35vw, 0, 0);
-    background-blend-mode: multiply;
     background-repeat: no-repeat;
 }
 
+.campfire.dead {
+    height: 2vw;
+    background-position: 0 -6vw;
+    top: 6vw;
+}
+
  .evil-campfire {
+    width: 10vw;
     background-image: url(../images/campfire.gif),  url(../images/campfire.gif);
     background-position: 0, 3vw;
-    width: 20vw;
-    height: 8vw;
-    bottom: 0;
     background-size: 9vw 8vw, 7vw 8vw;
-    transform: translate3d(-65vw, 0, 0);
     background-blend-mode: multiply;
  }
+
+ .evil-campfire.dead {
+    height: 2vw;
+    background-position: 0 -6vw, 3vw -6vw;
+    top: 6vw;
+}
 
 .girl, .girl div, .girl div:before, .girl div:after {
     content: '';
@@ -184,6 +216,10 @@ html, body {
     
 }
 
+.coin.placeholder {
+    opacity: 0.3;    
+}
+
 .coin.picked-up {
     transition: 0.5s transform, 0.9s opacity;
     opacity: 0;
@@ -228,14 +264,34 @@ html, body {
     height: 13vw;
 }
 
-.wall:before {
+.wall:before, .wall:after  {
     content: '';
-    width: 4vw;
+    width: 2vw;
     height: 13vw;
     background: brown;
 }
 
-.wall.shake:before {
+
+
+/* slanted wall probably too complex to do concisely enough */
+.wall.lv1:before {
+    width: 1vw;
+    height: 13vw;
+    background: brown;
+    transform: rotate(-39deg);
+    bottom: -3vw;
+    z-index: -100;
+}
+
+.wall:before, .wall:after, .wall.lv1:before {
+    border-radius: 129% 133% 0 0;
+    bottom: 0vw;
+    background: linear-gradient(9deg, #523434, #bb4d4d);
+    width: 7vw;
+    height: 7vw;
+}
+
+.wall.shake:before, .wall.shake:after  {
     animation: shake 0.3s linear infinite;
     
     transform: translate(0, 0);
@@ -243,6 +299,17 @@ html, body {
 
 .wall.destroyed:before {
     height: 3vw;
+    bottom: 0;
+    background: #444;
+}
+
+.wall:after {
+    height: 8vw;
+    left: -4vw;
+}
+
+.wall.destroyed:after {
+    height: 4vw;
     bottom: 0;
     background: #444;
 }

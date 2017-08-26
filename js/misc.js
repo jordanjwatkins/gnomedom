@@ -7,7 +7,7 @@ function move(el, transforms) {
 function roundedMove(el, transforms) {
     transforms = transforms || '';
 
-    el.style.transform = 'translate3d(' + Math.round(el.x) + 'px, ' + Math.round(el.y||0) + 'px, 0) ' + transforms;
+    el.style.transform = 'translate3d(' + Math.round(el.x) + 'px, ' + Math.round(el.y || 0) + 'px, 0) ' + transforms;
 }
 
 function boxesCollide(box1, box2) {

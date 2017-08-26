@@ -1,13 +1,18 @@
 var elHorse, elWorld, elGirl, currentWidth, unit, horseDirection, speed, wX;
-
+var gnomeCoinPicker, horseCoinPicker;
 var resizeDelta = 0;
+
+var elFire;
 
 var keys = {
     left: false,
-    right: false
+    right: false,
+    up: false,
+    upHold: 30,
 }
 
 var walls = [];
+var misc = [];
 
 document.addEventListener('DOMContentLoaded', init);
 
@@ -17,6 +22,8 @@ function test() {
     walls[0].health = 10;
     walls[0].destroyed = false;
     walls[0].classList.remove('destroyed');
+
+    addGnome(elHorse.x / unit + 4, elHorse.y / unit - 4, 4, 6.3);
 }
 
 function init() {
@@ -24,16 +31,22 @@ function init() {
     elGirl = document.querySelector('.girl');
     elWorld = document.querySelector('.world');
 
+    elFire = document.querySelector('.campfire');
+
     document.addEventListener('keydown', function (e) {
         if (e.which == 37) keys.left = true;
         if (e.which == 39) keys.right = true;
-        if (e.which == 38) useCoin();
+        if (e.which == 38) keys.up = true;
         if (e.which == 40) test();
     });
 
     document.addEventListener('keyup', function (e) {
         if (e.which == 37) keys.left = false;
         if (e.which == 39) keys.right = false;
+        if (e.which == 38) {
+            keys.up = false;
+            spendCoin(keys);
+        }
     });
 
     window.addEventListener('resize', function () {
@@ -46,8 +59,20 @@ function init() {
         coins.forEach(resizeCoin);
         gnomes.forEach(resizeCoin);
         walls.forEach(resizeCoin);
-
+        
         walls.forEach(roundedMove);
+
+        //misc.forEach(resizeCoin);
+        //misc.forEach(roundedMove);
+        
+        //roundedMove(misc[0]);
+        //roundedMove(misc[1]);
+
+        // why doesn't forEach work correctly here?
+        for(let i = 0; i < misc.length; i++) {
+            resizeCoin(misc[i]);
+            roundedMove(misc[i]);
+        }
     });
 
     setWorldSize();
@@ -57,15 +82,10 @@ function init() {
     // preload running image to avoid visible flash
     elHorse.classList.add('run');
 
+    // fade in after first tick positioning flash
     document.body.classList = 'loaded';
 
-    // test wall
-    var wall = addEntity({ x: -50, y: elWorld.clientHeight / unit - 13, width: 4, height: 13, things: walls, className: 'wall' });
-
-    wall.health = 10;
-    console.log(wall.x, wall.y,wall.width,wall.height);
-
-    roundedMove(wall);
+    addEntities();
 
     update();
 }
@@ -93,6 +113,16 @@ function horseMove(delta, direction) {
 
     horseDirection = direction;
 
+    misc.forEach((thing) => {
+        if (boxesCollide(elHorse, thing)) {
+            if (thing.coins < thing.maxCoins) {
+                console.log(thing);
+                elHorse.currentCoinTaker = thing;
+            }
+        }
+    });
+    
+
     move(elWorld);
     roundedMove(elHorse);
     roundedMove(elGirl);
@@ -118,6 +148,8 @@ function keyMove() {
 
         elGirl.classList.remove('run');
     }
+
+    if (keys.up) useCoins(keys);
 }
 
 var lastFrameTimeMs, delta, timestamp;
@@ -131,9 +163,55 @@ function update(timestamp) {
 
     coins.forEach(moveCoin);
 
-    coins.forEach(maybePickUpCoin);
+    // create method once for each coin
+    coins.forEach(tryPickups);
 
     gnomes.forEach(updateGnome);
 
     requestAnimationFrame(update);
+}
+
+function tryPickups (coin) {
+    maybePickUpCoin(coin, elHorse);
+
+    misc.forEach((thing) => {
+        if (thing.coins < thing.maxCoins) maybePickUpCoin(coin, thing);
+        
+        if (thing.coins >= thing.maxCoins) thing.classList.remove('dead');
+    });
+
+    gnomes.forEach((gnome) => {
+        maybePickUpCoin(coin, gnome);
+    });
+}
+
+function addEntities() {
+    // test wall
+    var wall = addEntity({ x: -50, y: elWorld.clientHeight / unit - 13, width: 4, height: 13, things: walls, className: 'wall' });
+
+    wall.health = 10;
+    
+    //console.log(wall.x, wall.y, wall.width, wall.height);
+
+    roundedMove(wall);
+
+   // fire
+    wall = addEntity({ x: -30, y: elWorld.clientHeight / unit - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
+
+    wall.coins = 0;
+    wall.maxCoins = 5;
+
+    //console.log(wall.x, wall.y, wall.width, wall.height);
+
+    roundedMove(wall);
+
+     // evil fire
+    wall = addEntity({ x: -70, y: elWorld.clientHeight / unit - 8, width: 10, height: 8, things: misc, className: 'evil-campfire dead 2' });
+
+    wall.coins = 0;
+    wall.maxCoins = 1;
+    
+    //console.log(wall.x, wall.y, wall.width, wall.height);
+
+    roundedMove(wall);
 }
