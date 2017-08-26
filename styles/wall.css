@@ -1,0 +1,79 @@
+.wall {
+    width: 4vw;
+    height: 13vw;
+}
+
+.wall:before, .wall:after  {
+    content: '';
+    width: 2vw;
+    height: 13vw;
+    background: brown;
+}
+
+/* slanted wall probably too complex to do concisely enough */
+.wall.lv1:before {
+    width: 1vw;
+    height: 13vw;
+    background: brown;
+    transform: rotate(-39deg);
+    bottom: -3vw;
+    z-index: -100;
+}
+
+.wall:before, .wall:after, .wall.lv1:before {
+    border-radius: 129% 133% 0 0;
+    bottom: 0vw;
+    background: linear-gradient(9deg, #523434, #bb4d4d);
+    width: 7vw;
+    height: 7vw;
+}
+
+.wall.shake:before, .wall.shake:after  {
+    animation: shake 0.3s linear infinite;
+    
+    transform: translate(0, 0);
+}
+
+.wall.destroyed:before {
+    height: 3vw;
+    bottom: 0;
+    background: #444;
+}
+
+.wall:after {
+    height: 8vw;
+    left: -4vw;
+}
+
+.wall.destroyed:after {
+    height: 4vw;
+    bottom: 0;
+    background: #444;
+}
+
+
+@keyframes shake {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    45% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(1vw, 0);
+    }
+
+    55% {
+        transform: translate(-1vw, 0);
+    }
+
+    60% {
+        transform: translate(0, 0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}

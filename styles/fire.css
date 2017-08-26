@@ -1,0 +1,27 @@
+.campfire, .evil-campfire {
+    background-image: url(../images/campfire.gif);
+    width: 9vw;
+    height: 8vw;
+    background-size: 9vw 8vw;
+    background-repeat: no-repeat;
+}
+
+.campfire.dead {
+    height: 2vw;
+    background-position: 0 -6vw;
+    top: 6vw;
+}
+
+ .evil-campfire {
+    width: 10vw;
+    background-image: url(../images/campfire.gif),  url(../images/campfire.gif);
+    background-position: 0, 3vw;
+    background-size: 9vw 8vw, 7vw 8vw;
+    background-blend-mode: multiply;
+ }
+
+ .evil-campfire.dead {
+    height: 2vw;
+    background-position: 0 -6vw, 3vw -6vw;
+    top: 6vw;
+}
