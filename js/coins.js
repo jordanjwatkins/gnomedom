@@ -122,8 +122,5 @@ function resizeCoin(coin) {
     coin.height = coin.height / resizeDelta;
 
     coin.x = coin.x / resizeDelta;
-    //coin.y = coin.y / resizeDelta;
     coin.y = elWorld.clientHeight - coin.height;
-
-    
 }
