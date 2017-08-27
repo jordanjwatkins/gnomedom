@@ -18,7 +18,7 @@ function boxesCollide(box1, box2) {
         box1.x + box1.width > box2.x &&
         box1.y < box2.y + box2.height &&
         box1.height + box1.y > box2.y
-   );
+    );
 }
 
 function randomDirection() {

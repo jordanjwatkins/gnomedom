@@ -4,7 +4,6 @@ var coinPool = [];
 function useCoins(keys) {
     if (elHorse.currentCoinTaker && keys.upHold > 30 && elHorse.currentCoinTaker.coins < elHorse.currentCoinTaker.maxCoins) {
         elHorse.currentCoinTaker.coins++;
-        console.log('using coins', elHorse.currentCoinTaker, elHorse.currentCoinTaker.coins);
 
         const coin = addCoin(elHorse.x / unit + 4, elHorse.y / unit - 1, 2, 3);
         
@@ -25,7 +24,6 @@ function spendCoin(keys) {
     } else {
         if (elHorse.currentCoinTaker && elHorse.currentCoinTaker.coins < elHorse.currentCoinTaker.maxCoins) {
             for (let i = 0; i < elHorse.currentCoinTaker.coins; i++) {
-                console.log(i);
                 addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
             }
 
@@ -88,10 +86,7 @@ function moveCoin(coin) {
 function maybePickUpCoin(coin, picker) {
     if (!coin.active) return;
 
-    if (
-        coin.canBePickedUp && boxesCollide(coin, picker) //||
-        //((picker.classList.contains('campfire') || picker.classList.contains('evil-campfire'))  && boxesCollide(coin, picker))
-    ) {
+    if (coin.canBePickedUp && boxesCollide(coin, picker)) {
         if (picker.maxCoins <= picker.coins) return;
 
         coin.classList.add('picked-up');

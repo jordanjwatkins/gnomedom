@@ -9,7 +9,7 @@ var keys = {
     right: false,
     up: false,
     upHold: 30,
-}
+};
 
 var walls = [];
 var misc = [];

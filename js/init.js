@@ -6,7 +6,6 @@ function init() {
     elFire = document.querySelector('.campfire');
 
     document.addEventListener('keydown', keydown);
-
     document.addEventListener('keyup', keyup);
 
     window.addEventListener('resize', resizeAll);
@@ -33,37 +32,31 @@ function setWorldSize() {
     elWorld.x = (resizeDelta) ? elWorld.x / resizeDelta : 25 * unit;
 
     elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
-    elHorse.width = (resizeDelta) ?  elHorse.width / resizeDelta : elHorse.clientWidth;
+    elHorse.width = (resizeDelta) ? elHorse.width / resizeDelta : elHorse.clientWidth;
     elHorse.height = elHorse.clientHeight;
 }
 
 function addEntities() {
-    // test wall
-    var wall = addEntity({ x: -50, y: elWorld.clientHeight / unit - 13, width: 4, height: 13, things: walls, className: 'wall' });
+    // test thing
+    var thing = addEntity({ x: -50, y: elWorld.clientHeight / unit - 13, width: 4, height: 13, things: walls, className: 'wall' });
 
-    wall.health = 10;
-    
-    //console.log(wall.x, wall.y, wall.width, wall.height);
+    thing.health = 10;
 
-    roundedMove(wall);
+    roundedMove(thing);
 
-   // fire
-    wall = addEntity({ x: -30, y: elWorld.clientHeight / unit - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
+    // fire
+    thing = addEntity({ x: -30, y: elWorld.clientHeight / unit - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
 
-    wall.coins = 0;
-    wall.maxCoins = 5;
+    thing.coins = 0;
+    thing.maxCoins = 5;
 
-    //console.log(wall.x, wall.y, wall.width, wall.height);
-
-    roundedMove(wall);
+    roundedMove(thing);
 
      // evil fire
-    wall = addEntity({ x: -70, y: elWorld.clientHeight / unit - 8, width: 10, height: 8, things: misc, className: 'evil-campfire dead 2' });
+    thing = addEntity({ x: -70, y: elWorld.clientHeight / unit - 8, width: 10, height: 8, things: misc, className: 'evil-campfire dead 2' });
 
-    wall.coins = 0;
-    wall.maxCoins = 1;
-    
-    //console.log(wall.x, wall.y, wall.width, wall.height);
+    thing.coins = 0;
+    thing.maxCoins = 1;
 
-    roundedMove(wall);
+    roundedMove(thing);
 }

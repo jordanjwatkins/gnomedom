@@ -8,9 +8,9 @@ function addEntity(props) {
     thing.width = unit * props.width || thing.clientWidth;
     thing.height = unit * props.height || thing.clientHeight;
 
-    console.log(thing.x, thing.y);
-
     thing.active = true;
+
+    thing.coins = 0;
     thing.maxCoins = 0;
 
     if (!thing.inDom) {
@@ -19,5 +19,5 @@ function addEntity(props) {
         elWorld.appendChild(thing);
     }
 
-    return thing
+    return thing;
 }

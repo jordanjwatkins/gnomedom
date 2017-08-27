@@ -25,27 +25,7 @@
     left: 50%;
     height: 90%;
     transform: translate3d(352px, 0, 0);
-    //mix-blend-mode: overlay;
-
-}
-
-.world-center {
-    width: 20px;
-    background: brown;
-    height: 30px;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-}
-
-.world-center:before {
-    background-image: url(../images/campfire.gif);
-    width: 3vw;
-    height: 5vw;
-    background-size: 3vw 5vw;
-    background-repeat: no-repeat;
-    content: '';
-    transform: translate(-10%, -100%);
+    /*mix-blend-mode: overlay;*/
 }
 
 .campfire, .evil-campfire {
@@ -68,4 +48,16 @@
     -webkit-background-clip: text;
     background-clip: text;
     background-size: 6vw;
+}
+
+.price {
+    font-size: 10vw;
+    top: -5vw;
+    left: 2vw;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.price.show {
+    opacity: 1;
 }
