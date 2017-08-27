@@ -17,11 +17,12 @@ function update(timestamp) {
 }
 
 function updateCoinTaker() {
-    let taker = elHorse.currentCoinTaker;
-    let prevPrice;
-
     // debounce?
-    if (taker && taker.price) prevPrice = taker.price;
+
+    const taker = elHorse.currentCoinTaker;
+    const prevPrice = (taker) ? taker.price : null;
+
+    if (taker) prevTaker = taker;
 
     elHorse.currentCoinTaker = null;
 
@@ -33,15 +34,18 @@ function updateCoinTaker() {
         }
     });
 
-    if (!elHorse.currentCoinTaker) {
+    updatePrice(elHorse.currentCoinTaker, prevPrice);
+}
+
+function updatePrice(coinTaker, prevPrice) {
+    if (!coinTaker) {
         if (prevPrice) prevPrice.classList.remove('show');
 
         return;
     } 
 
-    if (!elHorse.currentCoinTaker.price) {
+    if (!coinTaker.price) {
         elHorse.currentCoinTaker.price = addEntity({
-            //x, y, width, height,
             x: elHorse.currentCoinTaker.x / unit, 
             y: elHorse.currentCoinTaker.y / unit - 15,
             width: 4, height: 4,
@@ -49,14 +53,16 @@ function updateCoinTaker() {
             className: 'price',
         });
 
-        setTimeout(function () {
-            if (!elHorse.currentCoinTaker.price.classList.contains('show')) elHorse.currentCoinTaker.price.classList.add('show');
-        }, 0);
-    } else if (!elHorse.currentCoinTaker.price.classList.contains('show')) elHorse.currentCoinTaker.price.classList.add('show');
+        move(coinTaker.price);
+    }
 
+    if (!coinTaker.price.classList.contains('show')) {
+        setTimeout(function () {
+            coinTaker.price.classList.add('show');
+        }, 0);
+    }
+    
     if (prevPrice && elHorse.currentCoinTaker.price !== prevPrice) prevPrice.classList.remove('show');
 
-    elHorse.currentCoinTaker.price.innerHTML = elHorse.currentCoinTaker.maxCoins - elHorse.currentCoinTaker.coins;
-
-    move(elHorse.currentCoinTaker.price);
+    if (+coinTaker.price.innerHTML !== coinTaker.maxCoins - coinTaker.coins) coinTaker.price.innerHTML = coinTaker.maxCoins - coinTaker.coins;
 }

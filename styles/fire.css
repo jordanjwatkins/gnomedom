@@ -6,6 +6,13 @@
     background-repeat: no-repeat;
 }
 
+.campfire.small {
+    width: 6vw;
+    height: 5vw;
+    background-size: 6vw 5vw;
+    filter: brightness(72%);
+}
+
 .campfire.dead {
     height: 2vw;
     background-position: 0 -6vw;

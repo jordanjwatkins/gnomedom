@@ -8,7 +8,7 @@ var keys = {
     left: false,
     right: false,
     up: false,
-    upHold: 30,
+    upHold: 10,
 };
 
 var walls = [];

@@ -3,8 +3,6 @@ function init() {
     elGirl = document.querySelector('.girl');
     elWorld = document.querySelector('.world');
 
-    elFire = document.querySelector('.campfire');
-
     document.addEventListener('keydown', keydown);
     document.addEventListener('keyup', keyup);
 
@@ -28,6 +26,8 @@ function init() {
 function setWorldSize() {
     currentWidth = window.innerWidth;
     unit = currentWidth / 100;
+    worldHeight = elWorld.clientHeight;
+    uWorldHeight = elWorld.clientHeight / unit;
 
     elWorld.x = (resizeDelta) ? elWorld.x / resizeDelta : 25 * unit;
 
@@ -37,7 +37,7 @@ function setWorldSize() {
 }
 
 function addEntities() {
-    // test thing
+    // test wall
     var thing = addEntity({ x: -50, y: elWorld.clientHeight / unit - 13, width: 4, height: 13, things: walls, className: 'wall' });
 
     thing.health = 10;
@@ -59,4 +59,7 @@ function addEntities() {
     thing.maxCoins = 1;
 
     roundedMove(thing);
+
+    // camp
+    addCamp(-90);
 }

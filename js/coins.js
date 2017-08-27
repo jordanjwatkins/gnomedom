@@ -18,24 +18,14 @@ function useCoins(keys) {
 }
 
 function spendCoin(keys) {
-    if (keys.upHold < 0) {
-        addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
-        
-    } else {
-        if (elHorse.currentCoinTaker && elHorse.currentCoinTaker.coins < elHorse.currentCoinTaker.maxCoins) {
-            for (let i = 0; i < elHorse.currentCoinTaker.coins; i++) {
-                addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
-            }
-
-            elHorse.currentCoinTaker.coins = 0;
+    if (elHorse.currentCoinTaker && elHorse.currentCoinTaker.coins < elHorse.currentCoinTaker.maxCoins) {
+        for (let i = 0; i <= elHorse.currentCoinTaker.coins; i++) {
+            addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
         }
-        /*const coin = addCoin(elHorse.x / unit + 4, elHorse.y / unit - 18, 2, 3);
-        
-        setTimeout(() => {
-            coin.canBePickedUp = true;
-        }, 10);
 
-        keys.upHold = 0;*/
+        elHorse.currentCoinTaker.coins = 0;
+    } else {
+        addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
     }
 
     keys.upHold = 30;

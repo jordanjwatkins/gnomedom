@@ -20,12 +20,13 @@
     z-index: -100;
 }
 
-.wall:before, .wall:after, .wall.lv1:before {
-    border-radius: 129% 133% 0 0;
-    bottom: 0vw;
-    background: linear-gradient(9deg, #523434, #bb4d4d);
-    width: 7vw;
-    height: 7vw;
+.wall:before, .wall:after {
+    /*border-radius: 129% 133% 0 0;*/
+    bottom: 0;
+    /*background: linear-gradient(9deg, #523434, #bb4d4d);*/
+    width: 1vw;
+    height: 12vw;
+    mix-blend-mode: multiply;
 }
 
 .wall.shake:before, .wall.shake:after  {
@@ -41,8 +42,8 @@
 }
 
 .wall:after {
-    height: 8vw;
-    left: -4vw;
+    height: 10vw;
+    left: -1.8vw;
 }
 
 .wall.destroyed:after {
