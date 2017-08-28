@@ -1,6 +1,6 @@
 .horse, .horse div, .horse div:before, .horse div:after {
     width: 12.5vw;
-    height: 10.0vw;
+    height: 10vw;
     z-index: 2;
 }
 

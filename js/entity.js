@@ -13,11 +13,15 @@ function addEntity(props) {
     thing.coins = 0;
     thing.maxCoins = 0;
 
+    thing.sated = false;
+
     if (!thing.inDom) {
         thing.inDom = true;
         props.things.push(thing);
         elWorld.appendChild(thing);
     }
+
+    roundedMove(thing);
 
     return thing;
 }

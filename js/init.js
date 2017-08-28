@@ -12,6 +12,10 @@ function init() {
 
     horseMove(0, 1);
 
+    elHorse.coins = 15;
+
+    console.log(elHorse.coins);
+
     // preload running image to avoid visible flash
     elHorse.classList.add('run');
 
@@ -38,28 +42,49 @@ function setWorldSize() {
 
 function addEntities() {
     // test wall
-    var thing = addEntity({ x: -50, y: elWorld.clientHeight / unit - 13, width: 4, height: 13, things: walls, className: 'wall' });
+    var thing = addEntity({ x: -90, y: uWorldHeight - 13, width: 5, height: 13, things: walls, className: 'wall unbuilt' });
 
     thing.health = 10;
+    thing.maxCoins = 3;
 
-    roundedMove(thing);
+    thing.levelUp = function () {
+        this.classList.remove('unbuilt');
+    };
+
+    thing = addEntity({ x: 30, y: uWorldHeight - 13, width: 5, height: 13, things: walls, className: 'wall unbuilt' });
+
+    thing.health = 10;
+    thing.maxCoins = 3;
+
+    thing.levelUp = function () {
+        this.classList.remove('unbuilt');
+    };
 
     // fire
-    thing = addEntity({ x: -30, y: elWorld.clientHeight / unit - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
+    thing = addEntity({ x: -30, y: uWorldHeight - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
+
+    thing.maxCoins = 3;
+
+    // evil fire (lvl 2?)
+    thing = addEntity({ x: -270, y: uWorldHeight - 8, width: 10, height: 8, things: misc, className: 'evil-campfire' });
 
     thing.coins = 0;
-    thing.maxCoins = 5;
+    thing.maxCoins = 4;
 
-    roundedMove(thing);
-
-     // evil fire
-    thing = addEntity({ x: -70, y: elWorld.clientHeight / unit - 8, width: 10, height: 8, things: misc, className: 'evil-campfire dead 2' });
-
-    thing.coins = 0;
-    thing.maxCoins = 1;
+    thing.spawner = setInterval(function () {
+        console.log('spawn');
+        thing = addGnome(-269);
+        thing.filter = 'evil';
+        thing.style.filter = gFilters[thing.filter];
+        thing.moveType = 'walking';
+        thing.vX = -120*unit;
+    }, 10000);
 
     roundedMove(thing);
 
     // camp
-    addCamp(-90);
+    addCamp(-190);
+
+    addGnome(-40);
+    addGnome(20);
 }

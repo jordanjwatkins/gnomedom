@@ -26,15 +26,19 @@ function updateCoinTaker() {
 
     elHorse.currentCoinTaker = null;
 
-    misc.forEach((thing) => {
-        if (boxesCollide(elHorse, thing)) {
-            if (thing.coins < thing.maxCoins) {
-                elHorse.currentCoinTaker = thing;
-            }
-        }
-    });
+    misc.forEach(maybeSetCurrentCoinTaker);
+
+    walls.forEach(maybeSetCurrentCoinTaker);
 
     updatePrice(elHorse.currentCoinTaker, prevPrice);
+}
+
+function maybeSetCurrentCoinTaker(thing) {
+    if (thing.maxCoins <= 0 || thing.coins >= thing.maxCoins) return;
+
+    if (boxesCollide(elHorse, thing)) {
+        elHorse.currentCoinTaker = thing;
+    }
 }
 
 function updatePrice(coinTaker, prevPrice) {
@@ -42,12 +46,12 @@ function updatePrice(coinTaker, prevPrice) {
         if (prevPrice) prevPrice.classList.remove('show');
 
         return;
-    } 
+    }
 
     if (!coinTaker.price) {
-        elHorse.currentCoinTaker.price = addEntity({
-            x: elHorse.currentCoinTaker.x / unit, 
-            y: elHorse.currentCoinTaker.y / unit - 15,
+        coinTaker.price = addEntity({
+            x: coinTaker.x / unit + coinTaker.width / unit / 2 - 3,
+            y: coinTaker.y / unit - 15,
             width: 4, height: 4,
             things: misc,
             className: 'price',
@@ -61,8 +65,8 @@ function updatePrice(coinTaker, prevPrice) {
             coinTaker.price.classList.add('show');
         }, 0);
     }
-    
-    if (prevPrice && elHorse.currentCoinTaker.price !== prevPrice) prevPrice.classList.remove('show');
+
+    if (prevPrice && coinTaker.price !== prevPrice) prevPrice.classList.remove('show');
 
     if (+coinTaker.price.innerHTML !== coinTaker.maxCoins - coinTaker.coins) coinTaker.price.innerHTML = coinTaker.maxCoins - coinTaker.coins;
 }

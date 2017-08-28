@@ -37,7 +37,7 @@
 }
 
 .title {
-    left: 4vw;
+    left: 54vw;
     color: transparent;
     font-size: 30vw;
     font-family: monospace;
@@ -54,11 +54,16 @@
     font-family: monospace;
     font-size: 10vw;
     top: -5vw;
-    left: 2vw;
     opacity: 0;
     transition: opacity 0.3s;
 }
 
 .price.show {
     opacity: 0.5;
+}
+
+.bush {
+    width: 10vw;
+    height: 7vw;
+    background: darkgreen;
 }

@@ -1,12 +1,23 @@
-var coins = [];
-var coinPool = [];
-
 function useCoins(keys) {
-    if (elHorse.currentCoinTaker && keys.upHold > 30 && elHorse.currentCoinTaker.coins < elHorse.currentCoinTaker.maxCoins) {
-        elHorse.currentCoinTaker.coins++;
+    coinTaker = elHorse.currentCoinTaker;
+
+    if (!coinTaker) return;
+
+    if (elHorse.coins <= 0) return;
+
+    if (coinTaker && keys.upHold > 30 && coinTaker.coins < coinTaker.maxCoins) {
+        coinTaker.coins++;
+
+        if (coinTaker.coins === coinTaker.maxCoins && !coinTaker.sated) {
+            if (coinTaker.levelUp) coinTaker.levelUp();
+
+            coinTaker.sated = true;
+        }
+
+        elHorse.coins -= 2; // currently spend effect is based on picking the coin up, so an extra -1 to counterbalance
 
         const coin = addCoin(elHorse.x / unit + 4, elHorse.y / unit - 1, 2, 3);
-        
+
         setTimeout(() => {
             coin.canBePickedUp = true;
         }, 10);
@@ -18,17 +29,23 @@ function useCoins(keys) {
 }
 
 function spendCoin(keys) {
-    if (elHorse.currentCoinTaker && elHorse.currentCoinTaker.coins < elHorse.currentCoinTaker.maxCoins) {
-        for (let i = 0; i <= elHorse.currentCoinTaker.coins; i++) {
+    console.log(elHorse.coins);
+
+    coinTaker = elHorse.currentCoinTaker;
+
+    if (coinTaker && coinTaker.coins < coinTaker.maxCoins && coinTaker.coins > 0) {
+        for (let i = 0; i < coinTaker.coins; i++) {
             addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
         }
 
-        elHorse.currentCoinTaker.coins = 0;
-    } else {
+        coinTaker.coins = 0;
+    } else if (elHorse.coins > 0) {
+        elHorse.coins--;
+
         addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
     }
 
-    keys.upHold = 30;
+    keys.upHold = 0;
 }
 
 function addCoin(x, y, width, height) {
@@ -36,7 +53,7 @@ function addCoin(x, y, width, height) {
         x, y, width, height,
         thingPool: coinPool,
         things: coins,
-        className: 'coin'
+        className: 'coin',
     });
 
     // thrown velocity
@@ -102,8 +119,6 @@ function tryPickups(coin) {
     maybePickUpCoin(coin, elHorse);
 
     misc.forEach((thing) => {
-        if (thing.coins < thing.maxCoins) maybePickUpCoin(coin, thing);
-        
         if (thing.coins >= thing.maxCoins) thing.classList.remove('dead');
     });
 

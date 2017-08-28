@@ -4,10 +4,16 @@ function addCamp(x) {
     // fire
     thing = addEntity({ x: x, y: uWorldHeight - 5, width: 7, height: 5, things: misc, className: 'campfire small' });
 
-    roundedMove(thing);
-
     // gnomes
-    addGnome(x - 10, uWorldHeight - 6.3, 4, 6.3);
-    addGnome(x + 10, uWorldHeight - 6.3, 4, 6.3);
+    thing = addGnome(x - 10);
+
+    thing.campX = thing.x;
+
+    thing = addGnome(x + 10);
+
+    thing.campX = thing.x;
+
+    thing = addEntity({ x: x - 25, y: uWorldHeight - 7, width: 10, height: 7, things: misc, className: 'bush' });
+
+    thing = addEntity({ x: x + 25, y: uWorldHeight - 7, width: 10, height: 7, things: misc, className: 'bush' });
 }
-// fire

@@ -1,37 +1,31 @@
 .wall {
-    width: 4vw;
+    width: 5vw;
     height: 13vw;
+    border-bottom: 1vw solid #809e4e;
 }
 
 .wall:before, .wall:after  {
     content: '';
-    width: 2vw;
-    height: 13vw;
-    background: brown;
-}
-
-/* slanted wall probably too complex to do concisely enough */
-.wall.lv1:before {
-    width: 1vw;
-    height: 13vw;
-    background: brown;
-    transform: rotate(-39deg);
-    bottom: -3vw;
-    z-index: -100;
-}
-
-.wall:before, .wall:after {
-    /*border-radius: 129% 133% 0 0;*/
-    bottom: 0;
-    /*background: linear-gradient(9deg, #523434, #bb4d4d);*/
     width: 1vw;
     height: 12vw;
-    mix-blend-mode: multiply;
+    background: brown;
+    bottom: 0;
+    transition: transform 0.3s;
 }
+
+.wall:before {
+    left: 0.9vw;
+}
+
+.wall:after {
+    height: 10vw;
+    left: 3.1vw;
+}
+
 
 .wall.shake:before, .wall.shake:after  {
     animation: shake 0.3s linear infinite;
-    
+
     transform: translate(0, 0);
 }
 
@@ -41,10 +35,6 @@
     background: #444;
 }
 
-.wall:after {
-    height: 10vw;
-    left: -1.8vw;
-}
 
 .wall.destroyed:after {
     height: 4vw;
@@ -52,7 +42,12 @@
     background: #444;
 }
 
+.wall.unbuilt:after,
+.wall.unbuilt:before {
+    transform: translateY(100%);
+}
 
+/* could use simpler reaction that could stay active throughout attack (eg. flashing red) */
 @keyframes shake {
     0% {
         transform: translate(0, 0);
@@ -77,4 +72,14 @@
     100% {
         transform: translate(0, 0);
     }
+}
+
+/* slanted wall probably too complex to do concisely enough */
+.wall.lv1:before {
+    width: 1vw;
+    height: 13vw;
+    background: brown;
+    transform: rotate(-39deg);
+    bottom: -3vw;
+    z-index: -100;
 }

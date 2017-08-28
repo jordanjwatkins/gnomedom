@@ -21,7 +21,7 @@ Object.assign(window, {
         walls[0].destroyed = false;
         walls[0].classList.remove('destroyed');
 
-        addGnome(elHorse.x / unit + 4, elHorse.y / unit - 4, 4, 6.3);
+        addGnome(elHorse.x / unit + 4);
     },
 
     keyMove() {

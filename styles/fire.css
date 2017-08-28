@@ -19,15 +19,19 @@
     top: 6vw;
 }
 
- .evil-campfire {
+.campfire.lvl-2 {
     width: 10vw;
     background-image: url(../images/campfire.gif),  url(../images/campfire.gif);
     background-position: 0, 3vw;
     background-size: 9vw 8vw, 7vw 8vw;
     background-blend-mode: multiply;
- }
+}
 
-.evil-campfire.dead {
+.evil-campfire {
+    filter: brightness(2%);
+}
+
+.evil-campfire.dead, .campfire.lvl-2.dead {
     height: 2vw;
     background-position: 0 -6vw, 3vw -6vw;
     top: 6vw;
