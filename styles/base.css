@@ -1,9 +1,10 @@
 body div, :before, :after {
     position: absolute;
     box-sizing: border-box;
+    z-index: 1;
 }
 
-body:after, body:before {
+body:after, body:before, .light-layer, .light-layer-2, .night-layer {
     content: '';
     background: #1e5799;
     top: 0;
@@ -15,18 +16,22 @@ body:after, body:before {
 }
 
 body:before {
-    z-index: 100;
+    z-index: 1;
     //background: black;
 }
 
 body:after {
+    display: none;
     z-index: 100;
-    //background-image: radial-gradient(ellipse at 1%, #cecece 0%,#000000 86%), radial-gradient(ellipse at 90%, #cecece 0%,#000000 86%);
+    background-image: radial-gradient(ellipse at center, transparent 0%,#fff 86%), radial-gradient(ellipse at center, transparent 0%,#fff 86%);
     border-radius: 100%;
+    //mix-blend-mode: multiply;
+    background-size: 20vw;
+    background-position: -20vw 0, 0 0;
 }
 
 body.loaded:after, body.loaded:before {
-    opacity: 0;
+   // opacity: 0;
 }
 
 div, :before, :after {
@@ -40,4 +45,52 @@ html, body {
     margin: 0;
     overflow: hidden;
     background: linear-gradient(to bottom, #1e5799 0%, #7db9e8 100%);
+}
+
+html {
+    background: linear-gradient(to right, #000, transparent), linear-gradient(to left, #000, transparent), linear-gradient(to bottom, #1e5799 0%, #7db9e8 100%);
+
+    background-size: 34vw 200vw, 34vw 171vw;
+    background-size: 64vw 200vw, 64vw 171vw;
+    /* background-position: -20vw, -5vw; */
+    /*background-blend-mode: screen;
+
+    background-blend-mode: soft-light;*/
+
+    mix-blend-mode: soft-light;
+
+    background-repeat: no-repeat;
+    background-color: #000;
+}
+
+.light-layer {
+    z-index: 1;
+    background: red;
+   // mix-blend-mode: multiply;
+   display: none;
+}
+
+.light-layer-2 {
+    z-index: 4;
+    background: blue;
+
+        mix-blend-mode: soft-light;
+        background-color: #000;
+
+        background-image: radial-gradient(ellipse at center, transparent 0%,#fff 86%);
+        background-size: 30vw;
+        background-repeat: no-repeat;
+}
+
+.light-layer, .light-layer-2 { display: none; }
+
+.night-layer {
+    opacity: 0;
+    background: black;
+    z-index: 1000;
+    transition: opacity 20s;
+}
+
+.night-layer.night {
+    opacity: 0.9;
 }

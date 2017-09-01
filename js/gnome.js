@@ -212,19 +212,25 @@ function updateGnome(gnome) {
             walls.forEach((wall) => {
                 maybeStartWallAttack(gnome, wall);
             });
+        }
 
-            if ((gnome.moveType === 'attack' || gnome.startingAttack) && gnome.coins !== gnome.maxCoins) {
+        if ((gnome.moveType === 'attack' || gnome.startingAttack) && gnome.coins !== gnome.maxCoins) {
+            if (gnome.targetWall) {
+                //if (gnome.targetWall.destroyed) gnome.targetWall = null;
                 if (gnome.targetWall) {
-                    if (gnome.targetWall.destroyed) gnome.targetWall = null;
-                    if (gnome.targetWall) {
-                        attackWall(gnome, gnome.targetWall);
-                    } else {
-                         (gnome.coins === gnome.maxCoins) ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
-                    }
+                    attackWall(gnome, gnome.targetWall);
+                } else {
+                        (gnome.coins === gnome.maxCoins) ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
                 }
-            } else {
-                gnome.classList.remove('attack');
-                (gnome.coins === gnome.maxCoins) ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
+            }
+        } else {
+            gnome.classList.remove('attack');
+            (gnome.coins === gnome.maxCoins) ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
+
+            if (gnome.x > gnome.villagePos && gnome.x < gnome.villagePos + 12 * unit) {
+                gnome.moveType = 'standing';
+                gnome.classList.remove('walk');
+                gnome.task = 'idle';
             }
         }
 
@@ -247,7 +253,7 @@ function updateGnome(gnome) {
     // move toward village
     if (gnome.moveType === 'standing') {
         if (gnome.filter !== 'poor' && !gnome.task) {
-            walkToTarget(gnome, -30);
+            walkToTarget(gnome, gnome.villagePos);
 
             gnome.classList.remove('attack');
 

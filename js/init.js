@@ -2,6 +2,7 @@ function init() {
     elHorse = document.querySelector('.horse');
     elGirl = document.querySelector('.girl');
     elWorld = document.querySelector('.world');
+    elNightLayer = document.querySelector('.night-layer');
 
     document.addEventListener('keydown', keydown);
     document.addEventListener('keyup', keyup);
@@ -46,9 +47,11 @@ function addEntities() {
 
     thing.health = 10;
     thing.maxCoins = 3;
+    thing.destroyed = true;
 
     thing.levelUp = function () {
-        this.classList.remove('unbuilt');
+        this.classList.remove('unbuilt', 'destroyed');
+        this.destroyed = false;
     };
 
     thing = addEntity({ x: 30, y: uWorldHeight - 13, width: 5, height: 13, things: walls, className: 'wall unbuilt' });
@@ -57,7 +60,8 @@ function addEntities() {
     thing.maxCoins = 3;
 
     thing.levelUp = function () {
-        this.classList.remove('unbuilt');
+        this.classList.remove('unbuilt', 'destroyed');
+        this.destroyed = false;
     };
 
     // fire
@@ -71,20 +75,33 @@ function addEntities() {
     thing.coins = 0;
     thing.maxCoins = 4;
 
-    thing.spawner = setInterval(function () {
+    // spawn evils
+    let evils = 0;
+
+    spawn();
+
+    thing.spawner = setInterval(spawn, 10000);
+
+    function spawn() {
+        if (evils > 5) return;
+
         console.log('spawn');
+
+        evils++;
+
         thing = addGnome(-269);
         thing.filter = 'evil';
         thing.style.filter = gFilters[thing.filter];
         thing.moveType = 'walking';
-        thing.vX = -120*unit;
-    }, 10000);
+        thing.vX = -120 * unit;
+    }
 
     roundedMove(thing);
 
     // camp
     addCamp(-190);
 
+    // village gnomes
     addGnome(-40);
     addGnome(20);
 }

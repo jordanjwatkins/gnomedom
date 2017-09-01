@@ -18,3 +18,5 @@ var keys = {
 
 var walls = [];
 var misc = [];
+
+var elNightLayer;

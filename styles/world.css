@@ -11,7 +11,8 @@
 
 .ground.fore {
     z-index: 3;
-    mix-blend-mode: overlay;
+    /*mix-blend-mode: overlay;*/
+    //mix-blend-mode: multiply;
 }
 
 .ground.back {
@@ -20,12 +21,17 @@
 }
 
 .world {
+    z-index: 2;
     width: 0;
     top: 0;
     left: 50%;
     height: 90%;
     transform: translate3d(352px, 0, 0);
     /*mix-blend-mode: overlay;*/
+
+    //mix-blend-mode: multiply;
+
+
 }
 
 .campfire, .evil-campfire {

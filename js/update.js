@@ -13,6 +13,8 @@ function update(timestamp) {
 
     gnomes.forEach(updateGnome);
 
+    updateDayNight();
+
     requestAnimationFrame(update);
 }
 
@@ -69,4 +71,20 @@ function updatePrice(coinTaker, prevPrice) {
     if (prevPrice && coinTaker.price !== prevPrice) prevPrice.classList.remove('show');
 
     if (+coinTaker.price.innerHTML !== coinTaker.maxCoins - coinTaker.coins) coinTaker.price.innerHTML = coinTaker.maxCoins - coinTaker.coins;
+}
+
+let hour = 0;
+
+function updateDayNight() {
+    hour += delta *0.001;
+
+    console.log(hour);
+
+    if (hour > 24) hour = 0;
+
+    if (hour > 5 && hour < 5.2) {
+        elNightLayer.classList.remove('night');
+    } else if (hour > 17) {
+        elNightLayer.classList.add('night');
+    }
 }
