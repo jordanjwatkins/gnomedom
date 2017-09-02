@@ -15,6 +15,8 @@ function update(timestamp) {
 
     updateDayNight();
 
+    updateCanvas();
+
     requestAnimationFrame(update);
 }
 
@@ -78,7 +80,7 @@ let hour = 0;
 function updateDayNight() {
     hour += delta *0.001;
 
-    console.log(hour);
+    //console.log(hour);
 
     if (hour > 24) hour = 0;
 

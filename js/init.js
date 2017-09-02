@@ -11,6 +11,10 @@ function init() {
 
     setWorldSize();
 
+    elCanvas = document.querySelector('.canvas');
+    console.log(elCanvas);
+    ctx = elCanvas.getContext('2d');
+
     horseMove(0, 1);
 
     elHorse.coins = 15;

@@ -20,3 +20,5 @@ var walls = [];
 var misc = [];
 
 var elNightLayer;
+
+let elCanvas, ctx;
