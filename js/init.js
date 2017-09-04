@@ -86,6 +86,9 @@ function addEntities() {
     // horse
     thing = addEntity({ x: 43, y: uWorldHeight - 8, width: 12.5, height: 10, things: misc, className: 'horse' });
 
+    thing.sW = 5;
+    thing.sH = 4;
+
     // fire
     thing = addEntity({ x: 11, y: uWorldHeight - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
 

@@ -28,21 +28,21 @@ Object.assign(window, {
         if (keys.left) {
             horseMove(delta, 1);
 
-           // elHorse.classList.add('run');
-           // elGirl.classList.add('run');
+            elHorse.classList.add('run');
+            elGirl.classList.add('run');
 
-            //elHorse.classList.remove('right');
-            //elGirl.classList.remove('right');
+            elHorse.classList.remove('right');
+            elGirl.classList.remove('right');
         } else if (keys.right) {
             horseMove(delta, -1);
 
-            //elHorse.classList.add('run', 'right');
-            //elGirl.classList.add('run','right');
+            elHorse.classList.add('run', 'right');
+            elGirl.classList.add('run','right');
         } else {
             // don't remove first tick so 'run' image preloads correctly
-            //if (delta > 0) elHorse.classList.remove('run');
+            if (delta > 0) elHorse.classList.remove('run');
 
-            //elGirl.classList.remove('run');
+            elGirl.classList.remove('run');
         }
 
         if (keys.up) useCoins(keys);

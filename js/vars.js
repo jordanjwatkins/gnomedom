@@ -29,3 +29,9 @@ const projectiles = [];
 const images = {};
 
 let darknessCanvas, darknessCtx;
+
+const imageSizes = {
+    gnomeWalk: [7, 11],
+    horse: [5, 4],
+    fire: [5, 4],
+};

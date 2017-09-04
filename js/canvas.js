@@ -15,6 +15,10 @@ function renderDayNight() {
     ctx.drawImage(darknessCanvas, 0, 0);
 }
 
+function renderCoin(coin) {
+    draw(coin);
+}
+
 function renderFire(fire) {
     if (fire.sprite) {
         spriteX = fire.x + elWorld.x;
@@ -45,20 +49,66 @@ function renderHorse(horse) {
 
         let timeValue = Math.tan(lastFrameTimeMs / 190);
 
+        let deg = 7;
+        let angleInRad = deg * Math.PI / 180;
+        let tX = elCanvas.width / 2, tY = elCanvas.height / 2;
+
+        ctx.translate(tX, tY);
+        ctx.rotate(angleInRad);
+        ctx.translate(-(tX), -(tY));
+
         if (horse.burning) {
             if (timeValue < -0.66) {
-                ctx.drawImage(horse.sprite, 5, 0, 5, 4, Math.round(spriteX), spriteY, horse.width, horse.height);
+                draw(horse, 0);
             } else if (timeValue > -0.66 && timeValue < 0.66) {
-                ctx.drawImage(horse.sprite, 10, 0, 5, 4, Math.round(spriteX), spriteY, horse.width, horse.height);
+                draw(horse, 1);
             } else {
-                ctx.drawImage(horse.sprite, 15, 0, 5, 4, Math.round(spriteX), spriteY, horse.width, horse.height);
+                draw(horse, 2);
             }
         } else {
-            ctx.drawImage(horse.sprite, 0, 0, 5, 4, Math.round(spriteX), spriteY, horse.width, horse.height);
+            draw(horse, 0);
         }
+
+        ctx.translate(tX, tY);
+        ctx.rotate(-angleInRad);
+        ctx.translate(-(tX), -(tY));
     } else {
         horse.sprite =  images['horse'];
     }
+}
+
+function renderGnome(gnome) {
+    if (gnome.sprite) {
+        spriteX = gnome.x + elWorld.x;
+        spriteY = gnome.y - gnome.height;
+
+        // handle elsewhere
+        if (gnome.vX > 0) gnome.sprite =  images['gnomeWalk'];
+        if (gnome.vX < 0) gnome.sprite = images['flipped'];
+
+        //if (gnome.flipped) gnome.sprite = images['flipped'];
+
+        if (gnome.moveType === 'walking') {
+            if (Math.sin(lastFrameTimeMs / 100) > 0) {
+                draw(gnome, 0);
+            } else {
+                draw(gnome, 1);
+                //ctx.drawImage(gnome.sprite, 7, 0, 7, 11, Math.round(spriteX), spriteY, gnome.width, gnome.height);
+            }
+        } else {
+            gnome.sprite = images['gnomeStand'];
+            draw(gnome, 0);
+        }
+    }
+}
+
+function draw(thing, frame) {
+    ctx.drawImage(
+        thing.sprite,
+        frame * thing.sW, 0, thing.sW, thing.sH,
+        Math.round(spriteX), spriteY,
+        thing.width, thing.height
+    );
 }
 
 function lightOnScreen(light) {
@@ -88,20 +138,25 @@ function darken(x, y, w, h, darkenColor, amount) {
 }
 
 function loadImage(url, name) {
-  var img = new Image();
-  img.src = url
-  img.onload = function () {
-    console.log('image loaded', name);
-    images[name] = img;
-    //ctx.drawImage(img, 0, 0, 100, 100);
-    if (images.gnomeWalk && !images.flipped) loadImage(flipImage(images.gnomeWalk), 'flipped');
-  }
+    var img = new Image();
+
+    img.src = url;
+
+    img.onload = function () {
+        console.log('image loaded', name);
+
+        images[name] = img;
+
+        if (images.gnomeWalk && !images.flipped) loadImage(flipImage(images.gnomeWalk), 'flipped');
+    };
 }
 
 function flipImage(image) {
     var m_canvas = document.createElement('canvas');
+
     m_canvas.width = 14;
     m_canvas.height = 14;
+
     var m_context = m_canvas.getContext('2d');
 
     m_context.translate(14, 0);
@@ -109,9 +164,6 @@ function flipImage(image) {
 
     m_context.drawImage(image, 0, 0);
 
-    //m_context.translate(-6, 0);
-    //m_context.scale(-1, 1);
-    //console.log(m_canvas.toDataURL());
     return m_canvas.toDataURL();
 }
 

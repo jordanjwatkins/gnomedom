@@ -20,14 +20,7 @@ function update(timestamp) {
 
     misc.forEach(maybeRender);
 
-    maybeRenderHorse(elHorse);
-
-    //updateCanvas();
-
-    //gnomes.forEach(updateGnome);
-    //console.log('gnomes.length', gnomes.length);
-
-    //updateGnome(gnomes[4]);
+    //maybeRenderHorse(elHorse);
 
     for(let i = 0; i < gnomes.length; i++) {
         updateGnome(gnomes[i]);
@@ -42,12 +35,12 @@ function update(timestamp) {
 
 function maybeRender(thing) {
     if (thing.className.match('campfire')) renderFire(thing);
-    if (thing.className.match('horse')) renderHorse(thing);
+    //if (thing.className.match('horse')) renderHorse(thing);
 }
 
-function maybeRenderHorse(thing) {
+/*function maybeRenderHorse(thing) {
     if (thing.className.match('horse')) renderFire(thing);
-}
+}*/
 
 function updateCoinTaker() {
     // debounce?

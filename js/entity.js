@@ -1,6 +1,8 @@
 function addEntity(props) {
     var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : document.createElement('div');
 
+    thing.props = props;
+
     thing.className = props.className;
 
     thing.x = props.x * unit;

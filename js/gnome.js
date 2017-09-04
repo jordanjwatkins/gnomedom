@@ -22,6 +22,9 @@ function addGnome(x, y, width, height) {
 
     gnome.sprite = images.gnomeWalk;
 
+    gnome.sW = 7;
+    gnome.sH = 11;
+
     gnome.vX = 0;
     gnome.vY = 0;
     gnome.wait = 5;
@@ -70,28 +73,6 @@ function moveGnome(gnome) {
 
     //move(gnome);
     renderGnome(gnome);
-}
-
-function renderGnome(gnome) {
-    if (gnome.sprite) {
-        spriteX = gnome.x + elWorld.x;
-        spriteY = gnome.y - gnome.height;
-
-        if (gnome.vX < 0) gnome.sprite =  images['gnomeWalk'];
-        if (gnome.vX > 0) gnome.sprite = images['flipped'];
-
-        //if (gnome.flipped) gnome.sprite = images['flipped'];
-
-        if (gnome.moveType === 'walking') {
-            if (Math.sin(lastFrameTimeMs / 100) > 0) {
-                ctx.drawImage(gnome.sprite, 0, 0, 7, 11, Math.round(spriteX), spriteY, gnome.width, gnome.height);
-            } else {
-                ctx.drawImage(gnome.sprite, 7, 0, 7, 11, Math.round(spriteX), spriteY, gnome.width, gnome.height);
-            }
-        } else {
-            ctx.drawImage(images['gnomeStand'], 0, 0, 7, 11, Math.round(spriteX), spriteY, gnome.width, gnome.height);
-        }
-    }
 }
 
 function maybeStartWallAttack(gnome, wall) {

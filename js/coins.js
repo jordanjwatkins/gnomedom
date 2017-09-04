@@ -1,9 +1,7 @@
 function useCoins(keys) {
     coinTaker = elHorse.currentCoinTaker;
 
-    if (!coinTaker) return;
-
-    if (elHorse.coins <= 0) return;
+    if (!coinTaker || elHorse.coins <= 0) return;
 
     if (coinTaker && keys.upHold > 30 && coinTaker.coins < coinTaker.maxCoins) {
         coinTaker.coins++;
@@ -112,7 +110,7 @@ function maybePickUpCoin(coin, picker) {
 function makeCoinPicker(picker) {
     return function (coin) {
         maybePickUpCoin(coin, picker);
-    }
+    };
 }
 
 function tryPickups(coin) {

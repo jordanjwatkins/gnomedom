@@ -1,3 +1,9 @@
+.horse {
+    bottom: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .horse, .horse div, .horse div:before, .horse div:after {
     width: 12.5vw;
     height: 10vw;
