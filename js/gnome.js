@@ -11,6 +11,7 @@ function addGnome(x, y, width, height) {
     width = width || 4;
     height = height || 6.3;
 
+    // Fix this
     y = y || uWorldHeight - height;
 
     gnome = addEntity({
@@ -37,7 +38,7 @@ function addGnome(x, y, width, height) {
 
     gnome.maxCoins = 1;
 
-    gnome.style.filter = gFilters[gnome.filter];
+    //gnome.style.filter = gFilters[gnome.filter];
 
     gnome.villagePos = -60 * unit + 40 * unit * Math.random();
     gnome.campX = gnome.x;
@@ -54,13 +55,13 @@ function addGnome(x, y, width, height) {
 function moveGnome(gnome) {
     if (!gnome.active) return;
 
-    gnome.y = worldHeight  - gnome.clientHeight;
+    gnome.y = worldHeight  - gnome.height;
 
     if (gnome.moveType === 'walking') {
         //console.log('walking');
         if (gnome.vX === 0)  {
             gnome.vX = randomDirection() * unit / 12;
-            gnome.classList.add('walk');
+            //gnome.classList.add('walk');
         }
 
         //gnome.sprite = (gnome.vX > 0) ? images['gnomeWalk'] : images['flipped'];
@@ -92,9 +93,9 @@ function maybeStartWallAttack(gnome, wall) {
             gnome.startingAttack = false;
 
             gnome.moveType = 'attack';
-            gnome.classList.add('attack');
+            //gnome.classList.add('attack');
 
-            (gnome.attackDirection === 1) ? gnome.classList.add('right') : gnome.classList.remove('right');
+            //(gnome.attackDirection === 1) ? gnome.classList.add('right') : gnome.classList.remove('right');
 
             gnome.vX = 0.001;
 
@@ -107,13 +108,13 @@ function attackWall(gnome, wall) {
     if (gnome.attackTimer === 0) {
         console.log('attack');
 
-        wall.classList.add('shake');
+        //wall.classList.add('shake');
         gnome.attackTimer = 63;
         wall.shaking = true;
         wall.health -= 1;
 
         setTimeout(function () {
-            wall.classList.remove('shake');
+            //wall.classList.remove('shake');
             wall.shaking = false;
         }, 200);
     } else {
@@ -124,11 +125,11 @@ function attackWall(gnome, wall) {
         console.log('walking');
 
         wall.destroyed = true;
-        wall.classList.add('destroyed');
+       // wall.classList.add('destroyed');
         wall.coins = 0;
 
         gnome.moveType = 'walking';
-        gnome.classList.remove('attack');
+        //gnome.classList.remove('attack');
         gnome.vX = 0;
     }
 }
@@ -137,7 +138,7 @@ function handlePoor(gnome) {
     if (gnome.coins > 0) {
         // convert to citizen
         gnome.filter = 'default';
-        gnome.style.filter = gnome.defaultFilter;
+        //gnome.style.filter = gnome.defaultFilter;
 
         headHome(gnome);
 
@@ -187,7 +188,7 @@ function chooseWalkTarget(gnome) {
 
             gnome.vX = 0;
             gnome.moveType = 'standing';
-            gnome.classList.remove('walk');
+            //gnome.classList.remove('walk');
             gnome.headedHome = false;
         }
     } else {
@@ -205,7 +206,7 @@ function walkToTarget(thing, target) {
     thing.vX = (thing.x - target > 0) ? -thing.speed : thing.speed;
 
     thing.moveType = 'walking';
-    thing.classList.add('walk');
+    //thing.classList.add('walk');
 }
 
 function tryForCloserTarget(thing, target) {
@@ -235,12 +236,13 @@ function updateGnome(gnome) {
                 }
             }
         } else {
-            gnome.classList.remove('attack');
+            //gnome.classList.remove('attack');
+
             (gnome.coins === gnome.maxCoins) ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
 
             if (gnome.x > gnome.villagePos && gnome.x < gnome.villagePos + 12 * unit) {
                 gnome.moveType = 'standing';
-                gnome.classList.remove('walk');
+                //gnome.classList.remove('walk');
                 gnome.task = 'idle';
             }
         }
@@ -251,6 +253,7 @@ function updateGnome(gnome) {
     }
 
     if (gnome.filter === 'poor') {
+        //console.log('update poor gnome');
         handlePoor(gnome);
         moveGnome(gnome);
 
@@ -266,7 +269,7 @@ function updateGnome(gnome) {
         if (gnome.filter !== 'poor' && !gnome.task) {
             walkToTarget(gnome, gnome.villagePos);
 
-            gnome.classList.remove('attack');
+            //gnome.classList.remove('attack');
         }
     }
 
@@ -274,7 +277,7 @@ function updateGnome(gnome) {
     if (gnome.moveType === 'walking' && gnome.filter !== 'poor') {
         if (gnome.x > gnome.villagePos && gnome.x < gnome.villagePos + 12 * unit) {
             gnome.moveType = 'standing';
-            gnome.classList.remove('walk');
+            //gnome.classList.remove('walk');
             gnome.task = 'idle';
         }
     }

@@ -19,7 +19,7 @@ Object.assign(window, {
     test() {
         walls[0].health = 10;
         walls[0].destroyed = false;
-        walls[0].classList.remove('destroyed');
+        //walls[0].classList.remove('destroyed');
 
         addGnome(elHorse.x / unit + 4);
     },

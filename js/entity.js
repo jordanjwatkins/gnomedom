@@ -1,5 +1,7 @@
 function addEntity(props) {
-    var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : document.createElement('div');
+    //var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : document.createElement('div');
+
+    var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : {};
 
     thing.props = props;
 
@@ -20,10 +22,10 @@ function addEntity(props) {
     if (!thing.inDom) {
         thing.inDom = true;
         props.things.push(thing);
-        elWorld.appendChild(thing);
+        //elWorld.appendChild(thing);
     }
 
-    roundedMove(thing);
+    //roundedMove(thing);
 
     return thing;
 }

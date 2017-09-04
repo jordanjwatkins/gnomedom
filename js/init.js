@@ -92,6 +92,9 @@ function addEntities() {
     // fire
     thing = addEntity({ x: 11, y: uWorldHeight - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
 
+    thing.sW = 5;
+    thing.sH = 4;
+
     thing.maxCoins = 3;
     thing.coins = 3;
     thing.burning = true;
@@ -118,12 +121,12 @@ function addEntities() {
 
         thing = addGnome(-269);
         thing.filter = 'evil';
-        thing.style.filter = gFilters[thing.filter];
+        //thing.style.filter = gFilters[thing.filter];
         thing.moveType = 'walking';
         thing.vX = -120 * unit;
     }
 
-    roundedMove(thing);
+    //roundedMove(thing);
 
     // camp
     addCamp(-190);

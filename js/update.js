@@ -26,7 +26,7 @@ function update(timestamp) {
         updateGnome(gnomes[i]);
     }
 
-    projectiles.forEach(updateProjectile);
+    //projectiles.forEach(updateProjectile);
 
     updateDayNight();
 
@@ -56,7 +56,7 @@ function updateCoinTaker() {
 
     walls.forEach(maybeSetCurrentCoinTaker);
 
-    updatePrice(elHorse.currentCoinTaker, prevPrice);
+    //updatePrice(elHorse.currentCoinTaker, prevPrice);
 }
 
 function maybeSetCurrentCoinTaker(thing) {

@@ -21,24 +21,22 @@ function renderCoin(coin) {
 
 function renderFire(fire) {
     if (fire.sprite) {
-        spriteX = fire.x + elWorld.x;
-        spriteY = fire.y;
-
         let timeValue = Math.tan(lastFrameTimeMs / 190);
 
         if (fire.burning) {
             if (timeValue < -0.66) {
-                ctx.drawImage(fire.sprite, 5, 0, 5, 4, Math.round(spriteX), spriteY, fire.width, fire.height);
+                draw(fire, 1);
+                //ctx.drawImage(fire.sprite, 5, 0, 5, 4, Math.round(spriteX), spriteY, fire.width, fire.height);
             } else if (timeValue > -0.66 && timeValue < 0.66) {
-                ctx.drawImage(fire.sprite, 10, 0, 5, 4, Math.round(spriteX), spriteY, fire.width, fire.height);
+                draw(fire, 2);
             } else {
-                ctx.drawImage(fire.sprite, 15, 0, 5, 4, Math.round(spriteX), spriteY, fire.width, fire.height);
+                draw(fire, 3);
             }
         } else {
-            ctx.drawImage(fire.sprite, 0, 0, 5, 4, Math.round(spriteX), spriteY, fire.width, fire.height);
+            draw(fire, 0);
         }
     } else {
-        fire.sprite =  images['campfire'];
+        fire.sprite = images['campfire'];
     }
 }
 
@@ -79,30 +77,28 @@ function renderHorse(horse) {
 
 function renderGnome(gnome) {
     if (gnome.sprite) {
-        spriteX = gnome.x + elWorld.x;
-        spriteY = gnome.y - gnome.height;
-
-        // handle elsewhere
-        if (gnome.vX > 0) gnome.sprite =  images['gnomeWalk'];
+        if (gnome.vX > 0) gnome.sprite = images['gnomeWalk'];
         if (gnome.vX < 0) gnome.sprite = images['flipped'];
-
-        //if (gnome.flipped) gnome.sprite = images['flipped'];
 
         if (gnome.moveType === 'walking') {
             if (Math.sin(lastFrameTimeMs / 100) > 0) {
                 draw(gnome, 0);
             } else {
                 draw(gnome, 1);
-                //ctx.drawImage(gnome.sprite, 7, 0, 7, 11, Math.round(spriteX), spriteY, gnome.width, gnome.height);
             }
         } else {
             gnome.sprite = images['gnomeStand'];
             draw(gnome, 0);
         }
+    } else {
+        gnome.sprite = images['gnomeStand'];
     }
 }
 
 function draw(thing, frame) {
+    spriteX = thing.x + elWorld.x;
+    spriteY = thing.y;
+
     ctx.drawImage(
         thing.sprite,
         frame * thing.sW, 0, thing.sW, thing.sH,
