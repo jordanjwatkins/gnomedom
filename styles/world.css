@@ -28,11 +28,15 @@
     height: 90%;
     transform: translate3d(352px, 0, 0);
     /*mix-blend-mode: overlay;*/
-
+    //visibility: hidden;
     //mix-blend-mode: multiply;
 
 
 }
+
+.world > * { display: none; }
+
+// .world .horse { display: block !important; }
 
 .campfire, .evil-campfire {
     background-image: url(../images/campfire.gif);

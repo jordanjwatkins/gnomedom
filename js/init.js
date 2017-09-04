@@ -12,8 +12,23 @@ function init() {
     setWorldSize();
 
     elCanvas = document.querySelector('.canvas');
+
+    elCanvas.width = elCanvas.clientWidth;
+    elCanvas.height = elCanvas.clientHeight;
+
     console.log(elCanvas);
     ctx = elCanvas.getContext('2d');
+
+    ctx.imageSmoothingEnabled = false;
+
+    images.gnomeWalk = loadImage('./images/gnome-walk-sheet.gif', 'gnomeWalk');
+    images.gnomeStand = loadImage('./images/gnome-stand.gif', 'gnomeStand');
+
+    images.campfire = loadImage('./images/campfire-sheet.gif', 'campfire');
+
+    images.horse = loadImage('./images/horse-sheet.gif', 'horse');
+
+    darknessLayer();
 
     horseMove(0, 1);
 
@@ -21,13 +36,13 @@ function init() {
 
     console.log(elHorse.coins);
 
+    addEntities();
+
     // preload running image to avoid visible flash
     elHorse.classList.add('run');
 
     // fade in after first tick positioning flash
     document.body.classList = 'loaded';
-
-    addEntities();
 
     update();
 }
@@ -68,10 +83,15 @@ function addEntities() {
         this.destroyed = false;
     };
 
+    // horse
+    thing = addEntity({ x: 43, y: uWorldHeight - 8, width: 12.5, height: 10, things: misc, className: 'horse' });
+
     // fire
-    thing = addEntity({ x: -30, y: uWorldHeight - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
+    thing = addEntity({ x: 11, y: uWorldHeight - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
 
     thing.maxCoins = 3;
+    thing.coins = 3;
+    thing.burning = true;
 
     // evil fire (lvl 2?)
     thing = addEntity({ x: -270, y: uWorldHeight - 8, width: 10, height: 8, things: misc, className: 'evil-campfire' });

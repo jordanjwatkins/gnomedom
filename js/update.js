@@ -1,4 +1,4 @@
-var lastFrameTimeMs, delta, timestamp;
+var lastFrameTimeMs, delta;
 
 function update(timestamp) {
     delta = (lastFrameTimeMs) ? timestamp - lastFrameTimeMs: 0;
@@ -9,15 +9,44 @@ function update(timestamp) {
 
     updateCoinTaker();
 
-    coins.forEach(updateCoin);
+    //coins.forEach(updateCoin);
 
-    gnomes.forEach(updateGnome);
+    for(let i = 0; i < coins.length; i++) {
+        updateCoin(coins[i]);
+    }
+
+    ctx.clearRect(0, 0, elCanvas.clientWidth, elCanvas.clientHeight);
+    darknessCtx.clearRect(0, 0, elCanvas.clientWidth, elCanvas.clientHeight);
+
+    misc.forEach(maybeRender);
+
+    maybeRenderHorse(elHorse);
+
+    //updateCanvas();
+
+    //gnomes.forEach(updateGnome);
+    //console.log('gnomes.length', gnomes.length);
+
+    //updateGnome(gnomes[4]);
+
+    for(let i = 0; i < gnomes.length; i++) {
+        updateGnome(gnomes[i]);
+    }
+
+    projectiles.forEach(updateProjectile);
 
     updateDayNight();
 
-    updateCanvas();
-
     requestAnimationFrame(update);
+}
+
+function maybeRender(thing) {
+    if (thing.className.match('campfire')) renderFire(thing);
+    if (thing.className.match('horse')) renderHorse(thing);
+}
+
+function maybeRenderHorse(thing) {
+    if (thing.className.match('horse')) renderFire(thing);
 }
 
 function updateCoinTaker() {
@@ -76,17 +105,21 @@ function updatePrice(coinTaker, prevPrice) {
 }
 
 let hour = 0;
+let darkness = 0.9;
 
 function updateDayNight() {
-    hour += delta *0.001;
-
-    //console.log(hour);
+    hour += delta * 0.001;
 
     if (hour > 24) hour = 0;
 
-    if (hour > 5 && hour < 5.2) {
-        elNightLayer.classList.remove('night');
-    } else if (hour > 17) {
-        elNightLayer.classList.add('night');
+    if (hour > 5 && hour < 17 && darkness > 0) {
+        darkness -= 0.0001 * delta;
+    } else if ((hour > 17 || hour < 5) && darkness < 0.8) {
+        darkness += 0.0001 * delta;
     }
+
+    if (darkness < 0) darkness = 0;
+    if (darkness > 0.8) darkness = 0.8;
+
+    renderDayNight();
 }

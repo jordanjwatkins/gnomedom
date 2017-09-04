@@ -22,3 +22,10 @@ var misc = [];
 var elNightLayer;
 
 let elCanvas, ctx;
+
+const projectilePool = [];
+const projectiles = [];
+
+const images = {};
+
+let darknessCanvas, darknessCtx;

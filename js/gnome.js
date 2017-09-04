@@ -20,10 +20,13 @@ function addGnome(x, y, width, height) {
         className: 'gnome',
     });
 
+    gnome.sprite = images.gnomeWalk;
+
     gnome.vX = 0;
     gnome.vY = 0;
     gnome.wait = 5;
     gnome.headedHome = false;
+    gnome.attackWait = 100;
 
     gnome.moveType = 'standing';
     //gnome.moveType = 'falling';
@@ -48,21 +51,47 @@ function addGnome(x, y, width, height) {
 function moveGnome(gnome) {
     if (!gnome.active) return;
 
-    gnome.y = elWorld.clientHeight  - gnome.clientHeight;
+    gnome.y = worldHeight  - gnome.clientHeight;
 
     if (gnome.moveType === 'walking') {
+        //console.log('walking');
         if (gnome.vX === 0)  {
             gnome.vX = randomDirection() * unit / 12;
             gnome.classList.add('walk');
         }
 
-        if (gnome.vX > 0) gnome.classList.add('right');
-        if (gnome.vX < 0)gnome.classList.remove('right');
+        //gnome.sprite = (gnome.vX > 0) ? images['gnomeWalk'] : images['flipped'];
 
         gnome.x += gnome.vX;
+    } else {
+        //console.log('not walking');
+        gnome.sprite = images['gnomeStand'];
     }
 
-    move(gnome);
+    //move(gnome);
+    renderGnome(gnome);
+}
+
+function renderGnome(gnome) {
+    if (gnome.sprite) {
+        spriteX = gnome.x + elWorld.x;
+        spriteY = gnome.y - gnome.height;
+
+        if (gnome.vX < 0) gnome.sprite =  images['gnomeWalk'];
+        if (gnome.vX > 0) gnome.sprite = images['flipped'];
+
+        //if (gnome.flipped) gnome.sprite = images['flipped'];
+
+        if (gnome.moveType === 'walking') {
+            if (Math.sin(lastFrameTimeMs / 100) > 0) {
+                ctx.drawImage(gnome.sprite, 0, 0, 7, 11, Math.round(spriteX), spriteY, gnome.width, gnome.height);
+            } else {
+                ctx.drawImage(gnome.sprite, 7, 0, 7, 11, Math.round(spriteX), spriteY, gnome.width, gnome.height);
+            }
+        } else {
+            ctx.drawImage(images['gnomeStand'], 0, 0, 7, 11, Math.round(spriteX), spriteY, gnome.width, gnome.height);
+        }
+    }
 }
 
 function maybeStartWallAttack(gnome, wall) {
@@ -115,6 +144,7 @@ function attackWall(gnome, wall) {
 
         wall.destroyed = true;
         wall.classList.add('destroyed');
+        wall.coins = 0;
 
         gnome.moveType = 'walking';
         gnome.classList.remove('attack');
@@ -220,7 +250,7 @@ function updateGnome(gnome) {
                 if (gnome.targetWall) {
                     attackWall(gnome, gnome.targetWall);
                 } else {
-                        (gnome.coins === gnome.maxCoins) ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
+                    (gnome.coins === gnome.maxCoins) ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
                 }
             }
         } else {
@@ -256,7 +286,6 @@ function updateGnome(gnome) {
             walkToTarget(gnome, gnome.villagePos);
 
             gnome.classList.remove('attack');
-
         }
     }
 
@@ -267,6 +296,13 @@ function updateGnome(gnome) {
             gnome.classList.remove('walk');
             gnome.task = 'idle';
         }
+    }
+
+    gnome.attackWait -= delta * 0.1;
+
+    if (gnome.attackWait < 0) {
+        addProjectile(gnome.x /unit, gnome.y / unit, 2, 3);
+        gnome.attackWait = 100;
     }
 
     moveGnome(gnome);

@@ -119,6 +119,7 @@ html.sunless-rise {
     background: black;
     z-index: 1000;
     transition: opacity 20s;
+    display: none;
 }
 
 .night-layer.night {
