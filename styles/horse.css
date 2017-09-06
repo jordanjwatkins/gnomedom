@@ -55,7 +55,7 @@
     transform: translateZ(0) rotate(0) scaleX(1);
 }
 
-.girl div, .girl div:before, .girl div:after {
+.girl div, .girl div:after {
     transition: transform 0.5s;
     background-image: url(../images/girl-arms-around-knees.gif);
 }
@@ -71,21 +71,9 @@
 }
 
 
-.girl div:before {
-    transition: transform 0.5s;
-    background-image: url(../images/girl-arms-around-knees.gif);
-    transform: translate3d(0, 14.6vw, 0) rotate(0) scaleY(-0.75);
-    opacity: 0.8;
-}
-
-.girl.right div:before {
-    transform: translate3d(0, 14.6vw, 0) rotate(0) scaleY(-0.75);
-}
-
-.run.girl div:before {
-    transform: translate3d(0.2vw, 14.9vw, 0) rotate(-3deg) scaleY(-0.75);
-}
-
 .girl {
-    bottom: 4.5vw;
+    position: absolute;
+    bottom: 10vh;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

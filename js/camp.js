@@ -4,16 +4,20 @@ function addCamp(x) {
     // fire
     thing = addEntity({ x: x, y: uWorldHeight - 5, width: 7, height: 5, things: misc, className: 'campfire small' });
 
+    thing.sW = 5;
+    thing.sH = 4;
+    thing.burning = true;
+
     // gnomes
     thing = addGnome(x - 10);
 
-    thing.campX = thing.x;
-
     thing = addGnome(x + 10);
 
-    thing.campX = thing.x;
+    thing = addEntity({ x: x - 25, width:  Math.random() * 10 + 2, height: Math.random() * 37 + 2, things: misc, className: 'bush' });
 
-    thing = addEntity({ x: x - 25, y: uWorldHeight - 7, width: 10, height: 7, things: misc, className: 'bush' });
+    thing = addEntity({ x: x + 25, width:  Math.random() * 10 + 2, height:  Math.random() * 37 + 2, things: misc, className: 'bush' });
 
-    thing = addEntity({ x: x + 25, y: uWorldHeight - 7, width: 10, height: 7, things: misc, className: 'bush' });
+    thing = addEntity({ x: x + 35, width: Math.random() * 10 + 2, height: Math.random() * 37 + 2, things: misc, className: 'bush' });
+
+    thing = addEntity({ x: x - 35, width: Math.random() * 10 + 2, height: Math.random() * 37 + 2, things: misc, className: 'bush' });
 }

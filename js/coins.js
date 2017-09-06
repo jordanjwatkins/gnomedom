@@ -60,13 +60,15 @@ function addCoin(x, y, width, height) {
 
     coin.canBePickedUp = false;
 
+    console.log('coin x', coin.x);
+
     return coin;
 }
 
 function moveCoin(coin) {
     if (!coin.active) return;
 
-    if (coin.y === elWorld.clientHeight  - coin.clientHeight) return;
+    //if (coin.y === elWorld.clientHeight  - coin.clientHeight) return;
 
     coin.x += coin.vX;
     coin.y += coin.vY;
@@ -85,7 +87,8 @@ function moveCoin(coin) {
         }, 500);
     }
 
-    move(coin);
+    coin.style.transform = 'translate3d(' + (coin.x + elWorld.x - 350) + 'px, ' + (coin.y || 0) + 'px, 0) ';
+    //move(coin);
 }
 
 function maybePickUpCoin(coin, picker) {
@@ -117,7 +120,7 @@ function tryPickups(coin) {
     maybePickUpCoin(coin, elHorse);
 
     misc.forEach((thing) => {
-        if (thing.coins >= thing.maxCoins) thing.classList.remove('dead');
+        //if (thing.coins >= thing.maxCoins) thing.classList.remove('dead');
     });
 
     gnomes.forEach((gnome) => {

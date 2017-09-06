@@ -8,9 +8,7 @@ function horseMove(delta, direction) {
     elHorse.x = wX - elHorse.width / 2;
     elGirl.x = wX - elHorse.width / 4.9;
 
-    horseDirection = direction;
+    //console.log('elhorse x', elHorse.x);
 
-    //move(elWorld);
-    //roundedMove(elHorse);
-    //roundedMove(elGirl);
+    horseDirection = direction;
 }

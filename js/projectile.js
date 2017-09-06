@@ -1,5 +1,5 @@
 function addProjectile(x, y, width, height) {
-    var coin = addEntity({
+    /*var coin = addEntity({
         x, y, width, height,
         thingPool: projectilePool,
         things: projectiles,
@@ -12,7 +12,7 @@ function addProjectile(x, y, width, height) {
 
     coin.canBePickedUp = true;
 
-    return coin;
+    return coin;*/
 }
 
 function updateProjectile(projectile) {

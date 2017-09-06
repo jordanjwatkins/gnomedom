@@ -1,9 +1,9 @@
 function addEntity(props) {
-    //var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : document.createElement('div');
+    var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : document.createElement('div');
 
-    var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : {};
+    //var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : {};
 
-    thing.props = props;
+    //thing.props = props;
 
     thing.className = props.className;
 
@@ -12,6 +12,8 @@ function addEntity(props) {
     thing.width = unit * props.width || thing.clientWidth;
     thing.height = unit * props.height || thing.clientHeight;
 
+    if (!props.y) thing.y = worldHeight - thing.height;
+
     thing.active = true;
 
     thing.coins = 0;
@@ -19,13 +21,16 @@ function addEntity(props) {
 
     thing.sated = false;
 
-    if (!thing.inDom) {
+    if (!thing.inDom && thing.className === 'coin' || thing.className === 'price'/* || thing.className === 'gnome'*/) {
         thing.inDom = true;
-        props.things.push(thing);
-        //elWorld.appendChild(thing);
+
+        elWorld.appendChild(thing);
     }
 
-    //roundedMove(thing);
+    if (!thing.inGroup) {
+        thing.inGroup = true;
+        props.things.push(thing);
+    }
 
     return thing;
 }

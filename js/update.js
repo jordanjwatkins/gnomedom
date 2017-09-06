@@ -9,22 +9,15 @@ function update(timestamp) {
 
     updateCoinTaker();
 
-    //coins.forEach(updateCoin);
-
-    for(let i = 0; i < coins.length; i++) {
-        updateCoin(coins[i]);
-    }
-
     ctx.clearRect(0, 0, elCanvas.clientWidth, elCanvas.clientHeight);
     darknessCtx.clearRect(0, 0, elCanvas.clientWidth, elCanvas.clientHeight);
 
+    coins.forEach(updateCoin);
+
     misc.forEach(maybeRender);
+    walls.forEach(renderWall);
 
-    //maybeRenderHorse(elHorse);
-
-    for(let i = 0; i < gnomes.length; i++) {
-        updateGnome(gnomes[i]);
-    }
+    gnomes.forEach(updateGnome);
 
     //projectiles.forEach(updateProjectile);
 
@@ -34,17 +27,12 @@ function update(timestamp) {
 }
 
 function maybeRender(thing) {
-    if (thing.className.match('campfire')) renderFire(thing);
+    if (thing.className.match('campfire')) { renderFire(thing); }
+    if (thing.className.match('bush')) { thing.color = '#006400'; draw(thing, 0); }
     //if (thing.className.match('horse')) renderHorse(thing);
 }
 
-/*function maybeRenderHorse(thing) {
-    if (thing.className.match('horse')) renderFire(thing);
-}*/
-
 function updateCoinTaker() {
-    // debounce?
-
     const taker = elHorse.currentCoinTaker;
     const prevPrice = (taker) ? taker.price : null;
 
@@ -56,7 +44,7 @@ function updateCoinTaker() {
 
     walls.forEach(maybeSetCurrentCoinTaker);
 
-    //updatePrice(elHorse.currentCoinTaker, prevPrice);
+    updatePrice(elHorse.currentCoinTaker, prevPrice);
 }
 
 function maybeSetCurrentCoinTaker(thing) {
@@ -76,14 +64,18 @@ function updatePrice(coinTaker, prevPrice) {
 
     if (!coinTaker.price) {
         coinTaker.price = addEntity({
-            x: coinTaker.x / unit + coinTaker.width / unit / 2 - 3,
+            x: coinTaker.x / unit,
             y: coinTaker.y / unit - 15,
             width: 4, height: 4,
             things: misc,
             className: 'price',
         });
 
-        move(coinTaker.price);
+        console.log('coin taker x', coinTaker.x, coinTaker.price.x - 350);
+
+        coinTaker.price.style.transform = 'translate3d(' + (coinTaker.price.x + elWorld.x - 350) + 'px, ' + (coinTaker.price.y || 0) + 'px, 0) ';
+
+        //move(coinTaker.price);
     }
 
     if (!coinTaker.price.classList.contains('show')) {
@@ -91,6 +83,8 @@ function updatePrice(coinTaker, prevPrice) {
             coinTaker.price.classList.add('show');
         }, 0);
     }
+
+    coinTaker.price.style.transform = 'translate3d(' + (coinTaker.price.x + elWorld.x - 350) + 'px, ' + (coinTaker.price.y || 0) + 'px, 0) ';
 
     if (prevPrice && coinTaker.price !== prevPrice) prevPrice.classList.remove('show');
 
@@ -107,12 +101,12 @@ function updateDayNight() {
 
     if (hour > 5 && hour < 17 && darkness > 0) {
         darkness -= 0.0001 * delta;
-    } else if ((hour > 17 || hour < 5) && darkness < 0.8) {
+    } else if ((hour > 17 || hour < 5) && darkness < 0.9) {
         darkness += 0.0001 * delta;
     }
 
     if (darkness < 0) darkness = 0;
-    if (darkness > 0.8) darkness = 0.8;
+    if (darkness > 0.9) darkness = 0.9;
 
     renderDayNight();
 }

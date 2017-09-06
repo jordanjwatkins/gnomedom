@@ -3,20 +3,28 @@ let light2;
 let lightsOut;
 
 function renderDayNight() {
-    light1 = 15 * unit + elWorld.x;
+    light1 = 65 * unit + elWorld.x;
 
-    light2 = -415 + (elWorld.x / (unit /3));
+    light2 = -2215 + elWorld.x;
 
     darken(0, 0, elCanvas.clientWidth, elCanvas.clientHeight, '#000000', darkness);
 
-    if (lightOnScreen(light1)) cutoutGradient(light1, elCanvas.clientHeight - 120, 12 * unit, 1);
-    if (lightOnScreen(light2)) cutoutGradient(light2, 120, 50, 0.5);
+    if (lightOnScreen(light1)) cutoutGradient(light1, elCanvas.clientHeight - 13 * unit, 15 * unit, 1);
+    if (lightOnScreen(light2)) cutoutGradient(light2, elCanvas.clientHeight - 13 * unit, 12 * unit, 0.5);
 
     ctx.drawImage(darknessCanvas, 0, 0);
 }
 
 function renderCoin(coin) {
     draw(coin);
+}
+
+function renderWall(wall) {
+    if (wall.sprite) {
+        (wall.destroyed) ? draw(wall, 0) : draw(wall, 1);
+    } else {
+        wall.sprite = images['wall'];
+    }
 }
 
 function renderFire(fire) {
@@ -26,7 +34,6 @@ function renderFire(fire) {
         if (fire.burning) {
             if (timeValue < -0.66) {
                 draw(fire, 1);
-                //ctx.drawImage(fire.sprite, 5, 0, 5, 4, Math.round(spriteX), spriteY, fire.width, fire.height);
             } else if (timeValue > -0.66 && timeValue < 0.66) {
                 draw(fire, 2);
             } else {
@@ -40,8 +47,11 @@ function renderFire(fire) {
     }
 }
 
-function renderHorse(horse) {
+
+
+/*function renderHorse(horse) {
     if (horse.sprite) {
+        //console.log('horse x', horse.x);
         spriteX = horse.x;
         spriteY = horse.y - 2 * unit;
 
@@ -51,9 +61,9 @@ function renderHorse(horse) {
         let angleInRad = deg * Math.PI / 180;
         let tX = elCanvas.width / 2, tY = elCanvas.height / 2;
 
-        ctx.translate(tX, tY);
-        ctx.rotate(angleInRad);
-        ctx.translate(-(tX), -(tY));
+        //ctx.translate(tX, tY);
+        //ctx.rotate(angleInRad);
+        //ctx.translate(-(tX), -(tY));
 
         if (horse.burning) {
             if (timeValue < -0.66) {
@@ -67,18 +77,21 @@ function renderHorse(horse) {
             draw(horse, 0);
         }
 
-        ctx.translate(tX, tY);
-        ctx.rotate(-angleInRad);
-        ctx.translate(-(tX), -(tY));
+        //ctx.translate(tX, tY);
+        //ctx.rotate(-angleInRad);
+        //ctx.translate(-(tX), -(tY));
     } else {
         horse.sprite =  images['horse'];
     }
-}
+}*/
 
 function renderGnome(gnome) {
     if (gnome.sprite) {
-        if (gnome.vX > 0) gnome.sprite = images['gnomeWalk'];
-        if (gnome.vX < 0) gnome.sprite = images['flipped'];
+        //if (gnome.vX > 0) gnome.sprite = images['gnomeWalk'];
+        //if (gnome.vX < 0) gnome.sprite = images['flipped'];
+        gnome.sprite = (gnome.filter === 'poor') ? images.poor : images.gnomeWalk;
+        if (gnome.filter === 'evil') gnome.sprite = images.evil;
+        //ctx.filter = gFilters[gnome.filter];
 
         if (gnome.moveType === 'walking') {
             if (Math.sin(lastFrameTimeMs / 100) > 0) {
@@ -87,16 +100,23 @@ function renderGnome(gnome) {
                 draw(gnome, 1);
             }
         } else {
-            gnome.sprite = images['gnomeStand'];
+            gnome.sprite = (gnome.filter === 'poor') ? images.poor : images.gnomeStand;
+
             draw(gnome, 0);
         }
     } else {
-        gnome.sprite = images['gnomeStand'];
+         gnome.sprite = images.poor;
     }
 }
 
 function draw(thing, frame) {
-    spriteX = thing.x + elWorld.x;
+    if (!thing.sprite && !thing.color) return;
+
+    spriteX = thing.x + elWorld.x + 50 * unit - thing.width / 2;
+
+    if (thing.color) return drawRect(thing, spriteX);
+
+    //spriteX = thing.x + elWorld.x;
     spriteY = thing.y;
 
     ctx.drawImage(
@@ -105,6 +125,12 @@ function draw(thing, frame) {
         Math.round(spriteX), spriteY,
         thing.width, thing.height
     );
+}
+
+function drawRect(thing, spriteX) {
+    if (ctx.fillStyle !== thing.color) ctx.fillStyle = thing.color || "#000000";
+
+    ctx.fillRect(Math.round(spriteX), thing.y, thing.width, thing.height);
 }
 
 function lightOnScreen(light) {
@@ -144,10 +170,12 @@ function loadImage(url, name) {
         images[name] = img;
 
         if (images.gnomeWalk && !images.flipped) loadImage(flipImage(images.gnomeWalk), 'flipped');
+        if (images.gnomeWalk && !images.poor) loadImage(flipImage(images.gnomeWalk, 'grayscale(90%)'), 'poor');
+        if (images.gnomeWalk && !images.evil) loadImage(flipImage(images.gnomeWalk, 'hue-rotate(120deg) brightness(5%) drop-shadow(0 0 15px black)'), 'evil');
     };
 }
 
-function flipImage(image) {
+function flipImage(image, filter) {
     var m_canvas = document.createElement('canvas');
 
     m_canvas.width = 14;
@@ -157,6 +185,8 @@ function flipImage(image) {
 
     m_context.translate(14, 0);
     m_context.scale(-1, 1);
+
+    m_context.filter = filter;
 
     m_context.drawImage(image, 0, 0);
 

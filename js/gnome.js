@@ -11,7 +11,6 @@ function addGnome(x, y, width, height) {
     width = width || 4;
     height = height || 6.3;
 
-    // Fix this
     y = y || uWorldHeight - height;
 
     gnome = addEntity({
@@ -38,14 +37,14 @@ function addGnome(x, y, width, height) {
 
     gnome.maxCoins = 1;
 
-    //gnome.style.filter = gFilters[gnome.filter];
+    gnome.style.filter = gFilters[gnome.filter];
 
     gnome.villagePos = -60 * unit + 40 * unit * Math.random();
     gnome.campX = gnome.x;
 
     gnome.speed = unit / 5;
 
-    // gnome.style.filter = 'hue-rotate(120deg) brightness(45%)'; // zombie gnome
+    gnome.style.filter = 'hue-rotate(120deg) brightness(45%)'; // zombie gnome
 
     gnome.defaultFilter = 'hue-rotate(' + Math.random() * 1000 + 'deg)'; // rainbow gnomes
 
@@ -58,22 +57,19 @@ function moveGnome(gnome) {
     gnome.y = worldHeight  - gnome.height;
 
     if (gnome.moveType === 'walking') {
-        //console.log('walking');
         if (gnome.vX === 0)  {
             gnome.vX = randomDirection() * unit / 12;
-            //gnome.classList.add('walk');
         }
 
-        //gnome.sprite = (gnome.vX > 0) ? images['gnomeWalk'] : images['flipped'];
-
         gnome.x += gnome.vX;
-    } else {
-        //console.log('not walking');
-        gnome.sprite = images['gnomeStand'];
+
+        //console.log('gnome x', gnome.x);
     }
 
-    //move(gnome);
     renderGnome(gnome);
+    //move(gnome);
+
+    //gnome.style.transform = 'translate3d(' + (gnome.x + elWorld.x - 350) + 'px, ' + (gnome.y || 0) + 'px, 0) ';
 }
 
 function maybeStartWallAttack(gnome, wall) {
@@ -95,7 +91,7 @@ function maybeStartWallAttack(gnome, wall) {
             gnome.moveType = 'attack';
             //gnome.classList.add('attack');
 
-            //(gnome.attackDirection === 1) ? gnome.classList.add('right') : gnome.classList.remove('right');
+            (gnome.attackDirection === 1) ? gnome.classList.add('right') : gnome.classList.remove('right');
 
             gnome.vX = 0.001;
 
@@ -108,13 +104,13 @@ function attackWall(gnome, wall) {
     if (gnome.attackTimer === 0) {
         console.log('attack');
 
-        //wall.classList.add('shake');
+        wall.classList.add('shake');
         gnome.attackTimer = 63;
         wall.shaking = true;
         wall.health -= 1;
 
         setTimeout(function () {
-            //wall.classList.remove('shake');
+            wall.classList.remove('shake');
             wall.shaking = false;
         }, 200);
     } else {
@@ -125,11 +121,11 @@ function attackWall(gnome, wall) {
         console.log('walking');
 
         wall.destroyed = true;
-       // wall.classList.add('destroyed');
+        wall.classList.add('destroyed');
         wall.coins = 0;
 
         gnome.moveType = 'walking';
-        //gnome.classList.remove('attack');
+        gnome.classList.remove('attack');
         gnome.vX = 0;
     }
 }
@@ -138,7 +134,7 @@ function handlePoor(gnome) {
     if (gnome.coins > 0) {
         // convert to citizen
         gnome.filter = 'default';
-        //gnome.style.filter = gnome.defaultFilter;
+        gnome.style.filter = gnome.defaultFilter;
 
         headHome(gnome);
 
@@ -206,7 +202,7 @@ function walkToTarget(thing, target) {
     thing.vX = (thing.x - target > 0) ? -thing.speed : thing.speed;
 
     thing.moveType = 'walking';
-    //thing.classList.add('walk');
+    thing.classList.add('walk');
 }
 
 function tryForCloserTarget(thing, target) {
@@ -228,7 +224,8 @@ function updateGnome(gnome) {
 
         if ((gnome.moveType === 'attack' || gnome.startingAttack) && gnome.coins !== gnome.maxCoins) {
             if (gnome.targetWall) {
-                //if (gnome.targetWall.destroyed) gnome.targetWall = null;
+                if (gnome.targetWall.destroyed) gnome.targetWall = null;
+
                 if (gnome.targetWall) {
                     attackWall(gnome, gnome.targetWall);
                 } else {
@@ -236,13 +233,13 @@ function updateGnome(gnome) {
                 }
             }
         } else {
-            //gnome.classList.remove('attack');
+            gnome.classList.remove('attack');
 
             (gnome.coins === gnome.maxCoins) ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
 
             if (gnome.x > gnome.villagePos && gnome.x < gnome.villagePos + 12 * unit) {
                 gnome.moveType = 'standing';
-                //gnome.classList.remove('walk');
+                gnome.classList.remove('walk');
                 gnome.task = 'idle';
             }
         }
@@ -269,7 +266,7 @@ function updateGnome(gnome) {
         if (gnome.filter !== 'poor' && !gnome.task) {
             walkToTarget(gnome, gnome.villagePos);
 
-            //gnome.classList.remove('attack');
+            gnome.classList.remove('attack');
         }
     }
 
@@ -277,7 +274,7 @@ function updateGnome(gnome) {
     if (gnome.moveType === 'walking' && gnome.filter !== 'poor') {
         if (gnome.x > gnome.villagePos && gnome.x < gnome.villagePos + 12 * unit) {
             gnome.moveType = 'standing';
-            //gnome.classList.remove('walk');
+            gnome.classList.remove('walk');
             gnome.task = 'idle';
         }
     }

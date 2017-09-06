@@ -16,7 +16,6 @@ function init() {
     elCanvas.width = elCanvas.clientWidth;
     elCanvas.height = elCanvas.clientHeight;
 
-    console.log(elCanvas);
     ctx = elCanvas.getContext('2d');
 
     ctx.imageSmoothingEnabled = false;
@@ -27,16 +26,15 @@ function init() {
     images.campfire = loadImage('./images/campfire-sheet.gif', 'campfire');
 
     images.horse = loadImage('./images/horse-sheet.gif', 'horse');
+    images.wall = loadImage('./images/wall-sheet.gif', 'wall');
 
     darknessLayer();
+
+    addEntities();
 
     horseMove(0, 1);
 
     elHorse.coins = 15;
-
-    console.log(elHorse.coins);
-
-    addEntities();
 
     // preload running image to avoid visible flash
     elHorse.classList.add('run');
@@ -53,7 +51,7 @@ function setWorldSize() {
     worldHeight = elWorld.clientHeight;
     uWorldHeight = elWorld.clientHeight / unit;
 
-    elWorld.x = (resizeDelta) ? elWorld.x / resizeDelta : 25 * unit;
+    elWorld.x = (resizeDelta) ? elWorld.x / resizeDelta : 50 * unit;
 
     elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
     elHorse.width = (resizeDelta) ? elHorse.width / resizeDelta : elHorse.clientWidth;
@@ -61,49 +59,45 @@ function setWorldSize() {
 }
 
 function addEntities() {
-    // test wall
-    var thing = addEntity({ x: -90, y: uWorldHeight - 13, width: 5, height: 13, things: walls, className: 'wall unbuilt' });
+    // test walls
+    var thing;
 
-    thing.health = 10;
-    thing.maxCoins = 3;
-    thing.destroyed = true;
+    [-50, 70].forEach(x => {
+        thing = addEntity({ x: x, y: uWorldHeight - 13, width: 5, height: 13, things: walls, className: 'wall unbuilt' });
 
-    thing.levelUp = function () {
-        this.classList.remove('unbuilt', 'destroyed');
-        this.destroyed = false;
-    };
+        thing.health = 10;
+        thing.maxCoins = 3;
+        thing.destroyed = true;
 
-    thing = addEntity({ x: 30, y: uWorldHeight - 13, width: 5, height: 13, things: walls, className: 'wall unbuilt' });
+        thing.sW = 5;
+        thing.sH = 7;
 
-    thing.health = 10;
-    thing.maxCoins = 3;
-
-    thing.levelUp = function () {
-        this.classList.remove('unbuilt', 'destroyed');
-        this.destroyed = false;
-    };
+        thing.levelUp = function () {
+            this.classList.remove('unbuilt', 'destroyed');
+            this.destroyed = false;
+        };
+    });
 
     // horse
-    thing = addEntity({ x: 43, y: uWorldHeight - 8, width: 12.5, height: 10, things: misc, className: 'horse' });
+    thing = addEntity({ x: 0, y: uWorldHeight - 8, width: 12.5, height: 10, things: misc, className: 'horse' });
 
     thing.sW = 5;
     thing.sH = 4;
 
     // fire
-    thing = addEntity({ x: 11, y: uWorldHeight - 8, width: 9, height: 8, things: misc, className: 'campfire dead' });
+    [11, 270, -270].forEach(x => {
+        thing = addEntity({ x: x, y: uWorldHeight - 8, width: 9, height: 8, things: misc, className: 'campfire' });
 
-    thing.sW = 5;
-    thing.sH = 4;
+        thing.sW = 5;
+        thing.sH = 4;
 
-    thing.maxCoins = 3;
-    thing.coins = 3;
-    thing.burning = true;
+        thing.maxCoins = 3;
+        thing.burning = false;
 
-    // evil fire (lvl 2?)
-    thing = addEntity({ x: -270, y: uWorldHeight - 8, width: 10, height: 8, things: misc, className: 'evil-campfire' });
-
-    thing.coins = 0;
-    thing.maxCoins = 4;
+        thing.levelUp = function () {
+            this.burning = true;
+        };
+    });
 
     // spawn evils
     let evils = 0;
@@ -125,8 +119,6 @@ function addEntities() {
         thing.moveType = 'walking';
         thing.vX = -120 * unit;
     }
-
-    //roundedMove(thing);
 
     // camp
     addCamp(-190);
