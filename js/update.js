@@ -19,7 +19,7 @@ function update(timestamp) {
 
     gnomes.forEach(updateGnome);
 
-    //projectiles.forEach(updateProjectile);
+    projectiles.forEach(updateProjectile);
 
     updateDayNight();
 

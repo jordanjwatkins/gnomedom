@@ -63,9 +63,8 @@ function addEntities() {
     var thing;
 
     [-50, 70].forEach(x => {
-        thing = addEntity({ x: x, y: uWorldHeight - 13, width: 5, height: 13, things: walls, className: 'wall unbuilt' });
+        thing = addEntity({ x: x, y: uWorldHeight - 13, width: 5, height: 13, things: walls, className: 'wall' });
 
-        thing.health = 10;
         thing.maxCoins = 3;
         thing.destroyed = true;
 
@@ -73,7 +72,7 @@ function addEntities() {
         thing.sH = 7;
 
         thing.levelUp = function () {
-            this.classList.remove('unbuilt', 'destroyed');
+            this.health = 10;
             this.destroyed = false;
         };
     });
@@ -115,9 +114,8 @@ function addEntities() {
 
         thing = addGnome(-269);
         thing.filter = 'evil';
-        //thing.style.filter = gFilters[thing.filter];
         thing.moveType = 'walking';
-        thing.vX = -120 * unit;
+        thing.speed = unit / 4;
     }
 
     // camp

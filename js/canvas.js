@@ -3,7 +3,7 @@ let light2;
 let lightsOut;
 
 function renderDayNight() {
-    light1 = 65 * unit + elWorld.x;
+    light1 = 61 * unit + elWorld.x;
 
     light2 = -2215 + elWorld.x;
 
@@ -19,9 +19,12 @@ function renderCoin(coin) {
     draw(coin);
 }
 
+let offset;
+
 function renderWall(wall) {
     if (wall.sprite) {
-        (wall.destroyed) ? draw(wall, 0) : draw(wall, 1);
+        offset = (wall.shaking) ? -1 * unit : 0;
+        (wall.destroyed) ? draw(wall, 0, offset) : draw(wall, 1, offset);
     } else {
         wall.sprite = images['wall'];
     }
@@ -46,8 +49,6 @@ function renderFire(fire) {
         fire.sprite = images['campfire'];
     }
 }
-
-
 
 /*function renderHorse(horse) {
     if (horse.sprite) {
@@ -102,6 +103,12 @@ function renderGnome(gnome) {
         } else {
             gnome.sprite = (gnome.filter === 'poor') ? images.poor : images.gnomeStand;
 
+            if (gnome.filter === 'evil'){
+                gnome.sprite = images.evil;
+
+                if (gnome.attacking) return draw(gnome, 0, 2 * unit * gnome.attackDirection);
+            }
+
             draw(gnome, 0);
         }
     } else {
@@ -109,10 +116,10 @@ function renderGnome(gnome) {
     }
 }
 
-function draw(thing, frame) {
+function draw(thing, frame, offset = 0) {
     if (!thing.sprite && !thing.color) return;
 
-    spriteX = thing.x + elWorld.x + 50 * unit - thing.width / 2;
+    spriteX = thing.x + elWorld.x + 50 * unit - thing.width / 2 + offset;
 
     if (thing.color) return drawRect(thing, spriteX);
 

@@ -35,3 +35,5 @@ const imageSizes = {
     horse: [5, 4],
     fire: [5, 4],
 };
+
+let villagePos;
