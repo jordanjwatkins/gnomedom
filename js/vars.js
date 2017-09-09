@@ -1,39 +1,43 @@
-var elHorse, elWorld, elGirl, currentWidth, worldHeight, unit, horseDirection, speed, wX, random;
+let elHorse, elWorld, elGirl, currentWidth, worldHeight, unit, horseDirection, speed, wX, random;
 
-var gnomeCoinPicker, horseCoinPicker;
+let gnomeCoinPicker, horseCoinPicker;
 
-var coins = [];
-var coinPool = [];
+let closeTargetDistance, distanceToTarget;
 
-var resizeDelta = 0;
+let elNightLayer;
 
-var closeTargetDistance, distanceToTarget;
+let elCanvas, ctx;
 
-var keys = {
+let darknessCanvas, darknessCtx;
+
+let villagePos;
+
+let night = false;
+
+const coins = [];
+const coinPool = [];
+
+const gnomes = [];
+const gnomePool = [];
+
+const walls = [];
+const misc = [];
+
+const projectilePool = [];
+const projectiles = [];
+const images = {};
+
+let resizeDelta = 0;
+
+const keys = {
     left: false,
     right: false,
     up: false,
     upHold: 10,
 };
 
-var walls = [];
-var misc = [];
-
-var elNightLayer;
-
-let elCanvas, ctx;
-
-const projectilePool = [];
-const projectiles = [];
-
-const images = {};
-
-let darknessCanvas, darknessCtx;
-
 const imageSizes = {
     gnomeWalk: [7, 11],
     horse: [5, 4],
     fire: [5, 4],
 };
-
-let villagePos;

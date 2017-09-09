@@ -5,12 +5,13 @@ function update(timestamp) {
 
     lastFrameTimeMs = timestamp;
 
-    keyMove();
-
     updateCoinTaker();
 
     ctx.clearRect(0, 0, elCanvas.clientWidth, elCanvas.clientHeight);
     darknessCtx.clearRect(0, 0, elCanvas.clientWidth, elCanvas.clientHeight);
+
+    // base
+    draw({ x: 11 * unit, y: worldHeight - 70 * unit, width: 90 * unit, height: 70 * unit, sprite: images.base, sW: 9, sH: 7 }, 3);
 
     coins.forEach(updateCoin);
 
@@ -23,13 +24,21 @@ function update(timestamp) {
 
     updateDayNight();
 
+    // game over
+    if (elHorse.coins < 0) {
+        elHorse.classList.add('dead');
+        elGirl.classList.add('dead');
+    } else {
+        keyMove();
+    }
+
     requestAnimationFrame(update);
 }
 
 function maybeRender(thing) {
-    if (thing.className.match('campfire')) { renderFire(thing); }
+    if (thing.className.match('campfire')) renderFire(thing);
     if (thing.className.match('bush')) { thing.color = '#006400'; draw(thing, 0); }
-    //if (thing.className.match('horse')) renderHorse(thing);
+    if (thing.className.match('coinflower')) renderCoinFlower(thing);
 }
 
 function updateCoinTaker() {
@@ -91,22 +100,26 @@ function updatePrice(coinTaker, prevPrice) {
     if (+coinTaker.price.innerHTML !== coinTaker.maxCoins - coinTaker.coins) coinTaker.price.innerHTML = coinTaker.maxCoins - coinTaker.coins;
 }
 
-let hour = 0;
-let darkness = 0.9;
+let hour = 16;
+let darkness = 0;
 
 function updateDayNight() {
-    hour += delta * 0.001;
+    hour += delta * 0.0003;
+
+    //console.log(hour);
 
     if (hour > 24) hour = 0;
 
     if (hour > 5 && hour < 17 && darkness > 0) {
-        darkness -= 0.0001 * delta;
-    } else if ((hour > 17 || hour < 5) && darkness < 0.9) {
-        darkness += 0.0001 * delta;
+        night = false;
+        darkness -= 0.00005 * delta;
+    } else if ((hour > 17 || hour < 5) && darkness < 0.7) {
+        night = true;
+        darkness += 0.00005 * delta;
     }
 
     if (darkness < 0) darkness = 0;
-    if (darkness > 0.9) darkness = 0.9;
+    if (darkness > 0.7) darkness = 0.7;
 
     renderDayNight();
 }

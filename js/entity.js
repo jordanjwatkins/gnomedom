@@ -5,6 +5,8 @@ function addEntity(props) {
 
     //thing.props = props;
 
+    props.things = props.things || misc;
+
     thing.className = props.className;
 
     thing.x = props.x * unit;
@@ -21,7 +23,7 @@ function addEntity(props) {
 
     thing.sated = false;
 
-    if (!thing.inDom && thing.className === 'coin' || thing.className === 'price'/* || thing.className === 'gnome'*/) {
+    if (!thing.inDom && (thing.className === 'coin' || thing.className === 'price'/* || thing.className === 'gnome'*/)) {
         thing.inDom = true;
 
         elWorld.appendChild(thing);

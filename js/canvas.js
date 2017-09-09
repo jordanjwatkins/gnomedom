@@ -1,16 +1,27 @@
-let light1 = 150;
-let light2;
+//let light1 = 150;
+//let light2;
 let lightsOut;
 
 function renderDayNight() {
-    light1 = 61 * unit + elWorld.x;
+    //light1 = 61 * unit + elWorld.x;
 
-    light2 = -2215 + elWorld.x;
+    //light2 = -2215 + elWorld.x;
 
     darken(0, 0, elCanvas.clientWidth, elCanvas.clientHeight, '#000000', darkness);
 
-    if (lightOnScreen(light1)) cutoutGradient(light1, elCanvas.clientHeight - 13 * unit, 15 * unit, 1);
-    if (lightOnScreen(light2)) cutoutGradient(light2, elCanvas.clientHeight - 13 * unit, 12 * unit, 0.5);
+    misc.forEach((thing) => {
+        if (thing.className === 'campfire' && thing.burning) {
+            cutoutGradient(thing.x + 50 * unit + elWorld.x, elCanvas.clientHeight - 13 * unit, thing.radius, thing.intensity);
+        }
+    });
+
+    walls.forEach((thing) => {
+        if (!thing.destroyed) {
+            cutoutGradient(thing.x + 50 * unit + elWorld.x, elCanvas.clientHeight - 18 * unit, 23 * unit, 0.8);
+        }
+    });
+    //if (lightOnScreen(light1)) cutoutGradient(light1, elCanvas.clientHeight - 13 * unit, 15 * unit, 1);
+    //if (lightOnScreen(light2)) cutoutGradient(light2, elCanvas.clientHeight - 13 * unit, 12 * unit, 0.5);
 
     ctx.drawImage(darknessCanvas, 0, 0);
 }
@@ -30,6 +41,14 @@ function renderWall(wall) {
     }
 }
 
+function renderCoinFlower(thing) {
+    thing.sprite = images['coinflower'];
+    thing.sW = 3;
+    thing.sH = 7;
+
+    draw(thing, 0);
+}
+
 function renderFire(fire) {
     if (fire.sprite) {
         let timeValue = Math.tan(lastFrameTimeMs / 190);
@@ -46,7 +65,7 @@ function renderFire(fire) {
             draw(fire, 0);
         }
     } else {
-        fire.sprite = images['campfire'];
+        fire.sprite = (fire.evil) ?  images['evilCampfire'] : images['campfire'];
     }
 }
 
@@ -90,9 +109,17 @@ function renderGnome(gnome) {
     if (gnome.sprite) {
         //if (gnome.vX > 0) gnome.sprite = images['gnomeWalk'];
         //if (gnome.vX < 0) gnome.sprite = images['flipped'];
+
+        if (gnome.dead) {
+            draw(gnome, 0, null, 5 * unit);
+            gnome.active = false;
+
+            return;
+        }
+
         gnome.sprite = (gnome.filter === 'poor') ? images.poor : images.gnomeWalk;
-        if (gnome.filter === 'evil') gnome.sprite = images.evil;
-        //ctx.filter = gFilters[gnome.filter];
+
+        if (gnome.filter === 'evil') gnome.sprite = (gnome.coins >= gnome.maxCoins) ? images.evilRich : images.evil;
 
         if (gnome.moveType === 'walking') {
             if (Math.sin(lastFrameTimeMs / 100) > 0) {
@@ -103,8 +130,8 @@ function renderGnome(gnome) {
         } else {
             gnome.sprite = (gnome.filter === 'poor') ? images.poor : images.gnomeStand;
 
-            if (gnome.filter === 'evil'){
-                gnome.sprite = images.evil;
+            if (gnome.filter === 'evil') {
+                gnome.sprite = (gnome.coins >= gnome.maxCoins) ? images.evilRich : images.evil;
 
                 if (gnome.attacking) return draw(gnome, 0, 2 * unit * gnome.attackDirection);
             }
@@ -112,19 +139,21 @@ function renderGnome(gnome) {
             draw(gnome, 0);
         }
     } else {
-         gnome.sprite = images.poor;
+        gnome.sprite = images.poor;
     }
 }
 
-function draw(thing, frame, offset = 0) {
+function draw(thing, frame, offset = 0, offsetY = 0) {
     if (!thing.sprite && !thing.color) return;
 
     spriteX = thing.x + elWorld.x + 50 * unit - thing.width / 2 + offset;
 
+    if (spriteX < -thing.width || spriteX > currentWidth + thing.width) return; // off-screen
+
     if (thing.color) return drawRect(thing, spriteX);
 
     //spriteX = thing.x + elWorld.x;
-    spriteY = thing.y;
+    spriteY = thing.y + offsetY;
 
     ctx.drawImage(
         thing.sprite,
@@ -135,7 +164,7 @@ function draw(thing, frame, offset = 0) {
 }
 
 function drawRect(thing, spriteX) {
-    if (ctx.fillStyle !== thing.color) ctx.fillStyle = thing.color || "#000000";
+    if (ctx.fillStyle !== thing.color) ctx.fillStyle = thing.color || '#000';
 
     ctx.fillRect(Math.round(spriteX), thing.y, thing.width, thing.height);
 }
@@ -178,22 +207,47 @@ function loadImage(url, name) {
 
         if (images.gnomeWalk && !images.flipped) loadImage(flipImage(images.gnomeWalk), 'flipped');
         if (images.gnomeWalk && !images.poor) loadImage(flipImage(images.gnomeWalk, 'grayscale(90%)'), 'poor');
-        if (images.gnomeWalk && !images.evil) loadImage(flipImage(images.gnomeWalk, 'hue-rotate(120deg) brightness(5%) drop-shadow(0 0 15px black)'), 'evil');
+        if (images.gnomeWalk && !images.evil) loadImage(flipImage(images.gnomeWalk, 'brightness(5%)'), 'evil');
+        if (images.evil && !images.evilRich) loadImage(flipImage(images.gnomeWalk, null, true), 'evilRich');
+
+        if (images.campfire && !images.evilCampfire) loadImage(flipImage(images.campfire, 'brightness(5%)', null, 20, 4), 'evilCampfire');
     };
 }
 
-function flipImage(image, filter) {
+function flipImage(image, filter, coined, w, h) {
     var m_canvas = document.createElement('canvas');
 
-    m_canvas.width = 14;
-    m_canvas.height = 14;
+    m_canvas.width = w || 14;
+    m_canvas.height = h || 11;
 
     var m_context = m_canvas.getContext('2d');
 
-    m_context.translate(14, 0);
+    m_context.translate(w || 14, 0);
     m_context.scale(-1, 1);
 
     m_context.filter = filter;
+
+    m_context.drawImage(image, 0, 0);
+
+    if (coined) {
+        m_context.fillStyle = '#FFFF00';
+        m_context.fillRect(1, 5, 4, 5);
+
+        m_context.fillRect(8, 5, 4, 5);
+    }
+
+    return m_canvas.toDataURL();
+}
+
+function createTransformed(image, w, h, transformFn) {
+    var m_canvas = document.createElement('canvas');
+
+    m_canvas.width = w;
+    m_canvas.height = h;
+
+    var m_context = m_canvas.getContext('2d');
+
+    transformFn(m_context);
 
     m_context.drawImage(image, 0, 0);
 

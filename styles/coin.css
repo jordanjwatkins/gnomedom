@@ -2,6 +2,11 @@
     width: 2vw;
     height: 3vw;
     background: yellow;
+    opacity: 0;
+}
+
+.coin.in {
+    opacity: 1;
 }
 
 .coin.placeholder {

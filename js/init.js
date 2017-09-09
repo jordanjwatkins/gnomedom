@@ -20,13 +20,13 @@ function init() {
 
     ctx.imageSmoothingEnabled = false;
 
-    images.gnomeWalk = loadImage('./images/gnome-walk-sheet.gif', 'gnomeWalk');
-    images.gnomeStand = loadImage('./images/gnome-stand.gif', 'gnomeStand');
-
-    images.campfire = loadImage('./images/campfire-sheet.gif', 'campfire');
-
-    images.horse = loadImage('./images/horse-sheet.gif', 'horse');
-    images.wall = loadImage('./images/wall-sheet.gif', 'wall');
+    loadImage('./images/gnome-walk-sheet.gif', 'gnomeWalk');
+    loadImage('./images/gnome-stand.gif', 'gnomeStand');
+    loadImage('./images/campfire-sheet.gif', 'campfire');
+    loadImage('./images/horse-sheet.gif', 'horse');
+    loadImage('./images/wall-sheet.gif', 'wall');
+    loadImage('./images/coinflower2.gif', 'coinflower');
+    loadImage('./images/base-sheet.gif', 'base');
 
     darknessLayer();
 
@@ -35,6 +35,7 @@ function init() {
     horseMove(0, 1);
 
     elHorse.coins = 15;
+    elHorse.active = true;
 
     // preload running image to avoid visible flash
     elHorse.classList.add('run');
@@ -72,41 +73,41 @@ function addEntities() {
         thing.sH = 7;
 
         thing.levelUp = function () {
-            this.health = 10;
+            this.health = 30;
             this.destroyed = false;
         };
     });
 
     // horse
-    thing = addEntity({ x: 0, y: uWorldHeight - 8, width: 12.5, height: 10, things: misc, className: 'horse' });
+    //thing = addEntity({ x: 0, y: uWorldHeight - 8, width: 12.5, height: 10, things: misc, className: 'horse' });
 
-    thing.sW = 5;
-    thing.sH = 4;
+    /*thing.sW = 5;
+    thing.sH = 4;*/
 
-    // fire
-    [11, 270, -270].forEach(x => {
-        thing = addEntity({ x: x, y: uWorldHeight - 8, width: 9, height: 8, things: misc, className: 'campfire' });
+    // main fire
+    thing = fire(11, 9, 8);
+    thing.maxCoins = 3;
+    thing.radius = 29 * unit;
+    thing.intensity = 1;
+    thing.burning = false;
 
-        thing.sW = 5;
-        thing.sH = 4;
+    thing.levelUp = function () {
+        this.burning = true;
+    };
 
-        thing.maxCoins = 3;
-        thing.burning = false;
-
-        thing.levelUp = function () {
-            this.burning = true;
-        };
-    });
+    // evil fire
+    thing = fire(-269, 13, 17);
+    thing.evil = true;
 
     // spawn evils
     let evils = 0;
 
     spawn();
 
-    thing.spawner = setInterval(spawn, 10000);
+    thing.spawner = setInterval(spawn, 7000);
 
     function spawn() {
-        if (evils > 5) return;
+        if (!night) return;
 
         console.log('spawn');
 
@@ -124,4 +125,21 @@ function addEntities() {
     // village gnomes
     addGnome(-40);
     addGnome(20);
+
+
+    addGnome(40, null, 124, 131.5);
 }
+
+function fire(x, width, height, type) {
+    thing = addEntity({ x, width, height, className: 'campfire' });
+
+    thing.sW = 5;
+    thing.sH = 4;
+
+    thing.burning = true;
+    thing.radius = 13 * unit;
+    thing.intensity = 0.5;
+
+    return thing;
+}
+
