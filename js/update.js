@@ -10,9 +10,6 @@ function update(timestamp) {
     ctx.clearRect(0, 0, elCanvas.clientWidth, elCanvas.clientHeight);
     darknessCtx.clearRect(0, 0, elCanvas.clientWidth, elCanvas.clientHeight);
 
-    // base
-    draw({ x: 11 * unit, y: worldHeight - 70 * unit, width: 90 * unit, height: 70 * unit, sprite: images.base, sW: 9, sH: 7 }, 3);
-
     coins.forEach(updateCoin);
 
     misc.forEach(maybeRender);
@@ -27,7 +24,6 @@ function update(timestamp) {
     // game over
     if (elHorse.coins < 0) {
         elHorse.classList.add('dead');
-        elGirl.classList.add('dead');
     } else {
         keyMove();
     }
@@ -37,8 +33,10 @@ function update(timestamp) {
 
 function maybeRender(thing) {
     if (thing.className.match('campfire')) renderFire(thing);
-    if (thing.className.match('bush')) { thing.color = '#006400'; draw(thing, 0); }
+    if (thing.className.match('bush')) { thing.color = '#006400'; }
     if (thing.className.match('coinflower')) renderCoinFlower(thing);
+
+    if (thing.color) { draw(thing, 0); }
 }
 
 function updateCoinTaker() {
@@ -73,18 +71,12 @@ function updatePrice(coinTaker, prevPrice) {
 
     if (!coinTaker.price) {
         coinTaker.price = addEntity({
-            x: coinTaker.x / unit,
-            y: coinTaker.y / unit - 15,
+            x: coinTaker.x / unit - 10,
+            y: coinTaker.y / unit - 20,
             width: 4, height: 4,
             things: misc,
             className: 'price',
         });
-
-        console.log('coin taker x', coinTaker.x, coinTaker.price.x - 350);
-
-        coinTaker.price.style.transform = 'translate3d(' + (coinTaker.price.x + elWorld.x - 350) + 'px, ' + (coinTaker.price.y || 0) + 'px, 0) ';
-
-        //move(coinTaker.price);
     }
 
     if (!coinTaker.price.classList.contains('show')) {
@@ -93,7 +85,7 @@ function updatePrice(coinTaker, prevPrice) {
         }, 0);
     }
 
-    coinTaker.price.style.transform = 'translate3d(' + (coinTaker.price.x + elWorld.x - 350) + 'px, ' + (coinTaker.price.y || 0) + 'px, 0) ';
+    coinTaker.price.style.transform = `translate3d(${(coinTaker.price.x + elWorld.x)}px, ${(coinTaker.price.y || 0)}px, 0)`;
 
     if (prevPrice && coinTaker.price !== prevPrice) prevPrice.classList.remove('show');
 

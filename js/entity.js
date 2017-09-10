@@ -22,6 +22,7 @@ function addEntity(props) {
     thing.maxCoins = 0;
 
     thing.sated = false;
+    thing.level = 0;
 
     if (!thing.inDom && (thing.className === 'coin' || thing.className === 'price'/* || thing.className === 'gnome'*/)) {
         thing.inDom = true;

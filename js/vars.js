@@ -1,4 +1,4 @@
-let elHorse, elWorld, elGirl, currentWidth, worldHeight, unit, horseDirection, speed, wX, random;
+let elHorse, elWorld, elGirl, currentWidth, worldHeight, unit, horseDirection, speed, wX, random; //thing, spriteX, spriteY, uWorldHeight, gnome, coinTaker, prevTaker
 
 let gnomeCoinPicker, horseCoinPicker;
 
@@ -6,13 +6,15 @@ let closeTargetDistance, distanceToTarget;
 
 let elNightLayer;
 
-let elCanvas, ctx;
+let elCanvas;
 
 let darknessCanvas, darknessCtx;
 
 let villagePos;
 
 let night = false;
+
+const berries = [];
 
 const coins = [];
 const coinPool = [];

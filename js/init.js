@@ -1,13 +1,9 @@
 function init() {
     elHorse = document.querySelector('.horse');
-    elGirl = document.querySelector('.girl');
     elWorld = document.querySelector('.world');
-    elNightLayer = document.querySelector('.night-layer');
 
     document.addEventListener('keydown', keydown);
     document.addEventListener('keyup', keyup);
-
-    window.addEventListener('resize', resizeAll);
 
     setWorldSize();
 
@@ -18,12 +14,11 @@ function init() {
 
     ctx = elCanvas.getContext('2d');
 
-    ctx.imageSmoothingEnabled = false;
+    ctx['imageSmoothingEnabled'] = false;
 
     loadImage('./images/gnome-walk-sheet.gif', 'gnomeWalk');
     loadImage('./images/gnome-stand.gif', 'gnomeStand');
     loadImage('./images/campfire-sheet.gif', 'campfire');
-    loadImage('./images/horse-sheet.gif', 'horse');
     loadImage('./images/wall-sheet.gif', 'wall');
     loadImage('./images/coinflower2.gif', 'coinflower');
     loadImage('./images/base-sheet.gif', 'base');
@@ -34,14 +29,14 @@ function init() {
 
     horseMove(0, 1);
 
-    elHorse.coins = 15;
+    elHorse.coins = 25;
     elHorse.active = true;
 
     // preload running image to avoid visible flash
     elHorse.classList.add('run');
 
     // fade in after first tick positioning flash
-    document.body.classList = 'loaded';
+    document.body.classList.add('loaded');
 
     update();
 }
@@ -55,12 +50,12 @@ function setWorldSize() {
     elWorld.x = (resizeDelta) ? elWorld.x / resizeDelta : 50 * unit;
 
     elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
-    elHorse.width = (resizeDelta) ? elHorse.width / resizeDelta : elHorse.clientWidth;
+    elHorse.width = elHorse.clientWidth;
     elHorse.height = elHorse.clientHeight;
 }
 
 function addEntities() {
-    // test walls
+    // walls
     var thing;
 
     [-50, 70].forEach(x => {
@@ -78,12 +73,6 @@ function addEntities() {
         };
     });
 
-    // horse
-    //thing = addEntity({ x: 0, y: uWorldHeight - 8, width: 12.5, height: 10, things: misc, className: 'horse' });
-
-    /*thing.sW = 5;
-    thing.sH = 4;*/
-
     // main fire
     thing = fire(11, 9, 8);
     thing.maxCoins = 3;
@@ -92,8 +81,52 @@ function addEntities() {
     thing.burning = false;
 
     thing.levelUp = function () {
+        this.level++;
+
+        this.sated = false;
         this.burning = true;
+        this.coins = 0;
+
+        if (this.level === 1) {
+            this.maxCoins = 9;
+
+            // red berry
+            thing = addEntity({ x: -20, y: uWorldHeight - 14, width: 5, height: 5 });
+
+            thing.maxCoins = 1;
+
+            thing.levelUp = function () {
+                this.y = this.y + 4 * unit;
+            };
+
+            thing.color = '#5C0000';
+
+            berries.push(thing);
+
+            // blue berry
+            thing = addEntity({ x: 40, y: uWorldHeight - 14, width: 5, height: 5 });
+
+            thing.maxCoins = 1;
+
+            thing.levelUp = function () {
+                this.y = this.y + 4 * unit;
+            };
+
+            thing.color = '#200E4F';
+
+            berries.push(thing);
+        }
+
+        if (this.level === 2) this.maxCoins = 10;
+        if (this.level === 3) addGnome(40, null, 124, 131.5); // gnomezilla
     };
+
+    // camp
+    addCamp(-190);
+
+    // village gnomes
+    addGnome(-40);
+    addGnome(20);
 
     // evil fire
     thing = fire(-269, 13, 17);
@@ -118,16 +151,6 @@ function addEntities() {
         thing.moveType = 'walking';
         thing.speed = unit / 4;
     }
-
-    // camp
-    addCamp(-190);
-
-    // village gnomes
-    addGnome(-40);
-    addGnome(20);
-
-
-    addGnome(40, null, 124, 131.5);
 }
 
 function fire(x, width, height, type) {

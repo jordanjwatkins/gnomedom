@@ -11,7 +11,7 @@ function addGnome(x, y, width, height) {
         className: 'gnome',
     });
 
-    gnome.sprite = images.gnomeWalk;
+    gnome.sprite = images.poor;
 
     gnome.sW = 7;
     gnome.sH = 11;
@@ -44,13 +44,7 @@ function moveGnome(gnome) {
 
     gnome.y = worldHeight  - gnome.height;
 
-    if (gnome.moveType === 'walking') {
-        if (gnome.vX === 0)  {
-            //gnome.vX = randomDirection() * unit / 12;
-        }
-
-        gnome.x += gnome.vX;
-    }
+    if (gnome.moveType === 'walking') gnome.x += gnome.vX;
 
     renderGnome(gnome);
 }
@@ -77,7 +71,7 @@ function maybeStartWallAttack(gnome, wall) {
 }
 
 function attackWall(gnome1, wall) {
-    if (gnome1.attackWait === 0 && !gnome1.dead) {
+    if (gnome1.attackWait <= 0 && !gnome1.dead) {
         console.log('attack');
 
         gnome1.attackWait = 63;
@@ -85,9 +79,12 @@ function attackWall(gnome1, wall) {
         wall.shaking = true;
         wall.health -= 1;
 
+        let w = wall;
+        let g1 = gnome1;
+
         setTimeout(function () {
-            wall.shaking = false;
-            gnome1.attacking = false;
+            w.shaking = false;
+            g1.attacking = false;
         }, 30);
 
         if (wall.health <= 0) {
@@ -103,7 +100,7 @@ function attackWall(gnome1, wall) {
 }
 
 function attackGnome(gnome, target) {
-    if (((target.filter === 'default' && target.coins > 0) || target === elHorse)  && (gnome.attackWait < 50 || gnome.attackWait > 99)) {
+    if (((target.filter !== 'evil' && target.coins > 0) || target === elHorse)  && (gnome.attackWait < 50 || gnome.attackWait > 99)) {
         console.log('attack gnome');
 
         gnome.attackWait = 63;
@@ -126,8 +123,9 @@ function attackGnome(gnome, target) {
 
 function handlePoor(gnome) {
     if (gnome.coins > 0) {
-        gnome.filter = 'default';
+        gnome.filter = 'green';
         headHome(gnome);
+        if (gnome.camp && gnome.camp.pop) gnome.camp.pop--;
 
         return;
     }
@@ -195,21 +193,19 @@ function tryForCloserTarget(thing, target) {
 }
 
 function updateGnome(gnome) {
+    if (!gnome.active) return;
+
     if (gnome.filter === 'evil') {
         if (gnome.coins >= gnome.maxCoins || !night) {
-            if (!gnome.headedHome) {
-                setTimeout(()=>{
-                    walkToTarget(gnome, gnome.campX);
-                }, 50);
-            }
+            setTimeout(()=>{
+                walkToTarget(gnome, gnome.campX);
+            }, 350);
 
-            // stop at village
-            //if (gnome.moveType === 'walking') {
-                if (gnome.x > gnome.campX - 12 && gnome.x < gnome.campX + 12 * unit) {
-                    gnome.active = false;
-                    gnomePool.push(gnome);
-                }
-            //}
+            if (gnome.x > gnome.campX + 1 * unit && gnome.x < gnome.campX + 2 * unit) {
+               // console.log('gnome out');
+                gnome.active = false;
+                gnomePool.push(gnome);
+            }
 
             moveGnome(gnome);
 
@@ -253,6 +249,31 @@ function updateGnome(gnome) {
         //console.log('update poor gnome');
         handlePoor(gnome);
     } else {
+        if (gnome.filter === 'green') {
+            berries.forEach((berry, index) => {
+                if (berry.coins > 0 && boxesCollide(gnome, berry)) {
+
+                    berry.sated = false;
+                    berry.coins = 0;
+                    berry.y = berry.y - 4 * unit;
+
+                    gnome.filter = (index) ? 'blue' : 'default';
+                } else if (berry.coins > 0) {
+                    tryForCloserTarget(gnome, berry);
+                }
+            });
+
+            if (gnome.closeTarget && gnome.closeTarget.active) {
+                chooseWalkTarget(gnome);
+
+                moveGnome(gnome);
+
+                gnome.closeTarget = null;
+
+                return;
+            }
+        }
+
         // move toward village
         if (gnome.moveType === 'standing') {
             if (!gnome.task) {
@@ -262,25 +283,29 @@ function updateGnome(gnome) {
 
         // stop at village
         if (gnome.moveType === 'walking' && gnome.task !== 'defend') {
-            if (gnome.x > gnome.villagePos && gnome.x < gnome.villagePos + 12 * unit) {
+            if (atTarget(gnome, gnome.villagePos)) {
                 gnome.moveType = 'standing';
                 gnome.task = 'idle';
             }
         }
 
-        gnome.attackWait -= delta * 0.1;
-
-        if (gnome.attackWait < 0 && night) {
-            addProjectile(gnome.x / unit, gnome.y / unit, 1, 1);
-            gnome.attackWait = 200;
-        }
-
         if (night) {
-            if (gnome.task === 'idle') {
+             // fire projectiles
+            gnome.attackWait -= delta * 0.1;
+
+            if (gnome.attackWait < 0) {
+                addProjectile(gnome.x / unit, gnome.y / unit, 1, 1);
+                gnome.attackWait = 200;
+            }
+
+            // guard wall
+            if (gnome.task === 'idle' && gnome.filter === 'default') {
                 gnome.closeTarget = walls[0].x + 3 * unit + 10 * unit * Math.random();
                 walkToTarget(gnome, gnome.closeTarget);
                 gnome.task = 'defend';
-            } else if (atTarget(gnome, gnome.closeTarget)) {
+            }
+
+            if (atTarget(gnome, gnome.closeTarget)) {
                 gnome.moveType = 'standing';
             }
         }

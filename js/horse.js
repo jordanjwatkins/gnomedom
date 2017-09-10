@@ -3,12 +3,5 @@ function horseMove(delta, direction) {
 
     elWorld.x += Math.round(direction * speed * delta);
 
-    wX = -elWorld.x;
-
-    elHorse.x = wX - elHorse.width / 2;
-    elGirl.x = wX - elHorse.width / 4.9;
-
-    //console.log('elhorse x', elHorse.x);
-
-    horseDirection = direction;
+    elHorse.x = -elWorld.x - elHorse.width / 4;
 }

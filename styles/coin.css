@@ -9,10 +9,6 @@
     opacity: 1;
 }
 
-.coin.placeholder {
-    opacity: 0.3;
-}
-
 .coin.picked-up {
     transition: 0.5s transform, 0.9s opacity;
     opacity: 0;

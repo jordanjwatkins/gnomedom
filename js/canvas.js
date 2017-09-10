@@ -1,12 +1,6 @@
-//let light1 = 150;
-//let light2;
 let lightsOut;
 
 function renderDayNight() {
-    //light1 = 61 * unit + elWorld.x;
-
-    //light2 = -2215 + elWorld.x;
-
     darken(0, 0, elCanvas.clientWidth, elCanvas.clientHeight, '#000000', darkness);
 
     misc.forEach((thing) => {
@@ -20,8 +14,6 @@ function renderDayNight() {
             cutoutGradient(thing.x + 50 * unit + elWorld.x, elCanvas.clientHeight - 18 * unit, 23 * unit, 0.8);
         }
     });
-    //if (lightOnScreen(light1)) cutoutGradient(light1, elCanvas.clientHeight - 13 * unit, 15 * unit, 1);
-    //if (lightOnScreen(light2)) cutoutGradient(light2, elCanvas.clientHeight - 13 * unit, 12 * unit, 0.5);
 
     ctx.drawImage(darknessCanvas, 0, 0);
 }
@@ -49,9 +41,14 @@ function renderCoinFlower(thing) {
     draw(thing, 0);
 }
 
+let timeValue;
+
 function renderFire(fire) {
+    // base
+    if (fire.levelUp) draw({ x: 11 * unit, y: worldHeight - 70 * unit, width: 90 * unit, height: 70 * unit, sprite: images.base, sW: 9, sH: 7 }, fire.level);
+
     if (fire.sprite) {
-        let timeValue = Math.tan(lastFrameTimeMs / 190);
+        timeValue = Math.tan(lastFrameTimeMs / 190);
 
         if (fire.burning) {
             if (timeValue < -0.66) {
@@ -69,57 +66,22 @@ function renderFire(fire) {
     }
 }
 
-/*function renderHorse(horse) {
-    if (horse.sprite) {
-        //console.log('horse x', horse.x);
-        spriteX = horse.x;
-        spriteY = horse.y - 2 * unit;
-
-        let timeValue = Math.tan(lastFrameTimeMs / 190);
-
-        let deg = 7;
-        let angleInRad = deg * Math.PI / 180;
-        let tX = elCanvas.width / 2, tY = elCanvas.height / 2;
-
-        //ctx.translate(tX, tY);
-        //ctx.rotate(angleInRad);
-        //ctx.translate(-(tX), -(tY));
-
-        if (horse.burning) {
-            if (timeValue < -0.66) {
-                draw(horse, 0);
-            } else if (timeValue > -0.66 && timeValue < 0.66) {
-                draw(horse, 1);
-            } else {
-                draw(horse, 2);
-            }
-        } else {
-            draw(horse, 0);
-        }
-
-        //ctx.translate(tX, tY);
-        //ctx.rotate(-angleInRad);
-        //ctx.translate(-(tX), -(tY));
-    } else {
-        horse.sprite =  images['horse'];
-    }
-}*/
-
 function renderGnome(gnome) {
     if (gnome.sprite) {
-        //if (gnome.vX > 0) gnome.sprite = images['gnomeWalk'];
-        //if (gnome.vX < 0) gnome.sprite = images['flipped'];
-
         if (gnome.dead) {
+            console.log('dead');
             draw(gnome, 0, null, 5 * unit);
             gnome.active = false;
 
             return;
         }
 
-        gnome.sprite = (gnome.filter === 'poor') ? images.poor : images.gnomeWalk;
+        gnome.sprite = (gnome.filter === 'poor') ? images.poor : images.green;
 
         if (gnome.filter === 'evil') gnome.sprite = (gnome.coins >= gnome.maxCoins) ? images.evilRich : images.evil;
+
+        if (gnome.filter === 'blue') gnome.sprite = images.blue;
+        if (gnome.filter === 'default') gnome.sprite = images.gnomeWalk;
 
         if (gnome.moveType === 'walking') {
             if (Math.sin(lastFrameTimeMs / 100) > 0) {
@@ -128,10 +90,8 @@ function renderGnome(gnome) {
                 draw(gnome, 1);
             }
         } else {
-            gnome.sprite = (gnome.filter === 'poor') ? images.poor : images.gnomeStand;
-
             if (gnome.filter === 'evil') {
-                gnome.sprite = (gnome.coins >= gnome.maxCoins) ? images.evilRich : images.evil;
+                //gnome.sprite = (gnome.coins >= gnome.maxCoins) ? images.evilRich : images.evil;
 
                 if (gnome.attacking) return draw(gnome, 0, 2 * unit * gnome.attackDirection);
             }
@@ -143,17 +103,17 @@ function renderGnome(gnome) {
     }
 }
 
-function draw(thing, frame, offset = 0, offsetY = 0) {
+function draw(thing, frame, offset = 0, offsetY) {
     if (!thing.sprite && !thing.color) return;
 
     spriteX = thing.x + elWorld.x + 50 * unit - thing.width / 2 + offset;
 
-    if (spriteX < -thing.width || spriteX > currentWidth + thing.width) return; // off-screen
+    if (spriteX < -thing.width || spriteX > currentWidth + thing.width) return; // off-screen -trouble?
 
     if (thing.color) return drawRect(thing, spriteX);
 
     //spriteX = thing.x + elWorld.x;
-    spriteY = thing.y + offsetY;
+    spriteY = thing.y + (offsetY || 0);
 
     ctx.drawImage(
         thing.sprite,
@@ -180,7 +140,7 @@ function cutoutGradient(x, y, radius, brightness) {
     radius = radius * (1 + rnd);
     var radialGradient = darknessCtx.createRadialGradient(x, y, 0, x, y, radius);
     radialGradient.addColorStop(0, `rgba(255, 0, 0, ${brightness})`);
-    radialGradient.addColorStop(1, "rgba(255, 0, 0, 0)");
+    radialGradient.addColorStop(1, 'rgba(255, 0, 0, 0)');
     darknessCtx.fillStyle = radialGradient;
     darknessCtx.beginPath();
     darknessCtx.arc(x, y, radius, 0, 2 * Math.PI);
@@ -201,14 +161,15 @@ function loadImage(url, name) {
     img.src = url;
 
     img.onload = function () {
-        console.log('image loaded', name);
-
         images[name] = img;
 
         if (images.gnomeWalk && !images.flipped) loadImage(flipImage(images.gnomeWalk), 'flipped');
         if (images.gnomeWalk && !images.poor) loadImage(flipImage(images.gnomeWalk, 'grayscale(90%)'), 'poor');
         if (images.gnomeWalk && !images.evil) loadImage(flipImage(images.gnomeWalk, 'brightness(5%)'), 'evil');
-        if (images.evil && !images.evilRich) loadImage(flipImage(images.gnomeWalk, null, true), 'evilRich');
+        if (images.gnomeWalk && !images.green) loadImage(flipImage(images.gnomeWalk, 'hue-rotate(90deg)'), 'green');
+        if (images.gnomeWalk && !images.blue) loadImage(flipImage(images.gnomeWalk, 'hue-rotate(220deg)'), 'blue');
+
+        if (images.evil && !images.evilRich) loadImage(flipImage(images.evil, null, true), 'evilRich');
 
         if (images.campfire && !images.evilCampfire) loadImage(flipImage(images.campfire, 'brightness(5%)', null, 20, 4), 'evilCampfire');
     };
@@ -239,6 +200,7 @@ function flipImage(image, filter, coined, w, h) {
     return m_canvas.toDataURL();
 }
 
+/*
 function createTransformed(image, w, h, transformFn) {
     var m_canvas = document.createElement('canvas');
 
@@ -253,6 +215,7 @@ function createTransformed(image, w, h, transformFn) {
 
     return m_canvas.toDataURL();
 }
+*/
 
 function darknessLayer() {
     darknessCanvas = document.createElement('canvas');
@@ -260,4 +223,6 @@ function darknessLayer() {
     darknessCanvas.height = elCanvas.clientHeight;
 
     darknessCtx = darknessCanvas.getContext('2d');
+
+    document.body.appendChild(darknessCanvas);
 }

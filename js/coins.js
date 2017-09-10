@@ -7,9 +7,9 @@ function useCoins(keys) {
         coinTaker.coins++;
 
         if (coinTaker.coins === coinTaker.maxCoins && !coinTaker.sated) {
-            if (coinTaker.levelUp) coinTaker.levelUp();
-
             coinTaker.sated = true;
+
+            if (coinTaker.levelUp) coinTaker.levelUp();
         }
 
         elHorse.coins -= 1;
@@ -67,10 +67,6 @@ function addCoin(x, y, width, height) {
 }
 
 function moveCoin(coin) {
-    //if (!coin.active) return;
-
-    //if (coin.y === elWorld.clientHeight  - coin.clientHeight) return;
-
     coin.x += coin.vX;
     coin.y += coin.vY;
 
@@ -88,7 +84,7 @@ function moveCoin(coin) {
         }, 500);
     }
 
-    coin.style.transform = `translate3d(${(coin.x + elWorld.x - 350)}px, ${(coin.y || 0)}px, 0) `;
+    coin.style.transform = `translate3d(${(coin.x + elWorld.x)}px, ${(coin.y || 0)}px, 0) `;
 }
 
 function maybePickUpCoin(coin, picker) {
@@ -121,6 +117,8 @@ function maybePickUpCoin(coin, picker) {
         picker.coins++;
         coin.vX = 0;
         coin.active = false;
+
+        if (coin.filter === 'evil') return;
 
         setTimeout(() => {
             coin.y = coin.y - 40 * unit;

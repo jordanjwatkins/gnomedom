@@ -8,7 +8,7 @@
 }
 
 .ground.fore {
-    z-index: 3;
+    z-index: 5;
 }
 
 .ground.back {
@@ -17,12 +17,11 @@
 }
 
 .world {
-        z-index: 2;
+    z-index: 2;
     width: 0;
     top: 0;
     left: 50%;
     height: 90%;
-    transform: translate3d(352px, 0, 0);
 }
 
 .campfire, .evil-campfire {
@@ -51,9 +50,11 @@
 .price {
     font-family: monospace;
     font-size: 10vw;
-    top: -5vw;
     opacity: 0;
     transition: opacity 0.3s;
+    text-align: center;
+    width: 20vw;
+    color: #fff;
 }
 
 .price.show {
