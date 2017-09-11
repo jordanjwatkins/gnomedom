@@ -146,7 +146,7 @@ function handlePoor(gnome) {
     }
 
     // coin sense radius
-    closeTargetDistance = 150 * unit;
+    closeTargetDistance = 50 * unit;
 
     if (!gnome.closeTarget || !gnome.closeTarget.active) gnome.closeTarget = null;
 
@@ -191,7 +191,7 @@ function walkToTarget(thing, target) {
 }
 
 function tryForCloserTarget(thing, target) {
-    if (!target) return;
+    if (!target || !target.active || !target.targetable) return;
 
     distanceToTarget = Math.abs((target.x - thing.x));
 
@@ -295,14 +295,6 @@ function updateGnome(gnome) {
             return;
         }
 
-        // move toward village
-        if (gnome.moveType === 'standing') {
-            //gnome.task = 'idle';
-            //if (!gnome.task) {
-                //walkToTarget(gnome, gnome.villagePos);
-            //}
-        }
-
         // stop at village
         if (gnome.moveType === 'walking' && gnome.task !== 'defend') {
             if (atTarget(gnome, gnome.villagePos)) {
@@ -311,36 +303,54 @@ function updateGnome(gnome) {
             }
         }
 
-        if (night) {
-             // fire projectiles
-            gnome.attackWait -= delta * 0.1;
+        if (gnome.filter === 'default') {
+            if (night) {
+                 // fire projectiles
+                gnome.attackWait -= delta * 0.1;
 
-            if (gnome.attackWait < 0) {
-                addProjectile(gnome.x / unit, gnome.y / unit, 1, 1);
-                gnome.attackWait = 200;
+                if (gnome.attackWait < 0) {
+                    addProjectile(gnome.x / unit, gnome.y / unit, 1, 1);
+                    gnome.attackWait = 200;
+                }
+
+                if (gnome.task === 'idle') {
+                    console.log('guard wall');
+
+                    gnome.closeTarget = walls[0].x + 3 * unit + 8 * unit * Math.random();
+
+                    walkToTarget(gnome, gnome.closeTarget);
+
+                    gnome.task = 'defend';
+                }
+
+                if (atTarget(gnome, gnome.closeTarget)) {
+                    gnome.moveType = 'standing';
+                }
+            } else {
+                gnome.task = 'idle';
+                chooseWalkTarget(gnome);
             }
+        } else if (gnome.filter === 'blue') {
+            gnome.closeTarget = null;
 
-            // guard wall
-            //gnome.closeTarget = walls[0].x + 3 * unit + 8 * unit * Math.random();
-            //walkToTarget(gnome, gnome.closeTarget);
+            builderTasks.forEach((target) => {
+                tryForCloserTarget(gnome, target);
+            });
 
-            //if (gnome.filter === 'default') console.log('attacker task:', gnome.task);
+            if (gnome.closeTarget) {
+                if(boxesCollide(gnome, gnome.closeTarget)) {
+                    //console.log('at build task');
+                    if (gnome.closeTarget.build() === 'built') {
+                        gnome.moveType = 'standing';
+                        gnome.closeTarget.targetable = false;
+                    }
 
-            if (gnome.task === 'idle' && gnome.filter === 'default') {
-                console.log('guard wall');
-                gnome.closeTarget = walls[0].x + 3 * unit + 8 * unit * Math.random();
-
-                walkToTarget(gnome, gnome.closeTarget);
-
-                gnome.task = 'defend';
+                    //console.log('isBuilt', isBuilt);
+                    //if (isBuilt) gnome.moveType = 'standing';
+                } else {
+                    walkToTarget(gnome, gnome.closeTarget.x);
+                }
             }
-
-            if (atTarget(gnome, gnome.closeTarget)) {
-                gnome.moveType = 'standing';
-            }
-        } else {
-            gnome.task = 'idle';
-            chooseWalkTarget(gnome);
         }
     }
 
