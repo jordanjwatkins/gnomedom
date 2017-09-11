@@ -28,22 +28,38 @@ function addCamp(x) {
     addEntity({ x: x - 95, width: Math.random() * 10 + 2, height: Math.random() * 37 + 2, things: misc, className: 'bush' });
 
     coinFlower(x + 41);
-    coinFlower(x + 46);
-    coinFlower(x + 48);
-    coinFlower(x + 51);
-    coinFlower(x + 58);
+    //coinFlower(x + 46);
+    //coinFlower(x + 48);
+    //coinFlower(x + 51);
+    //coinFlower(x + 58);
     coinFlower(x + 61);
-    coinFlower(x + 66);
-    coinFlower(x + 68);
-    coinFlower(x + 71);
+    //coinFlower(x + 66);
+    //coinFlower(x + 68);
+    //coinFlower(x + 71);
 }
 
-function coinFlower(x) {
-    thing = addEntity({ x: x, width: 3, height: 7, things: misc, className: 'coinflower' });
+function coinFlower(x, y) {
+    y = y || 7;
+
+    thing = addEntity({ x: x, y: uWorldHeight - y, width: 3, height: 7, things: misc, className: 'coinflower' });
 
     thing.sprite = images.coinflower;
 
     thing.sH = 7;
+    thing.sW = 3;
+
+    thing.canBePickedUp = true;
+    thing.bloomHour = Math.random() * 24;
+}
+
+function coinTree(x, y) {
+    y = y || 7;
+
+    thing = addEntity({ x: x, y: uWorldHeight - 39, width: 13, height: 47, things: misc, className: 'coinflower' });
+
+    thing.sprite = images.coinflower;
+
+    thing.sH = 4;
     thing.sW = 3;
 
     thing.canBePickedUp = true;

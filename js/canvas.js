@@ -15,7 +15,7 @@ function renderDayNight() {
         }
     });
 
-    ctx.drawImage(darknessCanvas, 0, 0);
+    //ctx.drawImage(darknessCanvas, 0, 0);
 }
 
 function renderCoin(coin) {
@@ -33,24 +33,44 @@ function renderWall(wall) {
     }
 }
 
+function renderWave1(wall) {
+    if (wall.sprite) {
+        wall.sW = 25;
+        wall.sH = 2;
+
+        if (Math.sin(lastFrameTimeMs / 100) > 0) {
+            wall.sY = 0;
+            draw(wall, 0, 0, 0, darknessCtx);
+        } else {
+            wall.sY = 2;
+            draw(wall, 0, 0, 0, darknessCtx);
+        }
+
+        draw(wall, 0, 0, 0, darknessCtx);
+    } else {
+        wall.sprite = images['wave1'];
+    }
+}
+
+function renderWater(thing) {
+    draw(thing, 0, 0, 0, darknessCtx);
+}
+
 function renderCoinFlower(thing) {
     thing.sprite = images['coinflower'];
 
     if (boxesCollide(elHorse, thing)) {
         if (thing.canBePickedUp) {
-
             draw(thing, 1);
 
-            //console.log('horse/flower');
             thing.canBePickedUp = false;
+
             elHorse.coins++;
         } else {
             draw(thing, 0);
         }
     } else {
         (thing.canBePickedUp) ? draw(thing, 1) : draw(thing, 0);
-
-        //console.log(thing.bloomHour, hour);
 
         if (thing.bloomHour > hour && thing.bloomHour < hour + 0.01) thing.canBePickedUp = true;
     }
@@ -126,21 +146,23 @@ function renderGnome(gnome) {
     }
 }
 
-function draw(thing, frame, offset = 0, offsetY) {
+function draw(thing, frame, offset = 0, offsetY, context) {
+    context = context || ctx;
+
     if (!thing.sprite && !thing.color) return;
 
     spriteX = thing.x + elWorld.x + 50 * unit - thing.width / 2 + offset;
 
     if (spriteX < -thing.width || spriteX > currentWidth + thing.width) return; // off-screen -trouble?
 
-    if (thing.color) return drawRect(thing, spriteX);
+    if (thing.color) return drawRect(thing, spriteX, context);
 
     //spriteX = thing.x + elWorld.x;
     spriteY = thing.y + (offsetY || 0);
 
-    ctx.drawImage(
+    context.drawImage(
         thing.sprite,
-        frame * thing.sW, 0, thing.sW, thing.sH,
+        frame * thing.sW, (thing.sY || 0), thing.sW, thing.sH,
         Math.round(spriteX), spriteY,
         thing.width, thing.height
     );
@@ -197,10 +219,12 @@ function loadImage(url, name) {
         if (images.evil && !images.evilRich) loadImage(flipImage(images.evil, null, true), 'evilRich');
 
         if (images.campfire && !images.evilCampfire) loadImage(flipImage(images.campfire, 'brightness(5%)', null, 20, 4), 'evilCampfire');
+        if (images.wave && !images.wave1) loadImage(flipImage(images.wave, null, null, 25, 4, false), 'wave1');
+        if (images.wave1 && !images.wave2) loadImage(flipImage(images.wave1, null, null, 250, 40, true), 'wave2');
     };
 }
 
-function flipImage(image, filter, coined, w, h) {
+function flipImage(image, filter, coined, w, h, wave) {
     var m_canvas = document.createElement('canvas');
 
     m_canvas.width = w || 14;
@@ -214,6 +238,8 @@ function flipImage(image, filter, coined, w, h) {
     m_context.filter = filter;
 
     m_context.drawImage(image, 0, 0);
+
+    if (wave) images.waveP = m_context.createPattern(image, 'repeat');
 
     if (coined) {
         m_context.fillStyle = '#FFFF00';
@@ -248,6 +274,8 @@ function darknessLayer() {
     darknessCanvas.height = elCanvas.clientHeight;
 
     darknessCtx = darknessCanvas.getContext('2d');
+
+    darknessCtx.imageSmoothingEnabled = false;
 
     document.body.appendChild(darknessCanvas);
 }

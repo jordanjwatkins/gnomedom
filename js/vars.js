@@ -16,7 +16,9 @@ let coinBar, coinValue;
 
 let night = false;
 
-let fireLit = false;
+let fireLit = true; // gnomes will/won't chase coins
+
+const builderTasks = []; // check each and act on closest
 
 const berries = [];
 

@@ -30,7 +30,7 @@ function init() {
 
     horseMove(0, 1);
 
-    elHorse.coins = 25;
+    elHorse.coins = 30;
     elHorse.active = true;
 
     // preload running image to avoid visible flash
@@ -48,7 +48,7 @@ function setWorldSize() {
     worldHeight = elWorld.clientHeight;
     uWorldHeight = elWorld.clientHeight / unit;
 
-    elWorld.x = 20 * unit;
+    elWorld.x = -90 * unit;
 
     elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
     elHorse.width = elHorse.clientWidth;
@@ -137,25 +137,33 @@ function addEntities() {
     // dead-end
     addEntity({ x: 144, width: 13, height: 22, things: misc, className: 'bush' });
     addEntity({ x: 145, width: 10, height: 20, things: misc }).color = '#333';
+    coinFlower(130);
 
     // water
-    addEntity({ x: 180, width: 60, height: 10, things: misc }).color = '#2500FF';
-    //addEntity({ x: 180, width: 60, height: 10, things: misc }).color = '#002133';
-    coinFlower(30);
+    addEntity({ x: 181, y: uWorldHeight, width: 60, height: 10, things: misc, className: 'water' }).color = '#2500FF'; // water
+
+    addEntity({ x: 158, y: uWorldHeight - 1, width: 15, height: 1, things: misc, className: 'wave1' });
+    addEntity({ x: 172, y: uWorldHeight - 1, width: 15, height: 1, things: misc, className: 'wave1' });
+    addEntity({ x: 217, y: uWorldHeight - 1, width: 15, height: 1, things: misc, className: 'wave1' });
+
+    coinFlower(145, 29);
 
     // evil fire
     thing = fire(-269, 13, 17);
     thing.evil = true;
+
+    coinFlower(-293);
 
     // spawn evils
     let evils = 0;
 
     spawn();
 
-    thing.spawner = setInterval(spawn, 7000);
+    thing.spawner = setInterval(spawn, 4000);
 
     function spawn() {
-        if (!night) return;
+        if (!(hour > 18.5 || hour < 5)) return evils = 0;
+        if (evils >= days - 1) return;
 
         console.log('spawn');
 
@@ -164,7 +172,7 @@ function addEntities() {
         thing = addGnome(-269);
         thing.filter = 'evil';
         thing.moveType = 'walking';
-        thing.speed = unit / 3;
+        thing.speed = unit / 1.8;
 
         // avoid evil not appearing when horse is over fire during spawn
         let t = thing;
@@ -173,6 +181,7 @@ function addEntities() {
 
         setTimeout(function () {
             t.leftHome = true;
+            if (days > 4) spawn();
         }, 500);
     }
 

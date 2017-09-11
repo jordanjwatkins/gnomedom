@@ -20,7 +20,7 @@ function addGnome(x, y, width, height) {
     gnome.vY = 0;
     gnome.wait = 5;
     gnome.headedHome = false;
-    gnome.attackWait = 100;
+    gnome.attackWait = 49;
 
     gnome.moveType = 'standing';
     gnome.filter = 'poor';
@@ -61,12 +61,14 @@ function maybeStartWallAttack(gnome, wall) {
 
         random = 100 + 600 * Math.random();
 
+        let g = gnome;
+
         setTimeout(function () {
-            gnome.startingAttack = false;
+            g.startingAttack = false;
 
-            gnome.moveType = 'attack';
+            g.moveType = 'attack';
 
-            gnome.vX = 0;
+            g.vX = 0;
         }, random);
     }
 }
@@ -75,7 +77,7 @@ function attackWall(gnome1, wall) {
     if (gnome1.attackWait <= 0 && !gnome1.dead) {
         console.log('attack');
 
-        gnome1.attackWait = 63;
+        gnome1.attackWait = 193;
         gnome1.attacking = true;
         wall.shaking = true;
         wall.health -= 1;
@@ -104,7 +106,7 @@ function attackGnome(gnome, target) {
     if (((target.filter !== 'evil' && target.coins > 0) || target === elHorse)  && (gnome.attackWait < 50 || gnome.attackWait > 99)) {
         console.log('attack gnome');
 
-        gnome.attackWait = 63;
+        gnome.attackWait = 49;
         gnome.attacking = true;
 
         target.coins--;
@@ -205,7 +207,7 @@ function updateGnome(gnome) {
     gnome.home = (gnome.filter === 'poor' || gnome.filter === 'evil') ? gnome.campX : gnome.villagePos;
 
     if (gnome.filter === 'evil') {
-        if ((gnome.coins >= gnome.maxCoins || !night) && gnome.leftHome) {
+        if ((gnome.coins >= gnome.maxCoins || !(hour > 16.2 || hour < 5) || gnome.headedHome) && gnome.leftHome) {
             walkToTarget(gnome, gnome.campX);
 
             if (gnome.x > gnome.campX - 1 * unit && gnome.x < gnome.campX + 4 * unit) {
@@ -215,7 +217,16 @@ function updateGnome(gnome) {
 
             moveGnome(gnome);
 
+            tryForCloserTarget(gnome, elHorse);
+
+            if (gnome.closeTarget && gnome.closeTarget.active && boxesCollide(gnome, gnome.closeTarget)) attackGnome(gnome, gnome.closeTarget);
+
             return;
+        }
+
+        // return from end of world
+        if (gnome.x > 248 * unit + elWorld.x) {
+            gnome.headedHome = true;
         }
 
         if (!gnome.startingAttack) {
@@ -328,6 +339,7 @@ function updateGnome(gnome) {
                 gnome.moveType = 'standing';
             }
         } else {
+            gnome.task = 'idle';
             chooseWalkTarget(gnome);
         }
     }

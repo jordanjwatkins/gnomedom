@@ -20,7 +20,7 @@ body:before {
     z-index: 9000;
 }
 
-body:after {
+body:after, .day {
     content: 'love';
     font-size: 2vw;
     color: #fff;
@@ -70,4 +70,16 @@ html, body {
 
 .canvas {
     z-index: 2;
+}
+
+.day {
+    opacity: 0;
+    font-size: 10vw;
+    transition: 17s opacity;
+    z-index: 8999;
+    top: 20%;
+}
+
+.dayStart .day {
+    opacity: 0.4;
 }
