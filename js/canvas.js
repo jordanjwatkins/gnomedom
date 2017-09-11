@@ -35,10 +35,33 @@ function renderWall(wall) {
 
 function renderCoinFlower(thing) {
     thing.sprite = images['coinflower'];
-    thing.sW = 3;
-    thing.sH = 7;
 
-    draw(thing, 0);
+    if (boxesCollide(elHorse, thing)) {
+        if (thing.canBePickedUp) {
+
+            draw(thing, 1);
+
+            //console.log('horse/flower');
+            thing.canBePickedUp = false;
+            elHorse.coins++;
+        } else {
+            draw(thing, 0);
+        }
+    } else {
+        (thing.canBePickedUp) ? draw(thing, 1) : draw(thing, 0);
+
+        //console.log(thing.bloomHour, hour);
+
+        if (thing.bloomHour > hour && thing.bloomHour < hour + 0.01) thing.canBePickedUp = true;
+    }
+}
+
+function renderCoinBar() {
+    drawRect(coinBar, coinBar.x, darknessCtx);
+
+    coinValue.width = (elHorse.coins > 0) ? elHorse.coins * unit / 3 : 0;
+
+    drawRect(coinValue, coinValue.x, darknessCtx);
 }
 
 let timeValue;
@@ -123,10 +146,12 @@ function draw(thing, frame, offset = 0, offsetY) {
     );
 }
 
-function drawRect(thing, spriteX) {
-    if (ctx.fillStyle !== thing.color) ctx.fillStyle = thing.color || '#000';
+function drawRect(thing, spriteX, context) {
+    context = context || ctx;
 
-    ctx.fillRect(Math.round(spriteX), thing.y, thing.width, thing.height);
+    if (context.fillStyle !== thing.color) context.fillStyle = thing.color || '#000';
+
+    context.fillRect(Math.round(spriteX), thing.y, thing.width, thing.height);
 }
 
 function lightOnScreen(light) {

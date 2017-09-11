@@ -24,10 +24,11 @@ function addGnome(x, y, width, height) {
 
     gnome.moveType = 'standing';
     gnome.filter = 'poor';
+    gnome.task = 'idle';
 
     gnome.maxCoins = 1;
 
-    gnome.villagePos = -60 * unit + 40 * unit * Math.random();
+    gnome.villagePos = -20 * unit + 60 * unit * Math.random();
     gnome.campX = gnome.x;
 
     gnome.speed = unit / 5;
@@ -122,9 +123,13 @@ function attackGnome(gnome, target) {
 }
 
 function handlePoor(gnome) {
+    if (!fireLit) return;
+
     if (gnome.coins > 0) {
         gnome.filter = 'green';
+
         headHome(gnome);
+
         if (gnome.camp && gnome.camp.pop) gnome.camp.pop--;
 
         return;
@@ -135,11 +140,11 @@ function handlePoor(gnome) {
 
         return;
     } else {
-        gnome.wait = 20;
+        gnome.wait = 7;
     }
 
     // coin sense radius
-    closeTargetDistance = 50 * unit;
+    closeTargetDistance = 150 * unit;
 
     if (!gnome.closeTarget || !gnome.closeTarget.active) gnome.closeTarget = null;
 
@@ -155,7 +160,7 @@ function chooseWalkTarget(gnome) {
         walkToTarget(gnome, gnome.closeTarget.x);
 
         gnome.headedHome = false;
-    } else if (Math.abs(gnome.x - gnome.campX) < 10) {
+    } else if (atTarget(gnome, gnome.home)) {
         if (gnome.headedHome) {
             console.log('already at home');
 
@@ -171,7 +176,9 @@ function chooseWalkTarget(gnome) {
 function headHome(gnome) {
     gnome.headedHome = true;
 
-    (gnome.filter === 'poor' || gnome.filter === 'evil') ? walkToTarget(gnome, gnome.campX) : walkToTarget(gnome, gnome.villagePos);
+    //console.log(' head home');
+
+    walkToTarget(gnome, gnome.home);
 }
 
 function walkToTarget(thing, target) {
@@ -195,14 +202,13 @@ function tryForCloserTarget(thing, target) {
 function updateGnome(gnome) {
     if (!gnome.active) return;
 
-    if (gnome.filter === 'evil') {
-        if (gnome.coins >= gnome.maxCoins || !night) {
-            setTimeout(()=>{
-                walkToTarget(gnome, gnome.campX);
-            }, 350);
+    gnome.home = (gnome.filter === 'poor' || gnome.filter === 'evil') ? gnome.campX : gnome.villagePos;
 
-            if (gnome.x > gnome.campX + 1 * unit && gnome.x < gnome.campX + 2 * unit) {
-               // console.log('gnome out');
+    if (gnome.filter === 'evil') {
+        if ((gnome.coins >= gnome.maxCoins || !night) && gnome.leftHome) {
+            walkToTarget(gnome, gnome.campX);
+
+            if (gnome.x > gnome.campX - 1 * unit && gnome.x < gnome.campX + 4 * unit) {
                 gnome.active = false;
                 gnomePool.push(gnome);
             }
@@ -246,39 +252,44 @@ function updateGnome(gnome) {
             (gnome.campX - gnome.villagePos) ? walkToTarget(gnome, 100000) : walkToTarget(gnome, -100000);
         }
     } else if (gnome.filter === 'poor') {
-        //console.log('update poor gnome');
         handlePoor(gnome);
     } else {
+        // target sense radius
+        closeTargetDistance = 1550 * unit;
+
         if (gnome.filter === 'green') {
+            gnome.closeTarget = null;
+            gnome.moveType = 'standing';
+
             berries.forEach((berry, index) => {
                 if (berry.coins > 0 && boxesCollide(gnome, berry)) {
-
                     berry.sated = false;
                     berry.coins = 0;
                     berry.y = berry.y - 4 * unit;
 
                     gnome.filter = (index) ? 'blue' : 'default';
+
+                    return;
                 } else if (berry.coins > 0) {
                     tryForCloserTarget(gnome, berry);
                 }
             });
 
-            if (gnome.closeTarget && gnome.closeTarget.active) {
-                chooseWalkTarget(gnome);
+            chooseWalkTarget(gnome);
 
-                moveGnome(gnome);
+            moveGnome(gnome);
 
-                gnome.closeTarget = null;
+            gnome.closeTarget = null;
 
-                return;
-            }
+            return;
         }
 
         // move toward village
         if (gnome.moveType === 'standing') {
-            if (!gnome.task) {
-                walkToTarget(gnome, gnome.villagePos);
-            }
+            //gnome.task = 'idle';
+            //if (!gnome.task) {
+                //walkToTarget(gnome, gnome.villagePos);
+            //}
         }
 
         // stop at village
@@ -299,15 +310,25 @@ function updateGnome(gnome) {
             }
 
             // guard wall
+            //gnome.closeTarget = walls[0].x + 3 * unit + 8 * unit * Math.random();
+            //walkToTarget(gnome, gnome.closeTarget);
+
+            //if (gnome.filter === 'default') console.log('attacker task:', gnome.task);
+
             if (gnome.task === 'idle' && gnome.filter === 'default') {
-                gnome.closeTarget = walls[0].x + 3 * unit + 10 * unit * Math.random();
+                console.log('guard wall');
+                gnome.closeTarget = walls[0].x + 3 * unit + 8 * unit * Math.random();
+
                 walkToTarget(gnome, gnome.closeTarget);
+
                 gnome.task = 'defend';
             }
 
             if (atTarget(gnome, gnome.closeTarget)) {
                 gnome.moveType = 'standing';
             }
+        } else {
+            chooseWalkTarget(gnome);
         }
     }
 

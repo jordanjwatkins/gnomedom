@@ -20,8 +20,9 @@ function init() {
     loadImage('./images/gnome-stand.gif', 'gnomeStand');
     loadImage('./images/campfire-sheet.gif', 'campfire');
     loadImage('./images/wall-sheet.gif', 'wall');
-    loadImage('./images/coinflower2.gif', 'coinflower');
+    loadImage('./images/coinflower.gif', 'coinflower');
     loadImage('./images/base-sheet.gif', 'base');
+    loadImage('./images/wave.gif', 'wave');
 
     darknessLayer();
 
@@ -47,7 +48,7 @@ function setWorldSize() {
     worldHeight = elWorld.clientHeight;
     uWorldHeight = elWorld.clientHeight / unit;
 
-    elWorld.x = (resizeDelta) ? elWorld.x / resizeDelta : 50 * unit;
+    elWorld.x = 20 * unit;
 
     elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
     elHorse.width = elHorse.clientWidth;
@@ -88,6 +89,8 @@ function addEntities() {
         this.coins = 0;
 
         if (this.level === 1) {
+            fireLit = true;
+
             this.maxCoins = 9;
 
             // red berry
@@ -128,6 +131,18 @@ function addEntities() {
     addGnome(-40);
     addGnome(20);
 
+    coinFlower(-10);
+    coinFlower(30);
+
+    // dead-end
+    addEntity({ x: 144, width: 13, height: 22, things: misc, className: 'bush' });
+    addEntity({ x: 145, width: 10, height: 20, things: misc }).color = '#333';
+
+    // water
+    addEntity({ x: 180, width: 60, height: 10, things: misc }).color = '#2500FF';
+    //addEntity({ x: 180, width: 60, height: 10, things: misc }).color = '#002133';
+    coinFlower(30);
+
     // evil fire
     thing = fire(-269, 13, 17);
     thing.evil = true;
@@ -149,8 +164,24 @@ function addEntities() {
         thing = addGnome(-269);
         thing.filter = 'evil';
         thing.moveType = 'walking';
-        thing.speed = unit / 4;
+        thing.speed = unit / 3;
+
+        // avoid evil not appearing when horse is over fire during spawn
+        let t = thing;
+
+        t.leftHome = false;
+
+        setTimeout(function () {
+            t.leftHome = true;
+        }, 500);
     }
+
+    // coins bar
+    coinBar = addEntity({ x: 2, y: 2, width: 15, height: 2, className: 'bar' });
+    coinBar.color = '#444';
+
+    coinValue = addEntity({ x: 2, y: 2, width: 15, height: 2, className: 'bar' });
+    coinValue.color = '#ffff00';
 }
 
 function fire(x, width, height, type) {

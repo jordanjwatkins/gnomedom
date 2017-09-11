@@ -21,9 +21,14 @@ function update(timestamp) {
 
     updateDayNight();
 
+    renderCoinBar();
+
     // game over
     if (elHorse.coins < 0) {
         elHorse.classList.add('dead');
+        document.body.classList.add('game-over');
+    } else if (elHorse.x < -390 * unit) {
+        document.body.classList.add('win');
     } else {
         keyMove();
     }
@@ -32,11 +37,13 @@ function update(timestamp) {
 }
 
 function maybeRender(thing) {
-    if (thing.className.match('campfire')) renderFire(thing);
-    if (thing.className.match('bush')) { thing.color = '#006400'; }
-    if (thing.className.match('coinflower')) renderCoinFlower(thing);
+    if (thing.className.match('campfire')) return renderFire(thing);
+    if (thing.className.match('coinflower')) return renderCoinFlower(thing);
+    if (thing.className.match('bar')) return renderCoinBar(thing);
 
-    if (thing.color) { draw(thing, 0); }
+    if (thing.className.match('bush')) thing.color = '#006400';
+
+    if (thing.color) draw(thing, 0);
 }
 
 function updateCoinTaker() {

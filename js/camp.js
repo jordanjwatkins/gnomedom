@@ -39,10 +39,13 @@ function addCamp(x) {
 }
 
 function coinFlower(x) {
-    thing = addEntity({ x: x + 60, width: 3, height: 7, things: misc, className: 'coinflower' });
+    thing = addEntity({ x: x, width: 3, height: 7, things: misc, className: 'coinflower' });
 
-    thing['sprite'] = images['coinflower'];
+    thing.sprite = images.coinflower;
 
     thing.sH = 7;
     thing.sW = 3;
+
+    thing.canBePickedUp = true;
+    thing.bloomHour = Math.random() * 24;
 }

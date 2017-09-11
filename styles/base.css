@@ -7,18 +7,49 @@ body div, :before, :after {
     image-rendering: -moz-crisp-edges;
 }
 
-body:before {
+body:before, body:after {
     content: '';
+    transition: 0.3s ease-in-out;
+}
+
+body:before {
     background: #1e5799;
     width: 100%;
     height: 100%;
-    transition: 0.3s ease-in-out;
     pointer-events: none;
     z-index: 9000;
 }
 
+body:after {
+    content: 'love';
+    font-size: 2vw;
+    color: #fff;
+    transition: 0.3s ease-in-out;
+    width: 100%;
+    text-align: center;
+    font-family: monospace;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 9001;
+}
+
 body.loaded:after, body.loaded:before {
     opacity: 0;
+}
+
+body.game-over:after, body.game-over:before,
+body.win:after, body.win:before {
+    opacity: 1;
+    transition: 5s;
+    font-size: 6vw;
+}
+
+body.game-over:after {
+    content: 'well and truly lost...';
+}
+
+body.win:after {
+    content: 'once lost, now found...';
 }
 
 html, body {

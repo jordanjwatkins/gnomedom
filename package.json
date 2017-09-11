@@ -4,7 +4,7 @@
   "description": "",
   "main": "js/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "http-server",
     "setup": "rm -rf build && mkdir build && touch build/index.js",
     "concatjs": "concat -o build/index.js ./js/vars.js ./js/camp.js ./js/canvas.js ./js/update.js ./js/projectile.js ./js/misc.js ./js/input.js ./js/horse.js ./js/gnome.js ./js/entity.js ./js/coins.js ./js/app.js ./js/init.js && google-closure-compiler-js build/index.js > build/index.min.js --compilationLevel SIMPLE --assumeFunctionWrapper true",
     "gcc": "google-closure-compiler-js -h"
@@ -14,6 +14,7 @@
   "devDependencies": {
     "concat": "^1.0.3",
     "google-closure-compiler-js": "^20170806.0.0",
+    "http-server": "^0.10.0",
     "uglify-js": "^3.0.28"
   }
 }

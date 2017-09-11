@@ -12,7 +12,11 @@ let darknessCanvas, darknessCtx;
 
 let villagePos;
 
+let coinBar, coinValue;
+
 let night = false;
+
+let fireLit = false;
 
 const berries = [];
 
