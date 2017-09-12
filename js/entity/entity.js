@@ -23,7 +23,7 @@ function addEntity(props) {
 
     thing.sated = false;
     thing.level = 0;
-    thing.buildTime = 100;
+    thing.buildTime = 800;
     thing.targetable = true;
 
     if (!thing.inDom && (thing.className === 'coin' || thing.className === 'price'/* || thing.className === 'gnome'*/)) {

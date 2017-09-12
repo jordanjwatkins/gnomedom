@@ -3,5 +3,5 @@ function horseMove(delta, direction) {
 
     elWorld.x += Math.round(direction * speed * delta);
 
-    elHorse.x = -elWorld.x - elHorse.width / 4;
+    elHorse.x = -elWorld.x - elHorse.width / 2;
 }

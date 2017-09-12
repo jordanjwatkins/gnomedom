@@ -84,7 +84,7 @@ function moveCoin(coin) {
         }, 500);
     }
 
-    coin.style.transform = `translate3d(${(coin.x + elWorld.x)}px, ${(coin.y || 0)}px, 0) `;
+    roundedMove(coin);
 }
 
 function maybePickUpCoin(coin, picker) {
@@ -102,8 +102,6 @@ function maybePickUpCoin(coin, picker) {
         setTimeout(() => {
             coin.active = false;
         }, 50);
-
-        console.log('yowch!!!');
 
         return;
     }

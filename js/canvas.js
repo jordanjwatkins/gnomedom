@@ -73,6 +73,7 @@ function loadImage(url, name) {
         if (images.campfire && !images.evilCampfire) loadImage(flipImage(images.campfire, 'brightness(5%)', null, 20, 4), 'evilCampfire');
         if (images.wave && !images.wave1) loadImage(flipImage(images.wave, null, null, 25, 4, false), 'wave1');
         if (images.wave1 && !images.wave2) loadImage(flipImage(images.wave1, null, null, 250, 40, true), 'wave2');
+        if (images.coinflower && !images.cointree) loadImage(flipImage(images.coinflower, 'hue-rotate(90deg)', null, 6, 7, true), 'cointree');
     };
 }
 

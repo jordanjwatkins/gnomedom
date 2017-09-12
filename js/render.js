@@ -14,12 +14,6 @@ function renderDayNight() {
             cutoutGradient(thing.x + 50 * unit + elWorld.x, elCanvas.clientHeight - 18 * unit, 23 * unit, 0.8);
         }
     });
-
-    //ctx.drawImage(darknessCanvas, 0, 0);
-}
-
-function renderCoin(coin) {
-    draw(coin);
 }
 
 let offset;
@@ -29,7 +23,15 @@ function renderWall(wall) {
         offset = (wall.shaking) ? -1 * unit : 0;
         (wall.destroyed) ? draw(wall, 0, offset) : draw(wall, 1, offset);
     } else {
-        wall.sprite = images['wall'];
+        wall.sprite = images.wall;
+    }
+}
+
+function renderEvilWall(wall) {
+    if (wall.sprite) {
+        (wall.destroyed) ? draw(wall, 1, offset) : draw(wall, 0, offset);
+    } else {
+        wall.sprite = images.evilWall;
     }
 }
 
@@ -48,7 +50,7 @@ function renderWave1(wall) {
 
         draw(wall, 0, 0, 0, darknessCtx);
     } else {
-        wall.sprite = images['wave1'];
+        wall.sprite = images.wave1;
     }
 }
 
@@ -57,7 +59,13 @@ function renderWater(thing) {
 }
 
 function renderCoinFlower(thing) {
-    thing.sprite = images['coinflower'];
+    thing.sprite = images.coinflower;
+
+    if (thing.tree) {
+        thing.sprite = images.cointree;
+
+        return draw(thing, 0);
+    }
 
     if (boxesCollide(elHorse, thing)) {
         if (thing.canBePickedUp) {
@@ -88,8 +96,11 @@ let timeValue;
 
 function renderFire(fire) {
     // base
-    if (fire.levelUp) draw({ x: 11 * unit, y: worldHeight - 70 * unit, width: 90 * unit, height: 70 * unit, sprite: images.base, sW: 9, sH: 7 }, fire.level);
+    if (fire.levelUp) {
+        const baseLevel = (fire.level) ? fire.level - 1 : 0;
 
+        draw({ x: 11 * unit, y: worldHeight - 70 * unit, width: 90 * unit, height: 70 * unit, sprite: images.base, sW: 9, sH: 7 }, baseLevel);
+    }
     if (fire.sprite) {
         timeValue = Math.tan(lastFrameTimeMs / 190);
 
@@ -102,10 +113,10 @@ function renderFire(fire) {
                 draw(fire, 3);
             }
         } else {
-            draw(fire, 0);
+            (fire.evil) ? draw(fire, 3) : draw(fire, 0);
         }
     } else {
-        fire.sprite = (fire.evil) ?  images['evilCampfire'] : images['campfire'];
+        fire.sprite = (fire.evil) ?  images.evilCampfire : images.campfire;
     }
 }
 
@@ -134,11 +145,7 @@ function renderGnome(gnome) {
                 draw(gnome, 1);
             }
         } else {
-            if (gnome.filter === 'evil') {
-                //gnome.sprite = (gnome.coins >= gnome.maxCoins) ? images.evilRich : images.evil;
-
-                if (gnome.attacking) return draw(gnome, 0, 2 * unit * gnome.attackDirection);
-            }
+            if (gnome.filter === 'evil' && gnome.attacking) return draw(gnome, 0, 2 * unit * gnome.attackDirection);
 
             draw(gnome, 0);
         }

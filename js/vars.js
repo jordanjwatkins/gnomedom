@@ -1,4 +1,4 @@
-let elHorse, elWorld, elGirl, currentWidth, worldHeight, unit, horseDirection, speed, wX, random; //thing, spriteX, spriteY, uWorldHeight, gnome, coinTaker, prevTaker
+let elHorse, elWorld, currentWidth, worldHeight, unit, horseDirection, speed, wX, random, evilWall; //thing, spriteX, spriteY, uWorldHeight, gnome, coinTaker, prevTaker
 
 let gnomeCoinPicker, horseCoinPicker;
 
@@ -16,7 +16,7 @@ let coinBar, coinValue;
 
 let night = false;
 
-let fireLit = true; // gnomes will/won't chase coins
+let fireLit = false; // gnomes will/won't chase coins
 
 const builderTasks = []; // check each and act on closest
 
@@ -30,6 +30,7 @@ const gnomePool = [];
 
 const walls = [];
 const misc = [];
+const bg = [];
 
 const projectilePool = [];
 const projectiles = [];

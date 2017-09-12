@@ -28,14 +28,7 @@ function addCamp(x) {
     addEntity({ x: x - 95, width: Math.random() * 10 + 2, height: Math.random() * 37 + 2, things: misc, className: 'bush' });
 
     coinFlower(x + 41);
-    //coinFlower(x + 46);
-    //coinFlower(x + 48);
-    //coinFlower(x + 51);
-    //coinFlower(x + 58);
     coinFlower(x + 61);
-    //coinFlower(x + 66);
-    //coinFlower(x + 68);
-    //coinFlower(x + 71);
 }
 
 function coinFlower(x, y) {
@@ -50,6 +43,41 @@ function coinFlower(x, y) {
 
     thing.canBePickedUp = true;
     thing.bloomHour = Math.random() * 24;
+
+    thing.maxCoins = 1;
+
+    thing.levelUp = function () {
+        builderTasks.push(this);
+        this.resets = 3;
+        this.targetable = true;
+    };
+
+    thing.build = function (gnome) {
+        this.builder = gnome;
+        gnome.building = true;
+        this.targetable = false;
+
+        if (this.buildTime > 0) return --this.buildTime;
+
+        console.log('addCoin');
+        addCoin(this.x / unit, this.y / unit - 4, 2, 3);
+
+        this.buildTime = 800;
+
+        if (this.resets > 0) {
+            //this.canBePickedUp = true;
+            this.resets--;
+
+            return;
+        }
+
+        this.builder = null;
+        this.coins = 0;
+        gnome.building = false;
+        //this.targetable = true;
+
+        return 'built';
+    };
 }
 
 function coinTree(x, y) {
@@ -62,6 +90,6 @@ function coinTree(x, y) {
     thing.sH = 4;
     thing.sW = 3;
 
-    thing.canBePickedUp = true;
-    thing.bloomHour = Math.random() * 24;
+    //thing.canBePickedUp = true;
+    thing.tree = true;
 }

@@ -27,7 +27,7 @@ function addEntities() {
 
     // main fire
     thing = fire(11, 9, 8);
-    thing.maxCoins = 3;
+    thing.maxCoins = 1;
     thing.radius = 29 * unit;
     thing.intensity = 1;
     thing.burning = false;
@@ -39,10 +39,12 @@ function addEntities() {
         this.burning = true;
         this.coins = 0;
 
-        // adjust so level 1 costs 1 coin and lights the fire only?
         if (this.level === 1) {
             fireLit = true;
+            this.maxCoins = 3;
+        }
 
+        if (this.level === 2) {
             this.maxCoins = 9;
 
             // red berry
@@ -51,7 +53,7 @@ function addEntities() {
             thing.maxCoins = 1;
 
             thing.levelUp = function () {
-                this.y = this.y + 4 * unit;
+                this.y = this.y + 3.8 * unit;
             };
 
             thing.color = '#5C0000';
@@ -64,7 +66,7 @@ function addEntities() {
             thing.maxCoins = 1;
 
             thing.levelUp = function () {
-                this.y = this.y + 4 * unit;
+                this.y = this.y + 3.8 * unit;
             };
 
             thing.color = '#200E4F';
@@ -72,9 +74,11 @@ function addEntities() {
             berries.push(thing);
         }
 
-        if (this.level === 2) this.maxCoins = 10;
-        if (this.level === 3) addGnome(40, null, 100, 111.5); // gnomezilla
-        //if (this.level === 4) // activate gnomezilla FTW
+        if (this.level === 3) this.maxCoins = 10;
+
+        if (this.level === 4) {
+            addGnome(40, null, 80, 91.5).gnomezilla = true;
+        }
     };
 
     // camp
@@ -86,6 +90,8 @@ function addEntities() {
 
     coinFlower(-10);
     coinFlower(30);
+
+    coinTree(-90);
 
     // dead-end
     addEntity({ x: 144, width: 13, height: 22, things: misc, className: 'bush' });
@@ -101,6 +107,14 @@ function addEntities() {
 
     coinFlower(145, 29);
 
+    // evil wall
+    thing = addEntity({ x: -320, width: 40, height: 40, className: 'evilWall' });
+    thing.evil = true;
+    thing.sW = 4;
+    thing.sH = 4;
+
+    evilWall = thing;
+
     // evil fire
     thing = fire(-269, 13, 17);
     thing.evil = true;
@@ -110,15 +124,17 @@ function addEntities() {
     // spawn evils
     let evils = 0;
 
-    spawn();
-
     thing.spawner = setInterval(spawn, 4000);
 
-    function spawn() {
+    const eF = thing;
+
+    spawn();
+
+    function spawn(x) {
+        x = x || -269;
         if (!(hour > 18.5 || hour < 5)) return evils = 0;
         if (evils >= days - 1) return;
-
-        console.log('spawn');
+        if (!eF.burning) return;
 
         evils++;
 

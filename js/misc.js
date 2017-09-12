@@ -7,6 +7,8 @@ function roundedMove(el, transforms) {
 function boxesCollide(box1, box2) {
     if (box1 === box2) return false;
 
+    //if(box2 === elHorse) console.log('box 2 horse collide');
+
     return (
         box1.x + 2 * unit < box2.x + box2.width &&
         box1.x - 2 * unit + box1.width > box2.x &&

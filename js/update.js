@@ -42,6 +42,7 @@ function maybeRender(thing) {
     if (thing.className.match('bar')) return renderCoinBar(thing);
     if (thing.className.match('wave1')) return renderWave1(thing);
     if (thing.className.match('water')) return renderWater(thing);
+    if (thing.className.match('evilWall')) return renderEvilWall(thing);
 
     if (thing.className.match('bush')) thing.color = '#006400';
 
@@ -94,7 +95,7 @@ function updatePrice(coinTaker, prevPrice) {
         }, 0);
     }
 
-    coinTaker.price.style.transform = `translate3d(${(coinTaker.price.x + elWorld.x)}px, ${(coinTaker.price.y || 0)}px, 0)`;
+    roundedMove(coinTaker.price);
 
     if (prevPrice && coinTaker.price !== prevPrice) prevPrice.classList.remove('show');
 
@@ -107,7 +108,7 @@ function updatePrice(coinTaker, prevPrice) {
     if (+coinTaker.price.innerHTML !== coinTaker.maxCoins - coinTaker.coins) coinTaker.price.innerHTML = price.join('');
 }
 
-let days = 1;
+let days = 4;
 let hour = 4;
 let darkness = 0.8;
 night = true;
@@ -125,7 +126,6 @@ function updateDayNight() {
 
     if (hour > 5 && hour < 17 && darkness > 0) {
         if (night) {
-
             document.body.classList.add('dayStart');
             setTimeout(() => { document.body.classList.remove('dayStart'); }, 9000);
         }

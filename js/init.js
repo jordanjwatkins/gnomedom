@@ -14,7 +14,7 @@ function init() {
 
     ctx = elCanvas.getContext('2d');
 
-    ctx['imageSmoothingEnabled'] = false;
+    ctx.imageSmoothingEnabled = false;
 
     loadImage('./images/gnome-walk-sheet.gif', 'gnomeWalk');
     loadImage('./images/gnome-stand.gif', 'gnomeStand');
@@ -23,6 +23,7 @@ function init() {
     loadImage('./images/coinflower.gif', 'coinflower');
     loadImage('./images/base-sheet.gif', 'base');
     loadImage('./images/wave.gif', 'wave');
+    loadImage('./images/evil-wall.gif', 'evilWall');
 
     darknessLayer();
 
@@ -32,6 +33,7 @@ function init() {
 
     elHorse.coins = 30;
     elHorse.active = true;
+    elHorse.targetable = true;
 
     // preload running image to avoid visible flash
     elHorse.classList.add('run');
@@ -40,6 +42,10 @@ function init() {
     document.body.classList.add('loaded');
 
     update();
+
+    document.addEventListener('click', event => {
+        console.log('click', (event.clientX - elWorld.x) / unit - 60);
+    });
 }
 
 function setWorldSize() {
