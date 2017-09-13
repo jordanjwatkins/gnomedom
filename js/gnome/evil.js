@@ -1,5 +1,5 @@
 function handleEvil(gnome) {
-    if ((gnome.coins >= gnome.maxCoins || !(hour > 16.2 || hour < 5) || gnome.headedHome) && gnome.leftHome) {
+    if ((gnome.coins >= gnome.maxCoins || !(hour > 13 || hour < 6) || gnome.headedHome) && gnome.leftHome) {
         walkToTarget(gnome, gnome.campX);
 
         if (gnome.x > gnome.campX - 1 * unit && gnome.x < gnome.campX + 4 * unit) {
@@ -17,7 +17,7 @@ function handleEvil(gnome) {
     }
 
     // return from end of world
-    if (gnome.x > 135 * unit) {
+    if (gnome.x > 139 * unit) {
         gnome.headedHome = true;
 
         return;
@@ -67,7 +67,7 @@ function maybeStartWallAttack(gnome, wall) {
 
         random = 100 + 600 * Math.random();
 
-        let g = gnome;
+        const g = gnome;
 
         setTimeout(function () {
             g.startingAttack = false;
@@ -85,9 +85,11 @@ function attackWall(gnome1, wall) {
         gnome1.attacking = true;
         wall.shaking = true;
         wall.health -= 1;
+        wall.coins = 2;
+        wall.sated = false;
 
-        let w = wall;
-        let g1 = gnome1;
+        const w = wall;
+        const g1 = gnome1;
 
         setTimeout(function () {
             w.shaking = false;
@@ -108,8 +110,6 @@ function attackWall(gnome1, wall) {
 
 function attackGnome(gnome, target) {
     if (((target.filter !== 'evil' && target.coins > 0) || target === elHorse)  && (gnome.attackWait < 50 || gnome.attackWait > 99)) {
-        console.log('attack gnome');
-
         gnome.attackWait = 63;
         gnome.attacking = true;
 

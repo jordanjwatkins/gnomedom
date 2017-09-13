@@ -46,9 +46,7 @@ function handleVillager(gnome) {
             }
 
             if (gnome.task === 'idle') {
-                console.log('guard wall');
-
-                gnome.closeTarget = walls[0].x + 3 * unit + 8 * unit * Math.random();
+                gnome.closeTarget = walls[0].x + 4 * unit + 9 * unit * Math.random();
 
                 walkToTarget(gnome, gnome.closeTarget);
 
@@ -66,16 +64,8 @@ function handleVillager(gnome) {
         if (!gnome.building) {
             gnome.closeTarget = null;
 
-            //let override;
-
             builderTasks.forEach((target) => {
                 tryForCloserTarget(gnome, target);
-
-                /*if (target.builder === gnome) {
-                    console.log('builder match');
-                    gnome.closeTarget = target;
-                    //override = target;
-                }*/
             });
         }
 
@@ -85,10 +75,11 @@ function handleVillager(gnome) {
                     gnome.moveType = 'standing';
                     gnome.building = false;
                     gnome.closeTarget.builder = null;
-                    //gnome.closeTarget.coins = 0;
                     gnome.building = false;
                     gnome.closeTarget.targetable = false;
                     gnome.closeTarget = null;
+                } else {
+                    (Math.sin(lastFrameTimeMs / 80) > 0) ? walkToTarget(gnome, gnome.closeTarget.x + 13 * unit) : walkToTarget(gnome, gnome.closeTarget.x - 13 * unit);
                 }
             } else {
                 //gnome.building = false;

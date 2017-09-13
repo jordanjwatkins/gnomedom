@@ -39,12 +39,26 @@ function init() {
     elHorse.classList.add('run');
 
     // fade in after first tick positioning flash
-    document.body.classList.add('loaded');
+    document.body.classList.add('loaded', 'unlit');
 
     update();
 
     document.addEventListener('click', event => {
-        console.log('click', (event.clientX - elWorld.x) / unit - 60);
+        // console.log('click', (event.clientX - elWorld.x) / unit - 60);
+    });
+
+    document.addEventListener('keydown', event => {
+        let elKeys = document.querySelector('.keys');
+
+        if (event.which === 37 || event.which === 39) {
+            setTimeout(() => {
+                elKeys.classList.add('hide');
+            }, 4000);
+
+            setTimeout(() => {
+                elKeys.classList.add('out');
+            }, 5000);
+        }
     });
 }
 
@@ -54,7 +68,7 @@ function setWorldSize() {
     worldHeight = elWorld.clientHeight;
     uWorldHeight = elWorld.clientHeight / unit;
 
-    elWorld.x = -90 * unit;
+    elWorld.x = -125 * unit;
 
     elHorse.y = elWorld.clientHeight - elHorse.clientHeight;
     elHorse.width = elHorse.clientWidth;

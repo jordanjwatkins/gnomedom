@@ -62,7 +62,7 @@ function renderCoinFlower(thing) {
     thing.sprite = images.coinflower;
 
     if (thing.tree) {
-        thing.sprite = images.cointree;
+        thing.sprite = (thing.skin === 'cointree') ? images.cointree : images.cointree2;
 
         return draw(thing, 0);
     }
@@ -123,8 +123,6 @@ function renderFire(fire) {
 function renderGnome(gnome) {
     if (gnome.sprite) {
         if (gnome.dead) {
-            console.log('dead');
-
             draw(gnome, 0, null, 5 * unit);
             gnome.active = false;
 

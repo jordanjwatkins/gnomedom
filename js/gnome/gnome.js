@@ -20,7 +20,7 @@ function addGnome(x, y, width, height) {
     gnome.vY = 0;
     gnome.wait = 5;
     gnome.headedHome = false;
-    gnome.attackWait = 49;
+    gnome.attackWait = 193;
 
     gnome.moveType = 'standing';
     gnome.filter = 'poor';
@@ -57,8 +57,6 @@ function chooseWalkTarget(gnome) {
         gnome.headedHome = false;
     } else if (atTarget(gnome, gnome.home)) {
         if (gnome.headedHome) {
-            console.log('already at home');
-
             gnome.vX = 0;
             gnome.moveType = 'standing';
             gnome.headedHome = false;
@@ -109,7 +107,6 @@ function updateGnome(gnome) {
         });
 
         misc.forEach(target => {
-            //if (boxesCollide(gnome, target)) console.log('misc hit', target);
             if (target.burning && target.evil && boxesCollide(gnome, target)) target.burning = false;
             if (target.evil && boxesCollide(gnome, target)) target.destroyed = true;
         });

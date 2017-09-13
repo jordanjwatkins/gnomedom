@@ -9,7 +9,8 @@ body div, :before, :after {
 
 body:before, body:after {
     content: '';
-    transition: 0.3s ease-in-out;
+    transition: 0.8s ease-in-out;
+    transition-delay: 1s;
 }
 
 body:before {
@@ -20,8 +21,8 @@ body:before {
     z-index: 9000;
 }
 
-body:after, .day {
-    content: 'love';
+body:after, .day, .credits, .keys {
+    content: 'lost';
     font-size: 2vw;
     color: #fff;
     transition: 0.3s ease-in-out;
@@ -64,8 +65,6 @@ html, body {
     height: 100%;
     z-index: 2000;
     position: absolute;
-    //transform: scale(2, 2);
-    //transform-origin: top left;
 }
 
 .canvas {
@@ -82,4 +81,36 @@ html, body {
 
 .dayStart .day {
     opacity: 0.4;
+}
+
+.credits, .keys {
+    top: 60%;
+    transition: opacity 0.3s;
+}
+
+.keys {
+    z-index: 100;
+    font-size: 3vw;
+}
+
+.keys.hide {
+    opacity: 0;
+}
+
+.keys.out {
+    display: none;
+}
+
+.credits {
+    visibility: hidden;
+    opacity: 0;
+    top: auto;
+    bottom: 2%;
+    line-height: 1.4;
+    transition-delay: 3s;
+}
+
+.win .credits, .game-over .credits {
+    visibility: visible;
+    opacity: 1;
 }

@@ -9,8 +9,8 @@ function addProjectile(x, y, width, height) {
     coin.color = '#333';
 
     // thrown velocity
-    coin.vX = -3 * unit / 12 + randomDirection() * Math.random() * unit / 12; //randomDirection()
-    coin.vY = -unit / 3 - Math.random() * unit / 2;
+    coin.vX = -3 * unit / 12 + randomDirection() * Math.random() * unit / 12;
+    coin.vY = -unit / 4 - Math.random() * unit / 4;
 
     coin.canBePickedUp = true;
 

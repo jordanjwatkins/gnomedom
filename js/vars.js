@@ -17,6 +17,8 @@ let coinBar, coinValue;
 let night = false;
 
 let fireLit = false; // gnomes will/won't chase coins
+let mainFire;
+let buildersExist;
 
 const builderTasks = []; // check each and act on closest
 
@@ -35,8 +37,6 @@ const bg = [];
 const projectilePool = [];
 const projectiles = [];
 const images = {};
-
-let resizeDelta = 0;
 
 const keys = {
     left: false,

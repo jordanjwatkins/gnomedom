@@ -1,10 +1,6 @@
 function addEntity(props) {
     var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : document.createElement('div');
 
-    //var thing = (props.thingPool && props.thingPool.length > 0) ? props.thingPool.pop() : {};
-
-    //thing.props = props;
-
     props.things = props.things || misc;
 
     thing.className = props.className;
@@ -23,10 +19,10 @@ function addEntity(props) {
 
     thing.sated = false;
     thing.level = 0;
-    thing.buildTime = 800;
+    thing.buildTime = 500;
     thing.targetable = true;
 
-    if (!thing.inDom && (thing.className === 'coin' || thing.className === 'price'/* || thing.className === 'gnome'*/)) {
+    if (!thing.inDom && (thing.className === 'coin' || thing.className === 'price')) {
         thing.inDom = true;
 
         elWorld.appendChild(thing);

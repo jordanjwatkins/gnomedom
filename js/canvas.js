@@ -5,11 +5,10 @@ function draw(thing, frame, offset = 0, offsetY, context) {
 
     spriteX = thing.x + elWorld.x + 50 * unit - thing.width / 2 + offset;
 
-    if (spriteX < -thing.width || spriteX > currentWidth + thing.width) return; // off-screen -trouble?
+    if (spriteX < -thing.width || spriteX > currentWidth + thing.width) return; // off-screen
 
     if (thing.color) return drawRect(thing, spriteX, context);
 
-    //spriteX = thing.x + elWorld.x;
     spriteY = thing.y + (offsetY || 0);
 
     context.drawImage(
@@ -73,7 +72,8 @@ function loadImage(url, name) {
         if (images.campfire && !images.evilCampfire) loadImage(flipImage(images.campfire, 'brightness(5%)', null, 20, 4), 'evilCampfire');
         if (images.wave && !images.wave1) loadImage(flipImage(images.wave, null, null, 25, 4, false), 'wave1');
         if (images.wave1 && !images.wave2) loadImage(flipImage(images.wave1, null, null, 250, 40, true), 'wave2');
-        if (images.coinflower && !images.cointree) loadImage(flipImage(images.coinflower, 'hue-rotate(90deg)', null, 6, 7, true), 'cointree');
+        if (images.coinflower && !images.cointree) loadImage(flipImage(images.coinflower, 'hue-rotate(60deg)', null, 6, 7, true), 'cointree');
+        if (images.coinflower && !images.cointree2) loadImage(flipImage(images.coinflower, 'hue-rotate(90deg)', null, 6, 7, true), 'cointree2');
     };
 }
 
@@ -103,23 +103,6 @@ function flipImage(image, filter, coined, w, h, wave) {
 
     return m_canvas.toDataURL();
 }
-
-/*
-function createTransformed(image, w, h, transformFn) {
-    var m_canvas = document.createElement('canvas');
-
-    m_canvas.width = w;
-    m_canvas.height = h;
-
-    var m_context = m_canvas.getContext('2d');
-
-    transformFn(m_context);
-
-    m_context.drawImage(image, 0, 0);
-
-    return m_canvas.toDataURL();
-}
-*/
 
 function darknessLayer() {
     darknessCanvas = document.createElement('canvas');

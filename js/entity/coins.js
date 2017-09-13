@@ -18,7 +18,11 @@ function useCoins(keys) {
 
         setTimeout(() => {
             coin.canBePickedUp = true;
-            elHorse.coins -= 1; // currently spend effect is based on picking the coin up, so an extra -1 to counterbalance
+
+            setTimeout(() => {
+                elHorse.coins -= 1; // currently spend effect is based on picking the coin up, so an extra -1 to counterbalance
+                if (elHorse.coins < 0) elHorse.coins = 0;
+            }, 230);
         }, 30);
 
         keys.upHold = 0;
@@ -28,8 +32,6 @@ function useCoins(keys) {
 }
 
 function spendCoin(keys) {
-    console.log(elHorse.coins);
-
     coinTaker = elHorse.currentCoinTaker;
 
     if (coinTaker && coinTaker.coins < coinTaker.maxCoins && coinTaker.coins > 0) {

@@ -2,7 +2,7 @@ function keydown(e) {
     if (e.which == 37) keys.left = true;
     if (e.which == 39) keys.right = true;
     if (e.which == 38) keys.up = true;
-    if (e.which == 40) test();
+    //if (e.which == 40) test();
 }
 
 function keyup(e) {
@@ -31,9 +31,9 @@ function test() {
 
 function keyMove() {
     // stop on right side
-    if (elHorse.x > 125 * unit) {
+    if (elHorse.x > 127 * unit) {
         keys.right = false;
-    } else if (elHorse.x < -320 * unit) {
+    } else if (elHorse.x < -620 * unit) {
         if (!evilWall.destroyed) keys.left = false;
     }
 
