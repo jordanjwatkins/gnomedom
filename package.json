@@ -1,0 +1,20 @@
+{
+  "name": "gnomedom",
+  "version": "1.0.0",
+  "description": "",
+  "main": "js/app.js",
+  "scripts": {
+    "dev": "http-server",
+    "setup": "rm -rf build && mkdir build && touch build/index.js",
+    "concatjs": "concat -o build/index.js ./js/vars.js ./js/entity/camp.js ./js/canvas.js ./js/render.js ./js/update.js ./js/entity/projectile.js ./js/misc.js ./js/input.js ./js/entity/horse.js ./js/gnome/gnome.js ./js/gnome/evil.js ./js/gnome/poor.js ./js/gnome/villager.js ./js/entity/entity.js ./js/entity/add-entities.js ./js/entity/coins.js ./js/app.js ./js/init.js && google-closure-compiler-js build/index.js > build/index.min.js --compilationLevel SIMPLE --assumeFunctionWrapper true",
+    "gcc": "google-closure-compiler-js -h"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concat": "^1.0.3",
+    "google-closure-compiler-js": "^20170806.0.0",
+    "http-server": "^0.10.0",
+    "uglify-js": "^3.0.28"
+  }
+}
