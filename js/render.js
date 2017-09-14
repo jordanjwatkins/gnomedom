@@ -1,4 +1,14 @@
-let lightsOut;
+function maybeRender(thing) {
+    if (thing.update) thing.update();
+    if (thing.className.match('campfire')) return renderFire(thing);
+    if (thing.className.match('coinflower')) return renderCoinFlower(thing);
+    if (thing.className.match('bar')) return renderCoinBar(thing);
+    if (thing.className.match('wave1')) return renderWave1(thing);
+    if (thing.className.match('water')) return renderWater(thing);
+    if (thing.className.match('evilWall')) return renderEvilWall(thing);
+
+    if (thing.color) draw(thing, 0);
+}
 
 function renderDayNight() {
     darken(0, 0, elCanvas.clientWidth, elCanvas.clientHeight, '#000000', darkness);
@@ -16,11 +26,10 @@ function renderDayNight() {
     });
 }
 
-let offset;
-
 function renderWall(wall) {
     if (wall.sprite) {
-        offset = (wall.shaking) ? -1 * unit : 0;
+        const offset = (wall.shaking) ? -1 * unit : 0;
+
         (wall.destroyed) ? draw(wall, 0, offset) : draw(wall, 1, offset);
     } else {
         wall.sprite = images.wall;
@@ -92,17 +101,14 @@ function renderCoinBar() {
     drawRect(coinValue, coinValue.x, darknessCtx);
 }
 
-let timeValue;
-
 function renderFire(fire) {
-    // base
     if (fire.levelUp) {
         const baseLevel = (fire.level) ? fire.level - 1 : 0;
 
         draw({ x: 11 * unit, y: worldHeight - 70 * unit, width: 90 * unit, height: 70 * unit, sprite: images.base, sW: 9, sH: 7 }, baseLevel);
     }
     if (fire.sprite) {
-        timeValue = Math.tan(lastFrameTimeMs / 190);
+        const timeValue = Math.tan(lastFrameTimeMs / 190);
 
         if (fire.burning) {
             if (timeValue < -0.66) {

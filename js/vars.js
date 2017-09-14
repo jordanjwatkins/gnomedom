@@ -1,4 +1,4 @@
-let elHorse, elWorld, currentWidth, worldHeight, unit, horseDirection, speed, wX, random, evilWall; //thing, spriteX, spriteY, uWorldHeight, gnome, coinTaker, prevTaker
+let elHorse, elWorld, currentWidth, worldHeight, unit, horseDirection, speed, wX, random, evilWall; //thing, spriteX, spriteY, uWorldHeight, gnome, coinTaker, prevTaker;
 
 let gnomeCoinPicker, horseCoinPicker;
 
