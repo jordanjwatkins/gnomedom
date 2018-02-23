@@ -7,7 +7,7 @@ function initHorse() {
 
     horseMove(0, 1);
 
-    elHorse.coins = 40;
+    elHorse.coins = 0;
     elHorse.active = true;
     elHorse.targetable = true;
 
