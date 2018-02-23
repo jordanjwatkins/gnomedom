@@ -30,6 +30,7 @@ function villageWall(x) {
                 // upgrade
                 this.width = 10 * unit;
                 this.height = 18 * unit;
+                this.y -= 4 * unit;
                 this.health = 50;
                 this.level++;
                 this.coins = 4;

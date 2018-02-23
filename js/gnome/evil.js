@@ -104,7 +104,7 @@ function attackWall(gnome1, wall) {
         if (wall.health <= 0) {
             wall.destroyed = true;
             wall.sated = false;
-            wall.coins = 0;
+            wall.coins = 2;
 
             gnome1.moveType = 'walking';
         }
