@@ -10,6 +10,8 @@ function useCoins(keys) {
             coinTaker.sated = true;
 
             if (coinTaker.levelUp) coinTaker.levelUp();
+
+            elHorse.justLeveledCoinTaker = true;
         }
 
         elHorse.coins -= 1;
@@ -34,17 +36,22 @@ function useCoins(keys) {
 function spendCoin(keys) {
     coinTaker = elHorse.currentCoinTaker;
 
-    if (coinTaker && coinTaker.coins < coinTaker.maxCoins && coinTaker.coins > 0) {
-        for (let i = 0; i < coinTaker.coins; i++) {
-            addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
-        }
+    if (coinTaker) {
+        if (coinTaker.coins < coinTaker.maxCoins && coinTaker.coins > 0) {
+            // release spent coins
+            for (let i = 0; i < coinTaker.coins; i++) {
+                addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
+            }
 
-        coinTaker.coins = 0;
-    } else if (elHorse.coins > 0) {
+            coinTaker.coins = 0;
+        }
+    } else if (elHorse.coins > 0 && !elHorse.justLeveledCoinTaker) {
         elHorse.coins--;
 
         addCoin(elHorse.x / unit + 4, elHorse.y / unit - 4, 2, 3);
     }
+
+    elHorse.justLeveledCoinTaker = false;
 
     keys.upHold = 0;
 }
@@ -83,7 +90,7 @@ function moveCoin(coin) {
             if (coin && coin.active) {
                 coin.canBePickedUp = true;
             }
-        }, 500);
+        }, 300);
     }
 
     roundedMove(coin);
@@ -92,7 +99,13 @@ function moveCoin(coin) {
 function maybePickUpCoin(coin, picker) {
     if (!coin.active) return;
 
-    if (coin.canBePickedUp && coin.className === 'stone' && picker.filter === 'evil' && !picker.dead && boxesCollide(coin, picker)) {
+    if (
+        coin.canBePickedUp &&
+        coin.className === 'stone' &&
+        picker.filter === 'evil' &&
+        !picker.dead &&
+        boxesCollide(coin, picker)
+    ) {
         picker.health--;
 
         if (picker.health < 0) {

@@ -71,7 +71,10 @@ function mouseDown(event) {
         return;
     }
 
-    if (pointer.clientX < event.view.outerWidth / 2 || (pointer2 && pointer2.clientX < event.view.outerWidth / 2)) {
+    if (
+        pointer.clientX < event.view.outerWidth / 2 ||
+        (pointer2 && pointer2.clientX < event.view.outerWidth / 2)
+    ) {
         keys.left = true;
     } else {
         keys.right = true;
