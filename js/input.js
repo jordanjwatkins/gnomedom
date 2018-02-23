@@ -57,13 +57,13 @@ function mouseDown(event) {
 
     if (
         (
-            pointer.clientX > event.view.innerWidth / 4 &&
-            pointer.clientX < (event.view.innerWidth / 4) * 3
+            pointer.clientX > event.view.innerWidth / 3 &&
+            pointer.clientX < (event.view.innerWidth / 3) * 2
         ) ||
         (
             pointer2 &&
-            pointer2.clientX > event.view.innerWidth / 4 &&
-            pointer2.clientX < (event.view.innerWidth / 4) * 3
+            pointer2.clientX > event.view.innerWidth / 3 &&
+            pointer2.clientX < (event.view.innerWidth / 3) * 2
         )
     ) {
         keys.up = true;
