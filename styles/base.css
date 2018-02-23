@@ -5,6 +5,7 @@ body div, :before, :after {
     background-size: cover;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
+    user-select: none;
 }
 
 body:before, body:after {
