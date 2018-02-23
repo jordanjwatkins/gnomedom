@@ -3,7 +3,7 @@ function useCoins(keys) {
 
     if (!coinTaker || elHorse.coins <= 0) return;
 
-    if (coinTaker && keys.upHold > 30 && coinTaker.coins < coinTaker.maxCoins) {
+    if (coinTaker && keys.upHold > 20 && coinTaker.coins < coinTaker.maxCoins) {
         coinTaker.coins++;
 
         if (coinTaker.coins === coinTaker.maxCoins && !coinTaker.sated) {

@@ -38,6 +38,8 @@ function renderWall(wall) {
 
 function renderEvilWall(wall) {
     if (wall.sprite) {
+        const offset = 20 * unit;
+
         (wall.destroyed) ? draw(wall, 1, offset) : draw(wall, 0, offset);
     } else {
         wall.sprite = images.evilWall;

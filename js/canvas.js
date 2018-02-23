@@ -44,11 +44,10 @@ function loadImage(url, name) {
 
 function flipImage(image, filter, coined, w, h, wave) {
     var tmpCanvas = document.createElement('canvas');
+    var tmpContext = tmpCanvas.getContext('2d');
 
     tmpCanvas.width = w || 14;
     tmpCanvas.height = h || 11;
-
-    var tmpContext = tmpCanvas.getContext('2d');
 
     tmpContext.translate(w || 14, 0);
     tmpContext.scale(-1, 1);

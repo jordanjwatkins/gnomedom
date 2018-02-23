@@ -6,7 +6,7 @@ let closeTargetDistance, distanceToTarget;
 
 let elNightLayer;
 
-let elCanvas;
+var elCanvas, ctx;
 
 let darknessCanvas, darknessCtx;
 

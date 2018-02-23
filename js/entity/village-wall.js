@@ -18,18 +18,35 @@ function villageWall(x) {
 
         this.buildTime = 500;
 
+        if (this.level === 2) {
+            // repair
+            this.health = 50;
+            this.coins = 4;
+        }
+
+        if (this.level === 1) {
+            // full health
+            if (this.health === 40) {
+                // upgrade
+                this.width = 10 * unit;
+                this.height = 18 * unit;
+                this.health = 50;
+                this.level++;
+                this.coins = 4;
+            } else {
+                // repair
+                this.health = 40;
+                this.coins = 0;
+                this.sated = false;
+            }
+        }
+
+        // unbuilt
         if (this.level === 0) {
+            // build
             this.level++;
-            this.health = 30;
-            this.maxCoins = 4;
-            this.coins = 0;
-            this.sated = false;
-        } else if (this.level === 1 && this.health === 30) {
-            this.width = 10 * unit;
-            this.height = 18 * unit;
             this.health = 40;
-        } else {
-            this.health = 30;
+            this.maxCoins = 4;
             this.coins = 0;
             this.sated = false;
         }

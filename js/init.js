@@ -22,7 +22,7 @@ function init() {
 }
 
 function initCanvas() {
-    elCanvas = document.createElement('canvas');
+    elCanvas = document.querySelector('canvas');
 
     elCanvas.width = elCanvas.clientWidth;
     elCanvas.height = elCanvas.clientHeight;

@@ -45,11 +45,12 @@
     background-clip: text;
     background-size: 64vw;
     transform: translate(-50%, -50%);
-    transition: 7s ease-in-out;
+    transition: 7s background-size ease-in-out, 9s opacity ease-in-out;
 }
 
 .loaded .title {
     background-size: 0;
+    opacity: 0;
 }
 
 .price {

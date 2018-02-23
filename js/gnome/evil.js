@@ -85,8 +85,13 @@ function attackWall(gnome1, wall) {
         gnome1.attacking = true;
         wall.shaking = true;
         wall.health -= 1;
-        wall.coins = 2;
-        wall.sated = false;
+
+        // if not in the middle of paying for repairs
+        if (wall.coins !== 3) {
+            // make repairable
+            wall.coins = 2;
+            wall.sated = false;
+        }
 
         const w = wall;
         const g1 = gnome1;

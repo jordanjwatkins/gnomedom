@@ -46,7 +46,7 @@ function handleVillager(gnome) {
             }
 
             if (gnome.task === 'idle') {
-                gnome.closeTarget = walls[0].x + 4 * unit + 9 * unit * Math.random();
+                gnome.closeTarget = walls[0].x + 4 * unit + 6 * unit * Math.random();
 
                 walkToTarget(gnome, gnome.closeTarget);
 
