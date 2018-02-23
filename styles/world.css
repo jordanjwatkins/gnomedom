@@ -24,14 +24,6 @@
     height: 90%;
 }
 
-.campfire, .evil-campfire {
-    background-image: url(../images/campfire.gif);
-    width: 9vw;
-    height: 8vw;
-    background-size: 9vw 8vw;
-    background-repeat: no-repeat;
-}
-
 .title {
     left: 60%;
     top: 20%;

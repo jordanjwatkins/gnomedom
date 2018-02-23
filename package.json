@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "http-server",
-    "prod": "npm run setup && npm run concatjs && npm run copyIndex && npm run copyStyles && npm run copyImages && cd build && http-server",
+    "prod": "npm run setup && npm run concatjs && npm run copyIndex && npm run copyStyles && npm run copyImages && rm -f build/index.js && cd build && http-server",
     "setup": "rm -rf build && mkdir build && touch build/index.js",
     "concatjs": "concat -o build/index.js ./js/vars.js ./js/dark-light-layer.js ./js/entity/village-wall.js ./js/entity/day-night.js ./js/entity/coin-taker.js ./js/entity/coinflower.js ./js/entity/camp.js ./js/entity/evil-camp.js ./js/entity/flora.js ./js/canvas.js ./js/render.js ./js/update.js ./js/entity/projectile.js ./js/misc.js ./js/input.js ./js/entity/horse.js ./js/gnome/gnome.js ./js/gnome/evil.js ./js/gnome/poor.js ./js/gnome/villager.js ./js/entity/entity.js ./js/entity/add-entities.js ./js/entity/coins.js ./js/app.js ./js/init.js && google-closure-compiler-js build/index.js > build/index.min.js --compilationLevel SIMPLE --assumeFunctionWrapper true",
     "gcc": "google-closure-compiler-js -h",
