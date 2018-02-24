@@ -1,7 +1,7 @@
 .horse {
-    bottom: 10vh;
+    position: fixed;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -100%);
     z-index: 4;
 }
 

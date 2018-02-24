@@ -69,6 +69,7 @@ function addCoin(x, y, width, height) {
     coin.vY = -unit / 2 - Math.random();
 
     coin.canBePickedUp = false;
+    coin.out = false;
 
     setTimeout(() => coin.classList.add('in'), 20);
 
@@ -91,6 +92,13 @@ function moveCoin(coin) {
                 coin.canBePickedUp = true;
             }
         }, 300);
+    }
+
+    if (
+        coin.x - coin.width + elWorld.x > elCanvas.clientWidth / 2 ||
+        coin.x + coin.width * 1.5 + elWorld.x < -elCanvas.clientWidth / 2
+    ) {
+        return;
     }
 
     roundedMove(coin);
@@ -140,6 +148,7 @@ function maybePickUpCoin(coin, picker) {
 
         setTimeout(() => {
             coin.className = 'out';
+            coin.out = true;
             coinPool.push(coin);
         }, 900);
     }
@@ -160,6 +169,8 @@ function tryPickups(coin) {
 }
 
 function updateCoin(coin) {
+    if (coin.out) return;
+
     moveCoin(coin);
     tryPickups(coin);
 }

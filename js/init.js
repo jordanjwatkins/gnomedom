@@ -19,6 +19,14 @@ function init() {
 
     // fade in after first tick positioning flash
     document.body.classList.add('loaded', 'unlit');
+
+    ctx.imageSmoothingEnabled = false;
+
+    const tenVh = elCanvas.clientHeight / 10;
+
+    document.querySelector('.ground.fore').style.height = `${tenVh}px`;
+    document.querySelector('.ground.back').style.height = `calc(${tenVh}px + 5vw`;
+    document.querySelector('.horse').style.top = `${tenVh*9}px`;
 }
 
 function initCanvas() {
@@ -50,7 +58,7 @@ function loadImages() {
     loadImage('./images/campfire-sheet.gif', 'campfire');
     loadImage('./images/wall-sheet.gif', 'wall');
     loadImage('./images/coinflower.gif', 'coinflower');
-    loadImage('./images/base-sheet.gif', 'base');
+    loadImage('./images/base-sheet.png', 'base');
     loadImage('./images/wave.gif', 'wave');
     loadImage('./images/evil-wall.gif', 'evilWall');
 }
